@@ -45,58 +45,54 @@ namespace Orpheus.Mpd
             DisplayStatus?.Invoke(message);
         }
 
-        public async void PlaylistInfo(Action<MpdPlaylist> callback)
+        private  void RunCommand<T>(string message, IMpdCommand<T> task, Action<T> callback) {
+            _displayStatus(message);
+             _queue.Enqueue(() => Task.Run(delegate { _session.SendCommand<T>(task, callback); }));
+        }
+
+        public void PlaylistInfo(Action<MpdPlaylist> callback)
         {
-            _displayStatus("Updating current playlist...");
-            await _queue.Enqueue(() => Task.Run(delegate { _session.SendCommand(new PlaylistInfoCommand("playlistinfo"), callback); }));
+            RunCommand("Updating current playlist...", new PlaylistInfoCommand("playlistinfo"), callback);
         }
 
         public async void FilelistInfo(Action<MpdFileSystem> callback)
         {
-            _displayStatus("Fetching file system ...");
-            await _queue.Enqueue(() => Task.Run(delegate { _session.SendCommand(new ListallCommand("listall"), callback); }));
+            RunCommand("Fetching file system ...", new ListallCommand("listall"), callback);
         }
 
         public async void PlayId(string songId)
         {
-            _displayStatus("Playing id...");
-            await _queue.Enqueue(() => Task.Run(delegate { _session.SendCommand(new PlayIdCommand("playid", new[] { songId }), null); }));
+            RunCommand("Playing id...", new PlayIdCommand("playid", new[] { songId }), null);
         }
 
         public async void DeleteId(string songId)
         {
-            _displayStatus("Deleting id...");
-            await _queue.Enqueue(() => Task.Run(delegate { _session.SendCommand(new DeleteIdCommand("deleteid", new[] { songId }), null); }));
+            RunCommand("Deleting id...", new DeleteIdCommand("deleteid", new[] { songId }), null);
         }
 
         public async void AddId(string uri)
         {
-            _displayStatus("Adding id...");
-            await _queue.Enqueue(() => Task.Run(delegate { _session.SendCommand(new AddIdCommand("addid", new[] { uri }), null); }));
+            RunCommand("Adding id...", new AddIdCommand("addid", new[] { uri }), null);
         }
 
         public async void AddId(string uri, string position)
         {
-            _displayStatus("Adding id...");
-            await _queue.Enqueue(() => Task.Run(delegate { _session.SendCommand(new AddIdCommand("addid", new[] { uri, position }), null); }));
+            RunCommand("Adding id...", new AddIdCommand("addid", new[] { uri, position }), null);
         }
 
         public async void Status(Action<MpdStatus> callback)
         {
-            _displayStatus("Fetching status...");
-            await _queue.Enqueue(() => Task.Run(delegate { _session.SendCommand(new StatusCommand("status"), callback); }));
+            RunCommand("Fetching status...", new StatusCommand("status"), callback);
         }
 
         public async void Update()
         {
-            _displayStatus("Updating music database...");
-            await _queue.Enqueue(() => Task.Run(delegate { _session.SendCommand(new UpdateCommand("update"), null); }));
+            RunCommand("Updating music database...", new UpdateCommand("update"), null);
         }
 
         public async void SeekCur(string time)
         {
-            _displayStatus("Seek current ...");
-            await _queue.Enqueue(() => Task.Run(delegate { _session.SendCommand(new SeekCurrCommand("seekcur", new[] { time }), null); }));
+            RunCommand("Seek current ...", new SeekCurrCommand("seekcur", new[] { time }), null);
         }
 
         public string ConnectionAsString
