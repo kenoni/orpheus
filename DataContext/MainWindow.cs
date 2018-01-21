@@ -25,6 +25,37 @@ namespace Orpheus.DataContext
             UpdateStatus();
         }
 
+
+        private IList<PlayerStream> _playerStreams;
+
+        public IList<PlayerStream> PlayerStreams
+        {
+            get => _playerStreams;
+            set
+            {
+                _playerStreams = value;
+                NotifyPropertyChanged("PlayerStreams");
+                foreach (var item in _playerStreams)
+                {
+                    item.PropertyChanged += PropertyChanged;
+                }
+            }
+        }
+
+        public void GetPlayerStreams()
+        {
+            var streams = InitializePlayerStreams();
+            PlayerStreams = streams.ToList();
+        }
+
+        private IEnumerable<PlayerStream> InitializePlayerStreams()
+        {
+            return new[]
+            {
+                new PlayerStream{Name="rasp-pi.tk",Url="http://rasp-pi.tk:8000/",IsPlaying=false},
+                new PlayerStream{Name="HouseLovers",Url="http://ml1.t4e.dj:80/houselovers_low.aac",IsPlaying=false}
+            };
+        }
         private void FillCurrentPlaylist(MpdPlaylist mpdPlaylist)
         {
             if (mpdPlaylist == null) return;
@@ -168,8 +199,6 @@ namespace Orpheus.DataContext
         }
 
         public string PlayingSongId { get; set; }
-
-        
 
         private string _commandsStatus;
         public string CommandsStatus

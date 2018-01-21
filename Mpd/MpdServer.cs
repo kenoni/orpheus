@@ -45,9 +45,9 @@ namespace Orpheus.Mpd
             DisplayStatus?.Invoke(message);
         }
 
-        private  void RunCommand<T>(string message, IMpdCommand<T> task, Action<T> callback) {
+        private async void RunCommand<T>(string message, IMpdCommand<T> task, Action<T> callback = null) {
             _displayStatus(message);
-             _queue.Enqueue(() => Task.Run(delegate { _session.SendCommand<T>(task, callback); }));
+            await _queue.Enqueue(() => Task.Run(delegate { _session.SendCommand(task, callback); }));
         }
 
         public void PlaylistInfo(Action<MpdPlaylist> callback)
@@ -55,44 +55,44 @@ namespace Orpheus.Mpd
             RunCommand("Updating current playlist...", new PlaylistInfoCommand("playlistinfo"), callback);
         }
 
-        public async void FilelistInfo(Action<MpdFileSystem> callback)
+        public void FilelistInfo(Action<MpdFileSystem> callback)
         {
             RunCommand("Fetching file system ...", new ListallCommand("listall"), callback);
         }
 
-        public async void PlayId(string songId)
+        public void PlayId(string songId)
         {
-            RunCommand("Playing id...", new PlayIdCommand("playid", new[] { songId }), null);
+            RunCommand("Playing id...", new PlayIdCommand("playid", new[] { songId }));
         }
 
-        public async void DeleteId(string songId)
+        public void DeleteId(string songId)
         {
-            RunCommand("Deleting id...", new DeleteIdCommand("deleteid", new[] { songId }), null);
+            RunCommand("Deleting id...", new DeleteIdCommand("deleteid", new[] { songId }));
         }
 
-        public async void AddId(string uri)
+        public void AddId(string uri)
         {
-            RunCommand("Adding id...", new AddIdCommand("addid", new[] { uri }), null);
+            RunCommand("Adding id...", new AddIdCommand("addid", new[] { uri }));
         }
 
-        public async void AddId(string uri, string position)
+        public void AddId(string uri, string position)
         {
-            RunCommand("Adding id...", new AddIdCommand("addid", new[] { uri, position }), null);
+            RunCommand("Adding id...", new AddIdCommand("addid", new[] { uri, position }));
         }
 
-        public async void Status(Action<MpdStatus> callback)
+        public void Status(Action<MpdStatus> callback)
         {
             RunCommand("Fetching status...", new StatusCommand("status"), callback);
         }
 
-        public async void Update()
+        public void Update()
         {
-            RunCommand("Updating music database...", new UpdateCommand("update"), null);
+            RunCommand("Updating music database...", new UpdateCommand("update"));
         }
 
-        public async void SeekCur(string time)
+        public void SeekCur(string time)
         {
-            RunCommand("Seek current ...", new SeekCurrCommand("seekcur", new[] { time }), null);
+            RunCommand("Seek current ...", new SeekCurrCommand("seekcur", new[] { time }));
         }
 
         public string ConnectionAsString

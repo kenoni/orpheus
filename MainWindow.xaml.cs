@@ -184,18 +184,29 @@ namespace Orpheus
 
         private void FileSystemBtn_OnClick(object sender, RoutedEventArgs e)
         {
+            ShowSplitter();
             if (FileSystemDockPanel.Visibility == Visibility.Hidden)
             {
-                MainGrid.ColumnDefinitions[2].Width = new GridLength(50, GridUnitType.Star);
-                GridSplitter1.Visibility = Visibility.Visible;
                 FileSystemDockPanel.Visibility = Visibility.Visible;
                 _mainWindowDataContext.GetMpdFiles();
             }
             else
             {
+               FileSystemDockPanel.Visibility = Visibility.Hidden;
+            }
+        }
+
+        private void ShowSplitter()
+        {
+            if (FileSystemDockPanel.Visibility == Visibility.Hidden)
+            {
+                MainGrid.ColumnDefinitions[2].Width = new GridLength(50, GridUnitType.Star);
+                GridSplitter1.Visibility = Visibility.Visible;
+            }
+            else
+            {
                 GridSplitter1.Visibility = Visibility.Hidden;
                 MainGrid.ColumnDefinitions[2].Width = new GridLength(0);
-                FileSystemDockPanel.Visibility = Visibility.Hidden;
             }
         }
 
@@ -353,6 +364,49 @@ namespace Orpheus
         {
             _mpd.Update();
             _mainWindowDataContext.GetMpdFiles();
+        }
+
+        private void PlayerButton_Click(object sender, RoutedEventArgs e)
+        {
+            ShowSplitter();
+            if (PlayerDockPanel.Visibility == Visibility.Hidden)
+            {
+                PlayerDockPanel.Visibility = Visibility.Visible;
+                _mainWindowDataContext.GetPlayerStreams();
+            }
+            else
+            {
+                PlayerDockPanel.Visibility = Visibility.Hidden;
+            }
+        }
+
+        private void PlayerStreamsListView_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+
+            ListViewItem item = ListViewRowBeingClicked(PlayerStreamsListView, e);
+            if (item != null)
+            {
+                var stream = item.DataContext as PlayerStream;
+
+                if(stream != null)
+                {
+                    _mainWindowDataContext.PlayerStreams.ToList().ForEach(x => x.IsPlaying = false);
+
+                    if (!_mainWindowDataContext.IsPlayerPlaying)
+                    {
+                        _mainWindowDataContext.IsPlayerPlaying = true;
+                        stream.IsPlaying = true;
+                    }
+                    else
+                    {
+                        _player.Stop();
+                    }
+
+                    _player.Play(stream.Url);
+                    _player.Volume = (int)VolumeSlider.Value;
+                }
+            }
+
         }
     }
 }

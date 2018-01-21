@@ -81,6 +81,7 @@
     <Compile Include="Models\MpdPlaylist.cs" />
     <Compile Include="Commands\IMpdCommand.cs" />
     <Compile Include="Models\MpdStatus.cs" />
+    <Compile Include="Models\PlayerStream.cs" />
     <Compile Include="Mpd\MpdHelper.cs" />
     <Compile Include="Mpd\MpdResponse.cs" />
     <Compile Include="Mpd\MpdServer.cs" />
@@ -156,6 +157,9 @@
   <ItemGroup>
     <Resource Include="Icons\folder.png" />
     <Resource Include="Icons\reload.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Icons\play-button1.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
