@@ -4,9 +4,11 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 
 namespace Orpheus.Models
 {
+    [JsonObject(MemberSerialization.OptIn)]
     public class PlayerStream: INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
@@ -17,6 +19,7 @@ namespace Orpheus.Models
         }
 
         private bool _isPlaying;
+
         public bool IsPlaying
         {
             get => _isPlaying;
@@ -27,7 +30,20 @@ namespace Orpheus.Models
             }
         }
 
-        public string Name { get; set; }
+        private string _name;
+
+        [JsonProperty]
+        public string Name
+        {
+            get => _name;
+            set
+            {
+                _name = value;
+                NotifyPropertyChanged("Name");
+            }
+        }
+
+        [JsonProperty]
         public string Url { get; set; }
     }
 }

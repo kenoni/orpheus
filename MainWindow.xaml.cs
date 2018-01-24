@@ -8,6 +8,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using Orpheus.AppData;
 using Orpheus.DataContext;
 using Orpheus.Models;
 using Orpheus.Mpd;
@@ -28,6 +29,8 @@ namespace Orpheus
         private System.Windows.Threading.DispatcherTimer dispatcherTimer = null;
         private System.Windows.Threading.DispatcherTimer dispatcherTimer1 = null;
         private MpdServer _mpd = null;
+        private AppDataManager _appDataManager;
+
         public MainWindow()
         {
             InitializeComponent();
@@ -38,7 +41,11 @@ namespace Orpheus
             _mainWindowDataContext = new MainWindowDataContext(_mpd);
             _mainWindowDataContext.IsPlayerPlaying = false;
             DataContext = _mainWindowDataContext;
-             
+
+            var _appData = new AppData.AppDataContent(_mainWindowDataContext); 
+             _appDataManager = new AppDataManager(_appData);
+            
+
             StartTimers();
         }
         public MainWindowDataContext MainWindowDataContext
@@ -67,6 +74,7 @@ namespace Orpheus
 
         private void dispatcherTimer_Tick1(object sender, EventArgs e)
         {
+            
             _mainWindowDataContext.UpdateStatus();
         }
 
@@ -184,30 +192,24 @@ namespace Orpheus
 
         private void FileSystemBtn_OnClick(object sender, RoutedEventArgs e)
         {
-            ShowSplitter();
             if (FileSystemDockPanel.Visibility == Visibility.Hidden)
             {
+                PlayerDockPanel.Visibility = Visibility.Hidden;
                 FileSystemDockPanel.Visibility = Visibility.Visible;
                 _mainWindowDataContext.GetMpdFiles();
+                SetSplitterVisible(true);
             }
             else
             {
                FileSystemDockPanel.Visibility = Visibility.Hidden;
+                SetSplitterVisible(false);
             }
         }
 
-        private void ShowSplitter()
+        private void SetSplitterVisible(bool show)
         {
-            if (FileSystemDockPanel.Visibility == Visibility.Hidden)
-            {
-                MainGrid.ColumnDefinitions[2].Width = new GridLength(50, GridUnitType.Star);
-                GridSplitter1.Visibility = Visibility.Visible;
-            }
-            else
-            {
-                GridSplitter1.Visibility = Visibility.Hidden;
-                MainGrid.ColumnDefinitions[2].Width = new GridLength(0);
-            }
+            MainGrid.ColumnDefinitions[2].Width = (show) ? new GridLength(50, GridUnitType.Star) : new GridLength(0);
+            GridSplitter1.Visibility = (show) ? Visibility.Visible : Visibility.Hidden;
         }
 
         private void TextBlock_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
@@ -217,9 +219,9 @@ namespace Orpheus
 
         private void TextBlock_PreviewMouseMove(object sender, MouseEventArgs e)
         {
-            if ((e.LeftButton == MouseButtonState.Pressed || e.RightButton == MouseButtonState.Pressed) && !_IsDragging)
+            if ((e.LeftButton == MouseButtonState.Pressed || e.RightButton == MouseButtonState.Pressed) && !_isDragging)
             {
-                Point position = e.GetPosition(null);
+                var position = e.GetPosition(null);
                 Trace.WriteLine(Math.Abs(position.X - _startPoint.X));
 
                 if (Math.Abs(position.X - _startPoint.X) > 2 || Math.Abs(position.Y - _startPoint.Y) > 2)
@@ -230,41 +232,29 @@ namespace Orpheus
         }
 
         private Point _startPoint;
-        private bool _IsDragging;
+        private bool _isDragging;
 
 
         private List<MpdFile> GetSelectedFiles()
         {
-            List<MpdFile> files = new List<MpdFile>();
-
-            foreach(MpdFile file in FileTreeview.SelectedItems)
-            {
-                files.Add(file);
-            }
-
-            return files;
+            return FileTreeview.SelectedItems.Cast<MpdFile>().ToList();
         }
 
         private void StartDrag(MouseEventArgs e)
         {
-            _IsDragging = true;
-            //object temp = songsToBeAdded.Select(s => s.Uri).ToArray();
+            _isDragging = true;
             object temp = GetSelectedFiles().Select(s => s.Uri).ToArray();
 
-            DataObject data = null;
+            var data = new DataObject("AddToPlaylist", temp);
 
-            data = new DataObject("AddToPlaylist", temp);
-
-            if (data != null)
+            var dde = DragDropEffects.Move;
+            if (e.RightButton == MouseButtonState.Pressed)
             {
-                DragDropEffects dde = DragDropEffects.Move;
-                if (e.RightButton == MouseButtonState.Pressed)
-                {
-                    dde = DragDropEffects.All;
-                }
-                DragDropEffects de = DragDrop.DoDragDrop(FileTreeview, data, dde);
+                dde = DragDropEffects.All;
             }
-            _IsDragging = false;
+            var de = DragDrop.DoDragDrop(FileTreeview, data, dde);
+            
+            _isDragging = false;
         }
 
         private void PlayListView_PreviewDrop(object sender, DragEventArgs e)
@@ -368,15 +358,17 @@ namespace Orpheus
 
         private void PlayerButton_Click(object sender, RoutedEventArgs e)
         {
-            ShowSplitter();
             if (PlayerDockPanel.Visibility == Visibility.Hidden)
             {
+                FileSystemDockPanel.Visibility = Visibility.Hidden;
                 PlayerDockPanel.Visibility = Visibility.Visible;
-                _mainWindowDataContext.GetPlayerStreams();
+                _appDataManager.GetData();
+                SetSplitterVisible(true);
             }
             else
             {
                 PlayerDockPanel.Visibility = Visibility.Hidden;
+                SetSplitterVisible(false);
             }
         }
 

@@ -56,7 +56,7 @@ namespace Orpheus.CsCore
             }
             set
             {
-                if (_soundOut != null)
+                if (_soundOut?.WaveSource != null)
                 {
                     _soundOut.Volume = Math.Min(1.0f, Math.Max(value / 100f, 0f));
                 }

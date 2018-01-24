@@ -52,7 +52,7 @@ namespace Orpheus.Commands
                         Name = matchFile.Groups[3].Value
                     };
 
-                    var folderExists = Response.Items.Where(i => i.Uri == matchFile.Groups[2].Value);
+                    var folderExists = Response.Items.Where(i => i.Uri == matchFile.Groups[2].Value).ToList();
                     if (folderExists.Any())
                     {
                         if (folderExists.First().Children == null)
