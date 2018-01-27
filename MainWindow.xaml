@@ -56,9 +56,73 @@
                 </Controls:MultiSelectTreeView.Resources>
             </Controls:MultiSelectTreeView>
         </DockPanel>
+        <Popup x:Name="AddStreamPopup"  AllowsTransparency="True" IsOpen="False" Width="290"  PlacementTarget="{Binding ElementName=PlayerStreamsListView}" Placement="Top" Margin="0">
+            <Grid Background="AliceBlue" Width="290">
+                <Grid.Resources >
+                    <Style TargetType="Border" >
+                        <Setter Property="Padding" Value="5,0,5,1" />
+                    </Style>
+                </Grid.Resources>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="20"/>
+                    <RowDefinition Height="20"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
 
+                    <ColumnDefinition Width="45" />
+                    <ColumnDefinition Width="210" />
+                    <ColumnDefinition Width="35" />
+                </Grid.ColumnDefinitions>
+                <Border Grid.Row="0" Grid.Column="0">
+                    <TextBlock Grid.Column="0" Grid.Row="0" Text="Name"></TextBlock>
+                </Border>
+                <Border Grid.Row="0" Grid.Column="1">
+                    <TextBox Name="AddStreamName" Width="199" Grid.Column="1" Grid.Row="0"></TextBox>
+                </Border>
+                <Border Grid.Row="1" Grid.Column="0">
+                    <TextBlock Grid.Column="0" Grid.Row="1" Text="Url"></TextBlock>
+                </Border>
+                <Border Grid.Row="1" Grid.Column="1">
+                    <TextBox Name="AddStreamUrl" Width="199" Grid.Column="1" Grid.Row="1"></TextBox>
+                </Border>
+                <Border Grid.Row="1" Grid.Column="2">
+                    <Button  x:Name="AddStreamBtn" Content="Add" 
+                            Grid.Column="2" Grid.Row="1" Click="AddStreamBtn_Click" />
+                </Border>
+                
+            </Grid>
+        </Popup>
         <DockPanel Grid.Column="2" Grid.Row="2" Width="Auto"  Name="PlayerDockPanel"  Visibility="Hidden" >
-            <ListView AllowDrop="True" VerticalAlignment="Stretch"   Name="PlayerStreamsListView" ItemsSource="{Binding Path=PlayerStreams}"  MouseDoubleClick="PlayerStreamsListView_MouseDoubleClick"  Margin="5,5,0,5" VerticalContentAlignment="Stretch" >
+           
+            <DockPanel Height="34" HorizontalAlignment="Right" LastChildFill="False" Margin="5,0" DockPanel.Dock="Top" VerticalAlignment="Top" >
+                <ToggleButton HorizontalAlignment="Left" Margin="1,0,0,0" VerticalAlignment="Center" Width="24"  Click="OnPlayClicked">
+                    <Image Height="18" Width="16">
+                        <Image.Style>
+                            <Style TargetType="{x:Type Image}">
+                                <Style.Triggers>
+                                    <DataTrigger  Binding="{Binding IsPlayerPlaying}" Value="False">
+                                        <Setter Property="Source" Value="Icons/play-button.png"/>
+                                    </DataTrigger>
+                                    <DataTrigger  Binding="{Binding IsPlayerPlaying}" Value="True">
+                                        <Setter Property="Source" Value="Icons/stop.png"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Image.Style>
+                    </Image>
+                </ToggleButton>
+                <Slider x:Name="VolumeSlider" HorizontalAlignment="Right" IsMoveToPointEnabled="True"  Height="20" Maximum="100"   TickFrequency="15" VerticalAlignment="Center" Margin="5,0" Width="120"  HorizontalContentAlignment="Center" VerticalContentAlignment="Center" RenderTransformOrigin="2.919,0.567"  ValueChanged="OnSliderValueChanged"/>
+                
+
+            </DockPanel>
+           
+            <ListView PreviewKeyDown="PlayerStreamsListView_PreviewKeyDown" AllowDrop="True" VerticalAlignment="Stretch"   Name="PlayerStreamsListView" ItemsSource="{Binding Path=PlayerStreams}"  MouseDoubleClick="PlayerStreamsListView_MouseDoubleClick"  Margin="5,5,0,5" VerticalContentAlignment="Stretch" >
+               
+                <ListView.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem Header="Add" Name="AddStreamMenuItem" Click="MenuItem_Click" />
+                    </ContextMenu>
+                </ListView.ContextMenu>
                 <ListView.Resources>
                     <Style TargetType="GridViewColumnHeader">
                         <Setter Property="Visibility" Value="Collapsed" />
@@ -93,27 +157,7 @@
             </MenuItem>
         </Menu>
         <Border  Grid.Row="1" Grid.ColumnSpan="3" Grid.Column="0" BorderBrush="Black"   BorderThickness="0 0 0 .4">
-            <DockPanel Height="34" LastChildFill="False" Margin="5,0" VerticalAlignment="Top" >
-
-                <Slider x:Name="VolumeSlider" IsMoveToPointEnabled="True"  Height="20" Maximum="100"   TickFrequency="15" VerticalAlignment="Center" Width="100" Margin="5,0" HorizontalAlignment="Right" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" RenderTransformOrigin="2.919,0.567" DockPanel.Dock="Right" ValueChanged="OnSliderValueChanged"/>
-                <ToggleButton   HorizontalAlignment="Left" Margin="1,0,0,0" VerticalAlignment="Center" Width="24" DockPanel.Dock="Right" Click="OnPlayClicked">
-                    <Image Height="18" Width="16">
-                        <Image.Style>
-                            <Style TargetType="{x:Type Image}">
-                                <Style.Triggers>
-                                    <DataTrigger  Binding="{Binding IsPlayerPlaying}" Value="False">
-                                        <Setter Property="Source" Value="Icons/play-button.png"/>
-                                    </DataTrigger>
-                                    <DataTrigger  Binding="{Binding IsPlayerPlaying}" Value="True">
-                                        <Setter Property="Source" Value="Icons/stop.png"/>
-                                    </DataTrigger>
-                                </Style.Triggers>
-                            </Style>
-                        </Image.Style>
-                    </Image>
-                </ToggleButton>
-
-            </DockPanel>
+            
         </Border>
 
 
@@ -155,7 +199,7 @@
         </Border>
 
         <DockPanel Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="3" VerticalAlignment="Stretch" Height="30" Dock="Bottom" Name="PlaylisItemSliderPanel" Margin="10,0,10,10">
-            <Slider  Width="{Binding Path=ActualWidth, ElementName=PlaylisItemSliderPanel}" IsMoveToPointEnabled="True" Margin="0,10,0,0" Maximum="{Binding Path=Duration}" Value="{Binding Path=ElapsedTime}" Name="PlaylisItemSlider" VerticalContentAlignment="Bottom" PreviewMouseUp="PlaylisItemSlider_OnValueChanged" HorizontalContentAlignment="Center" VerticalAlignment="Bottom" HorizontalAlignment="Center" Height="20"  />
+            <Slider  Width="{Binding Path=ActualWidth, ElementName=PlaylisItemSliderPanel}" IsMoveToPointEnabled="True" Margin="0,0,0,0" Maximum="{Binding Path=Duration}" Value="{Binding Path=ElapsedTime}" Name="PlaylisItemSlider" VerticalContentAlignment="Bottom" PreviewMouseUp="PlaylisItemSlider_OnValueChanged" HorizontalContentAlignment="Center" VerticalAlignment="Bottom" HorizontalAlignment="Center" Height="20"  />
         </DockPanel>
 
         <StatusBar Grid.Row="5" Grid.ColumnSpan="3" Grid.Column="0" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" >

@@ -42,21 +42,7 @@ namespace Orpheus.DataContext
             }
         }
 
-        public void GetPlayerStreams()
-        {
-            var streams = InitializePlayerStreams();
-            PlayerStreams = streams.ToList();
-        }
-
-        private IEnumerable<PlayerStream> InitializePlayerStreams()
-        {
-            return new[]
-            {
-                new PlayerStream{Name="rasp-pi.tk",Url="http://rasp-pi.tk:8000/",IsPlaying=false},
-                new PlayerStream{Name="HouseLovers",Url="http://ml1.t4e.dj:80/houselovers_low.aac",IsPlaying=false}
-            };
-        }
-        private void FillCurrentPlaylist(MpdPlaylist mpdPlaylist)
+           private void FillCurrentPlaylist(MpdPlaylist mpdPlaylist)
         {
             if (mpdPlaylist == null) return;
             CurrentPlaylist = mpdPlaylist.Items;

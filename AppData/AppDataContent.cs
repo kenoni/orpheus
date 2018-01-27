@@ -21,10 +21,13 @@ namespace Orpheus.AppData
 
         public void UpdateContextStreams(IList<PlayerStream> streams)
         {
-            _dataContext.PlayerStreams = streams.Select(x => new PlayerStream{Name = x.Name, Url = x.Url}).ToList();
+            if(streams != null)
+            {
+                _dataContext.PlayerStreams = streams.Select(x => new PlayerStream { Name = x.Name, Url = x.Url }).ToList();
+            }
         }
 
-        public IList<PlayerStream> GetStreamsFromContext => _dataContext.PlayerStreams;
+        public IList<PlayerStream> StreamsFromContext => _dataContext.PlayerStreams;
 
         [JsonProperty]
         public IList<PlayerStream> Streams;

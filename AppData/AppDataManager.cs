@@ -20,14 +20,31 @@ namespace Orpheus.AppData
         public void GetData()
         {
             var json = FileManger.ReadFrom(_dataFileName);
+            if(json != string.Empty)
+            {
+                ParseJsonData(json);
+                return;
+            }
+            else
+            {
+                SaveData();
+                json = FileManger.ReadFrom(_dataFileName);
+                ParseJsonData(json);
+            }
+        }
+
+        private void ParseJsonData(string json)
+        {
+
             var content = Deserializer.ToObject<AppDataContent>(json);
             _appDataContent.UpdateContextStreams(content.Streams);
         }
 
         public void SaveData()
         {
+            _appDataContent.Streams = _appDataContent.StreamsFromContext;
             var contentStr = Serializer.ToString<AppDataContent>(_appDataContent);
-            //FileManger.SaveTo(_dataFileName, contentStr);
+            FileManger.SaveTo(_dataFileName, contentStr);
         }
     }
 

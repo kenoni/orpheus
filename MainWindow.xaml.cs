@@ -400,5 +400,43 @@ namespace Orpheus
             }
 
         }
+
+        private void MenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            AddStreamName.Text = string.Empty;
+            AddStreamUrl.Text = string.Empty;
+            AddStreamPopup.IsOpen = true;
+        }
+
+        private void AddStreamBtn_Click(object sender, RoutedEventArgs e)
+        {
+            if (_mainWindowDataContext.PlayerStreams == null) _mainWindowDataContext.PlayerStreams = new List<PlayerStream>();
+            _mainWindowDataContext.PlayerStreams.Add(new PlayerStream { Name = AddStreamName.Text, Url = AddStreamUrl.Text });
+            _appDataManager.SaveData();
+            AddStreamPopup.IsOpen = false;
+            PlayerStreamsListView.Items.Refresh();
+        }
+
+        private void PlayerStreamsListView_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Delete)
+            {
+                //listview.Items.Remove(listview.Items.CurrentItem);
+                object currentItem = PlayerStreamsListView.Items.CurrentItem;
+                if (currentItem != null)
+                {
+                    foreach (var streamToDelete in PlayerStreamsListView.SelectedItems)
+                    {
+                        var streamEntry = (PlayerStream)streamToDelete;
+
+                        _mainWindowDataContext.PlayerStreams.Remove(streamEntry);
+                    }
+
+                    PlayerStreamsListView.Items.Refresh(); // TO DO : Refresh too soon must be done when all delete commands ended.
+                }
+            }
+            _appDataManager.SaveData();
+
+        }
     }
 }
