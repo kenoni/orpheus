@@ -81,6 +81,7 @@
     <Compile Include="DataContext\MainWindow.cs" />
     <Compile Include="DataContext\SettingsWindow.cs" />
     <Compile Include="Extensions.cs" />
+    <Compile Include="Helpers\TreeBuilder.cs" />
     <Compile Include="Models\MpdFileSystem.cs" />
     <Compile Include="Models\MpdPlaylistEntry.cs" />
     <Compile Include="Models\MpdPlaylist.cs" />
@@ -166,5 +167,6 @@
   <ItemGroup>
     <Resource Include="Icons\play-button1.png" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

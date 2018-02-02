@@ -10,12 +10,17 @@ namespace Orpheus.Models
 {
     public class MpdFileSystem
     {
-        public IList<MpdFile> Items { get; set; }
+        public IList<ITreeItem<MpdFile>> Items { get; set; }
         
     }
 
+    public interface ITreeItem<T>
+    {
+        string Uri { get; set; }
+        IList<ITreeItem<T>> Children { get; set; }
+    }
 
-    public class MpdFile : INotifyPropertyChanged
+    public class MpdFile : INotifyPropertyChanged, ITreeItem<MpdFile>
     {
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -28,7 +33,7 @@ namespace Orpheus.Models
         public string Name { get; set; }
         public string Uri { get; set; }
         public MpdFileType Type { get; set; }
-        public IList<MpdFile> Children { get; set; }
+        public IList<ITreeItem<MpdFile>> Children { get; set; }
 
         private bool _isSelected;
 

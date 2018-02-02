@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using Orpheus.Helpers;
 
 namespace Orpheus.Commands
 {
@@ -22,7 +23,7 @@ namespace Orpheus.Commands
         public ListallCommand(string command)
         {
             Command = command;
-            Response = new MpdFileSystem { Items = new List<MpdFile>() };
+            Response = new MpdFileSystem { Items = new List<ITreeItem<MpdFile>>() };
         }
 
         public MpdFileSystem Parse(MpdResponse response)
@@ -52,20 +53,12 @@ namespace Orpheus.Commands
                         Name = matchFile.Groups[3].Value
                     };
 
-                    var folderExists = Response.Items.Where(i => i.Uri == matchFile.Groups[2].Value).ToList();
-                    if (folderExists.Any())
-                    {
-                        if (folderExists.First().Children == null)
-                            folderExists.First().Children = new List<MpdFile>();
-                        folderExists.First().Children.Add(item);
-                    }
-                    else
-                    {
-                        Response.Items.Add(item);
-                    }
-
+                    Response.Items.Add(item);
                 }
             }
+            var treeBuilder = new TreeBuilder<MpdFile>(Response.Items, '/');
+
+            Response.Items = treeBuilder.BuildTree();
 
             return Response;
         }
