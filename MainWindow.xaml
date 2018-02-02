@@ -12,6 +12,7 @@
         Title="Orpheus" Width="800" MinHeight="450" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" Icon="Icons/Orpheus32x32.png">
     <Window.Resources>
         <converters:SecondsToTimeConverter x:Key="TimeConverter" />
+        <converters:UnixTimeToDateTimeConverter x:Key="UnixTimeConverter" />
     </Window.Resources>
     <Grid Name="MainGrid">
         <Grid.ColumnDefinitions>
@@ -205,6 +206,12 @@
         <StatusBar Grid.Row="5" Grid.ColumnSpan="3" Grid.Column="0" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" >
             <StatusBarItem>
                 <TextBlock  Name="StatusBarLabel" Text="{Binding Path=State}" />
+            </StatusBarItem>
+            <StatusBarItem HorizontalAlignment="Right">
+                <TextBlock  Text="Last db update:" />
+            </StatusBarItem>
+            <StatusBarItem HorizontalAlignment="Right">
+                <TextBlock  Name="MpdCommandsStatsLabel" Text="{Binding Path=UpdateDbTime , Converter={StaticResource UnixTimeConverter}}" />
             </StatusBarItem>
             <StatusBarItem HorizontalAlignment="Right">
                 <TextBlock  Name="MpdCommandsStatusLabel" Text="{Binding Path=CommandsStatus}" />

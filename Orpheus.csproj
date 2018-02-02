@@ -73,8 +73,10 @@
     <Compile Include="Commands\DeleteIdCommand.cs" />
     <Compile Include="Commands\PlayIdCommand.cs" />
     <Compile Include="Commands\SeekCurrCommand.cs" />
+    <Compile Include="Commands\StatsCommand.cs" />
     <Compile Include="Commands\StatusCommand.cs" />
     <Compile Include="Commands\UpdateCommand.cs" />
+    <Compile Include="Converters\UnixTimeToDateTime.cs" />
     <Compile Include="Converters\SecondsToTime.cs" />
     <Compile Include="CsCore\Helper.cs" />
     <Compile Include="CsCore\Player.cs" />
@@ -86,6 +88,7 @@
     <Compile Include="Models\MpdPlaylistEntry.cs" />
     <Compile Include="Models\MpdPlaylist.cs" />
     <Compile Include="Commands\IMpdCommand.cs" />
+    <Compile Include="Models\MpdStats.cs" />
     <Compile Include="Models\MpdStatus.cs" />
     <Compile Include="Models\PlayerStream.cs" />
     <Compile Include="Mpd\MpdHelper.cs" />

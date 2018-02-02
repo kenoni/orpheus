@@ -353,7 +353,6 @@ namespace Orpheus
         private void RescanFileSystem_Click(object sender, RoutedEventArgs e)
         {
             _mpd.Update();
-            _mainWindowDataContext.GetMpdFiles();
         }
 
         private void PlayerButton_Click(object sender, RoutedEventArgs e)

@@ -95,6 +95,11 @@ namespace Orpheus.Mpd
             RunCommand("Seek current ...", new SeekCurrCommand("seekcur", new[] { time }));
         }
 
+        public void Stats(Action<MpdStats> callback)
+        {
+            RunCommand("Fetching stats...", new StatsCommand("stats"), callback);
+        }
+
         public string ConnectionAsString
         {
             get =>  $"{_address}:{_port}"; 

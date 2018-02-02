@@ -80,9 +80,30 @@ namespace Orpheus.DataContext
             }
         }
 
+        private decimal _updateDbTime;
+        public decimal UpdateDbTime
+        {
+            get => _updateDbTime;
+            set
+            {
+                if(value > _updateDbTime)
+                {
+                    GetMpdFiles();
+                    _updateDbTime = value;
+                    NotifyPropertyChanged("UpdateDbTime");
+                }
+            }
+        }
+
+        private void FillStatsFields(MpdStats stats)
+        {
+            UpdateDbTime = stats.UpdateTime;
+        }
+
         public void UpdateStatus()
         {
             _mpd.Status(FillStatusFields);
+            _mpd.Stats(FillStatsFields);
         }
 
         private void FillFileSystem(MpdFileSystem files)

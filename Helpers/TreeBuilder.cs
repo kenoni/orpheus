@@ -27,19 +27,19 @@ namespace Orpheus.Helpers
             return roots;
         }
 
-        private void AddChildren(ITreeItem<T> mpdFile)
+        private void AddChildren(ITreeItem<T> treeItem)
         {
-            if (_items.Any(x => x.Uri.StartsWith(mpdFile.Uri)))
+            if (_items.Any(x => x.Uri.StartsWith(treeItem.Uri)))
             {
-                var slashCount = mpdFile.Uri.Count(x => x == _delimiter);
-                mpdFile.Children = _items.Where(x => x.Uri.StartsWith(mpdFile.Uri + _delimiter) && slashCount + 1 == x.Uri.Count(x1 => x1 == _delimiter)).ToList();
+                var slashCount = treeItem.Uri.Count(x => x == _delimiter);
+                treeItem.Children = _items.Where(x => x.Uri.StartsWith(treeItem.Uri + _delimiter) && slashCount + 1 == x.Uri.Count(x1 => x1 == _delimiter)).ToList();
 
-                foreach (var child in mpdFile.Children)
+                foreach (var child in treeItem.Children)
                     AddChildren(child);
             }
             else
             {
-                mpdFile.Children = new List<ITreeItem<T>>();
+                treeItem.Children = new List<ITreeItem<T>>();
             }
         }
     }
