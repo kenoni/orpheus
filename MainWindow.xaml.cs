@@ -190,22 +190,6 @@ namespace Orpheus
             _mpd?.SeekCur(sliderValue.ToString(CultureInfo.InvariantCulture));
         }
 
-        private void FileSystemBtn_OnClick(object sender, RoutedEventArgs e)
-        {
-            if (FileSystemDockPanel.Visibility == Visibility.Hidden)
-            {
-                PlayerDockPanel.Visibility = Visibility.Hidden;
-                FileSystemDockPanel.Visibility = Visibility.Visible;
-                _mainWindowDataContext.GetMpdFiles();
-                SetSplitterVisible(true);
-            }
-            else
-            {
-               FileSystemDockPanel.Visibility = Visibility.Hidden;
-                SetSplitterVisible(false);
-            }
-        }
-
         private void SetSplitterVisible(bool show)
         {
             MainGrid.ColumnDefinitions[2].Width = (show) ? new GridLength(50, GridUnitType.Star) : new GridLength(0);
@@ -355,22 +339,6 @@ namespace Orpheus
             _mpd.Update();
         }
 
-        private void PlayerButton_Click(object sender, RoutedEventArgs e)
-        {
-            if (PlayerDockPanel.Visibility == Visibility.Hidden)
-            {
-                FileSystemDockPanel.Visibility = Visibility.Hidden;
-                PlayerDockPanel.Visibility = Visibility.Visible;
-                _appDataManager.GetData();
-                SetSplitterVisible(true);
-            }
-            else
-            {
-                PlayerDockPanel.Visibility = Visibility.Hidden;
-                SetSplitterVisible(false);
-            }
-        }
-
         private void PlayerStreamsListView_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
 
@@ -436,6 +404,22 @@ namespace Orpheus
             }
             _appDataManager.SaveData();
 
+        }
+
+        private void TabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (e.OriginalSource is TabControl)
+            {
+                string tabName = ((sender as TabControl).SelectedItem as TabItem).Header as string;
+
+                switch (tabName)
+                {
+                    case "Player": _appDataManager.GetData(); break;
+                    default: break;
+                }
+                e.Handled = true;
+            }
+           
         }
     }
 }
