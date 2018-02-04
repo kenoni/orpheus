@@ -21,6 +21,8 @@ namespace Orpheus.DataContext
 
             CurrentPlaylist = new ObservableCollection<MpdPlaylistEntry>();
 
+            IsPlayerPlaying = false;
+
             UpdatePlayList();
             UpdateStatus();
         }

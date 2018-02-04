@@ -10,7 +10,7 @@ using static Orpheus.CsCore.Helper;
 
 namespace Orpheus.DataContext
 {
-    class SettingsWindowDataContext : INotifyPropertyChanged
+    public class SettingsWindowDataContext : INotifyPropertyChanged
     {
         public SettingsWindowDataContext()
         {

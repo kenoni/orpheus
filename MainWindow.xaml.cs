@@ -24,8 +24,8 @@ namespace Orpheus
     public partial class MainWindow : Window
     {
         private Player _player;
-        private SettingsWindow _settingsWindow = null;
-        readonly MainWindowDataContext _mainWindowDataContext = null;
+        private MainContext _mainContext = null;
+        public readonly SettingsWindowDataContext _settingsDataContext = null;
         private System.Windows.Threading.DispatcherTimer dispatcherTimer = null;
         private System.Windows.Threading.DispatcherTimer dispatcherTimer1 = null;
         private MpdServer _mpd = null;
@@ -36,18 +36,26 @@ namespace Orpheus
             InitializeComponent();
             _player = new Player();
             VolumeSlider.Value = Settings.Default.Player_Volume;
-
-            _mpd = new MpdServer();
-            _mainWindowDataContext = new MainWindowDataContext(_mpd);
-            _mainWindowDataContext.IsPlayerPlaying = false;
-            DataContext = _mainWindowDataContext;
-
-            var _appData = new AppData.AppDataContent(_mainWindowDataContext); 
-             _appDataManager = new AppDataManager(_appData);
             
-
+            InitializeDataContext();
+            InitializeAppDataManager();
+            LoadSettings();
             StartTimers();
         }
+
+        private void InitializeDataContext()
+        {
+            _mpd = new MpdServer();
+            _mainContext = new MainContext(_mpd);
+            DataContext = _mainContext;
+        }
+
+        public void InitializeAppDataManager()
+        {
+            var _appData = new AppData.AppDataContent(_mainContext.MainWindow);
+            _appDataManager = new AppDataManager(_appData);
+        }
+
         public MainWindowDataContext MainWindowDataContext
         {
             get;
@@ -69,53 +77,26 @@ namespace Orpheus
 
         private void dispatcherTimer_Tick(object sender, EventArgs e)
         {
-            _mainWindowDataContext.ElapsedTime++;
+            _mainContext.MainWindow.ElapsedTime++;
         }
 
         private void dispatcherTimer_Tick1(object sender, EventArgs e)
         {
             
-            _mainWindowDataContext.UpdateStatus();
-        }
-
-        private void OnSettingsClicked(object sender, RoutedEventArgs e)
-        {
-            if (_settingsWindow == null)
-            {
-                _settingsWindow = new SettingsWindow(this);
-            }
-            else
-            {
-                _settingsWindow.Visibility = Visibility.Visible;
-            }
-
-            _settingsWindow.Show();
-        }
-
-        private void OnExitClicked(object sender, RoutedEventArgs e)
-        {
-            Close();
-        }
-
-        public void OnChildWindowClosing(Window window)
-        {
-            if (window == _settingsWindow)
-            {
-                _settingsWindow = null;
-            }
+            _mainContext.MainWindow.UpdateStatus();
         }
 
         private void OnPlayClicked(object sender, RoutedEventArgs e)
         {
-            if (!_mainWindowDataContext.IsPlayerPlaying)
+            if (!_mainContext.MainWindow.IsPlayerPlaying)
             {
-                _mainWindowDataContext.IsPlayerPlaying = true;
+                _mainContext.MainWindow.IsPlayerPlaying = true;
                 _player.Play(@"http://rasp-pi.tk:8000/");
                 _player.Volume = (int)VolumeSlider.Value;
             }
             else
             {
-                _mainWindowDataContext.IsPlayerPlaying = false;
+                _mainContext.MainWindow.IsPlayerPlaying = false;
                 _player.Stop();
             }
         }
@@ -154,7 +135,7 @@ namespace Orpheus
                 if (song != null)
                 {
                     _mpd?.PlayId(song.Id);
-                    _mainWindowDataContext?.UpdateStatus();
+                    _mainContext?.MainWindow?.UpdateStatus();
                     dispatcherTimer.Start();
                 }
             }
@@ -252,7 +233,7 @@ namespace Orpheus
                 _mpd?.AddId(song);
             }
 
-            _mainWindowDataContext.UpdatePlayList(); //TO DO : Query only added records
+            _mainContext.MainWindow.UpdatePlayList(); //TO DO : Query only added records
         }
 
         private int DropTargetRowIndex(DragEventArgs e)
@@ -290,7 +271,7 @@ namespace Orpheus
                     {
                         var playlistEntry = (MpdPlaylistEntry)songToDelete;
                         
-                        _mainWindowDataContext.CurrentPlaylist.Remove(playlistEntry);
+                        _mainContext.MainWindow.CurrentPlaylist.Remove(playlistEntry);
                         _mpd.DeleteId(playlistEntry.Id);
                     }
 
@@ -349,11 +330,11 @@ namespace Orpheus
 
                 if(stream != null)
                 {
-                    _mainWindowDataContext.PlayerStreams.ToList().ForEach(x => x.IsPlaying = false);
+                    _mainContext.MainWindow.PlayerStreams.ToList().ForEach(x => x.IsPlaying = false);
 
-                    if (!_mainWindowDataContext.IsPlayerPlaying)
+                    if (!_mainContext.MainWindow.IsPlayerPlaying)
                     {
-                        _mainWindowDataContext.IsPlayerPlaying = true;
+                        _mainContext.MainWindow.IsPlayerPlaying = true;
                         stream.IsPlaying = true;
                     }
                     else
@@ -377,8 +358,8 @@ namespace Orpheus
 
         private void AddStreamBtn_Click(object sender, RoutedEventArgs e)
         {
-            if (_mainWindowDataContext.PlayerStreams == null) _mainWindowDataContext.PlayerStreams = new List<PlayerStream>();
-            _mainWindowDataContext.PlayerStreams.Add(new PlayerStream { Name = AddStreamName.Text, Url = AddStreamUrl.Text });
+            if (_mainContext.MainWindow.PlayerStreams == null) _mainContext.MainWindow.PlayerStreams = new List<PlayerStream>();
+            _mainContext.MainWindow.PlayerStreams.Add(new PlayerStream { Name = AddStreamName.Text, Url = AddStreamUrl.Text });
             _appDataManager.SaveData();
             AddStreamPopup.IsOpen = false;
             PlayerStreamsListView.Items.Refresh();
@@ -396,7 +377,7 @@ namespace Orpheus
                     {
                         var streamEntry = (PlayerStream)streamToDelete;
 
-                        _mainWindowDataContext.PlayerStreams.Remove(streamEntry);
+                        _mainContext.MainWindow.PlayerStreams.Remove(streamEntry);
                     }
 
                     PlayerStreamsListView.Items.Refresh(); // TO DO : Refresh too soon must be done when all delete commands ended.
@@ -414,12 +395,33 @@ namespace Orpheus
 
                 switch (tabName)
                 {
-                    case "Player": _appDataManager.GetData(); break;
+                    case "Player": if (_mainContext.MainWindow.PlayerStreams == null) _appDataManager.GetData(); break;
                     default: break;
                 }
                 e.Handled = true;
             }
            
+        }
+
+        public void LoadSettings()
+        {
+            TbMpdAddress.Text = Settings.Default.Mpd_Address;
+            TbMpdRefreshInterval.Text = Settings.Default.Mpd_RefreshInterval.ToString();
+            CbOutputDevices.SelectedValue = Settings.Default.OutputDeviceId;
+        }
+
+        public void SaveSettings()
+        {
+            Settings.Default.Mpd_Address = TbMpdAddress.Text;
+            Settings.Default.Mpd_RefreshInterval = TbMpdRefreshInterval.Text.ToInt();
+            var outputDevice = CbOutputDevices.SelectedValue;
+            Settings.Default.OutputDeviceId = outputDevice.ToString();
+            Settings.Default.Save();
+        }
+
+        private void OnSaveSettingsClicked(object sender, RoutedEventArgs e)
+        {
+            SaveSettings();
         }
     }
 }

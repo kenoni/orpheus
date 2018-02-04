@@ -80,6 +80,7 @@
     <Compile Include="Converters\SecondsToTime.cs" />
     <Compile Include="CsCore\Helper.cs" />
     <Compile Include="CsCore\Player.cs" />
+    <Compile Include="DataContext\MainContext.cs" />
     <Compile Include="DataContext\MainWindow.cs" />
     <Compile Include="DataContext\SettingsWindow.cs" />
     <Compile Include="Extensions.cs" />
@@ -97,9 +98,6 @@
     <Compile Include="Mpd\MpdSession.cs" />
     <Compile Include="Mpd\TaskQueue.cs" />
     <Compile Include="Commands\PlaylistInfoCommand.cs" />
-    <Compile Include="SettingsWindow.xaml.cs">
-      <DependentUpon>SettingsWindow.xaml</DependentUpon>
-    </Compile>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -112,10 +110,6 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="SettingsWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CsCore\MusicPlayer.cs">

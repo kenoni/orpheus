@@ -31,7 +31,7 @@
 
         <GridSplitter Name="GridSplitter1" Visibility="Visible" Grid.Row="2" Grid.Column="1" HorizontalAlignment="Right" Width="2" VerticalAlignment="Stretch"  ResizeBehavior="PreviousAndNext" Height="Auto" Background="CornflowerBlue" Margin="0,0,0,5" IsEnabled="True" ResizeDirection="Columns" Cursor="SizeWE"/>
 
-        <Popup x:Name="AddStreamPopup"  AllowsTransparency="True" IsOpen="False" Width="290"  PlacementTarget="{Binding ElementName=PlayerStreamsListView}" Placement="Top" Margin="0">
+        <Popup x:Name="AddStreamPopup"  AllowsTransparency="True" IsOpen="False" Width="290"  PlacementTarget="{Binding ElementName=MainWindow.PlayerStreamsListView}" Placement="Top" Margin="0">
             <Grid Background="AliceBlue" Width="290">
                 <Grid.Resources >
                     <Style TargetType="Border" >
@@ -64,22 +64,11 @@
                     <Button  x:Name="AddStreamBtn" Content="Add" 
                             Grid.Column="2" Grid.Row="1" Click="AddStreamBtn_Click" />
                 </Border>
-                
+
             </Grid>
         </Popup>
-       
-        <Menu DockPanel.Dock="Top" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3">
-            <MenuItem Header="_File">
-                <MenuItem Header="Settings" Click="OnSettingsClicked"/>
-                <MenuItem Header="Exit" Click="OnExitClicked"/>
-            </MenuItem>
-        </Menu>
-        <Border  Grid.Row="1" Grid.ColumnSpan="3" Grid.Column="0" BorderBrush="Black"   BorderThickness="0 0 0 .4">
-            
-        </Border>
 
-
-        <ListView AllowDrop="True" Grid.Row="2" Grid.Column="0" PreviewDrop="PlayListView_PreviewDrop" VerticalAlignment="Stretch" PreviewKeyDown="PlayListView_PreviewKeyDown"  Name="PlayListView" ItemsSource="{Binding Path=CurrentPlaylist}"  MouseDoubleClick="OnPlaylistViewDoubleClicked"  Margin="5,5,0,5" VerticalContentAlignment="Stretch" >
+        <ListView AllowDrop="True" Grid.Row="2" Grid.Column="0" PreviewDrop="PlayListView_PreviewDrop" VerticalAlignment="Stretch" PreviewKeyDown="PlayListView_PreviewKeyDown"  Name="PlayListView" ItemsSource="{Binding Path=MainWindow.CurrentPlaylist}"  MouseDoubleClick="OnPlaylistViewDoubleClicked"  Margin="5,5,0,5" VerticalContentAlignment="Stretch" >
             <ListView.Resources>
                 <Style TargetType="GridViewColumnHeader">
                     <Setter Property="Visibility" Value="Collapsed" />
@@ -93,7 +82,7 @@
                                 <DataTemplate.Resources>
                                     <Style TargetType="{x:Type TextBlock}">
                                         <Style.Triggers>
-                                            <DataTrigger Binding="{Binding Path=IsCurrentlyPlaying}" Value="true" >
+                                            <DataTrigger Binding="{Binding Path=MainWindow.IsCurrentlyPlaying}" Value="true" >
                                                 <Setter Property="Foreground" Value="Blue"/>
                                             </DataTrigger>
                                         </Style.Triggers>
@@ -109,29 +98,29 @@
 
         <Border Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="3" BorderBrush="Black" BorderThickness="0 .4 0 0">
             <DockPanel  VerticalAlignment="Stretch" Height="30" >
-                <Label DockPanel.Dock="Left"  Content="{Binding Path=ElapsedTime, Converter={StaticResource TimeConverter}}"  />
+                <Label DockPanel.Dock="Left"  Content="{Binding Path=MainWindow.ElapsedTime, Converter={StaticResource TimeConverter}}"  />
                 <Label DockPanel.Dock="Left"  Content="/"  />
-                <Label  DockPanel.Dock="Left" Content="{Binding Path=Duration, Converter={StaticResource TimeConverter}}"  />
-                <Label  Content="{Binding Path=PlayingSong}"  />
+                <Label  DockPanel.Dock="Left" Content="{Binding Path=MainWindow.Duration, Converter={StaticResource TimeConverter}}"  />
+                <Label  Content="{Binding Path=MainWindow.PlayingSong}"  />
             </DockPanel>
         </Border>
 
         <DockPanel Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="3" VerticalAlignment="Stretch" Height="30" Dock="Bottom" Name="PlaylisItemSliderPanel" Margin="10,0,10,10">
-            <Slider  Width="{Binding Path=ActualWidth, ElementName=PlaylisItemSliderPanel}" IsMoveToPointEnabled="True" Margin="0,0,0,0" Maximum="{Binding Path=Duration}" Value="{Binding Path=ElapsedTime}" Name="PlaylisItemSlider" VerticalContentAlignment="Bottom" PreviewMouseUp="PlaylisItemSlider_OnValueChanged" HorizontalContentAlignment="Center" VerticalAlignment="Bottom" HorizontalAlignment="Center" Height="20"  />
+            <Slider  Width="{Binding Path=ActualWidth, ElementName=PlaylisItemSliderPanel}" IsMoveToPointEnabled="True" Margin="0,0,0,0" Maximum="{Binding Path=MainWindow.Duration}" Value="{Binding Path=MainWindow.ElapsedTime}" Name="PlaylisItemSlider" VerticalContentAlignment="Bottom" PreviewMouseUp="PlaylisItemSlider_OnValueChanged" HorizontalContentAlignment="Center" VerticalAlignment="Bottom" HorizontalAlignment="Center" Height="20"  />
         </DockPanel>
 
         <StatusBar Grid.Row="5" Grid.ColumnSpan="3" Grid.Column="0" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" >
             <StatusBarItem>
-                <TextBlock  Name="StatusBarLabel" Text="{Binding Path=State}" />
+                <TextBlock  Name="StatusBarLabel" Text="{Binding Path=MainWindow.State}" />
             </StatusBarItem>
             <StatusBarItem HorizontalAlignment="Right">
                 <TextBlock  Text="Last db update:" />
             </StatusBarItem>
             <StatusBarItem HorizontalAlignment="Right">
-                <TextBlock  Name="MpdCommandsStatsLabel" Text="{Binding Path=UpdateDbTime , Converter={StaticResource UnixTimeConverter}}" />
+                <TextBlock  Name="MpdCommandsStatsLabel" Text="{Binding Path=MainWindow.UpdateDbTime , Converter={StaticResource UnixTimeConverter}}" />
             </StatusBarItem>
             <StatusBarItem HorizontalAlignment="Right">
-                <TextBlock  Name="MpdCommandsStatusLabel" Text="{Binding Path=CommandsStatus}" />
+                <TextBlock  Name="MpdCommandsStatusLabel" Text="{Binding Path=MainWindow.CommandsStatus}" />
             </StatusBarItem>
         </StatusBar>
         <TabControl SelectionChanged="TabControl_SelectionChanged"  Grid.Column="2" Grid.Row="2" TabStripPlacement="Left" >
@@ -166,7 +155,7 @@
                     </DockPanel>
                     <Controls:MultiSelectTreeView  PreviewMouseDown="FileTreeview_PreviewMouseDown"  
                                            HorizontalContentAlignment="Stretch" 
-                                           ItemsSource="{Binding Path=MpdFileSystem}"  
+                                           ItemsSource="{Binding Path=MainWindow.MpdFileSystem}"  
                                            VerticalContentAlignment="Stretch" 
                                            Name="FileTreeview" 
                                            Margin="5" >
@@ -187,10 +176,10 @@
                                 <Image.Style>
                                     <Style TargetType="{x:Type Image}">
                                         <Style.Triggers>
-                                            <DataTrigger  Binding="{Binding IsPlayerPlaying}" Value="False">
+                                            <DataTrigger  Binding="{Binding MainWindow.IsPlayerPlaying}" Value="False">
                                                 <Setter Property="Source" Value="Icons/play-button.png"/>
                                             </DataTrigger>
-                                            <DataTrigger  Binding="{Binding IsPlayerPlaying}" Value="True">
+                                            <DataTrigger  Binding="{Binding MainWindow.IsPlayerPlaying}" Value="True">
                                                 <Setter Property="Source" Value="Icons/stop.png"/>
                                             </DataTrigger>
                                         </Style.Triggers>
@@ -201,7 +190,7 @@
                         <Slider x:Name="VolumeSlider" HorizontalAlignment="Right" IsMoveToPointEnabled="True"  Height="20" Maximum="100"   TickFrequency="15" VerticalAlignment="Center" Margin="5,0" Width="120"  HorizontalContentAlignment="Center" VerticalContentAlignment="Center" RenderTransformOrigin="2.919,0.567"  ValueChanged="OnSliderValueChanged"/>
                     </DockPanel>
 
-                    <ListView PreviewKeyDown="PlayerStreamsListView_PreviewKeyDown" AllowDrop="True" VerticalAlignment="Stretch"   Name="PlayerStreamsListView" ItemsSource="{Binding Path=PlayerStreams}"  MouseDoubleClick="PlayerStreamsListView_MouseDoubleClick"  Margin="5,5,0,5" VerticalContentAlignment="Stretch" >
+                    <ListView PreviewKeyDown="PlayerStreamsListView_PreviewKeyDown" AllowDrop="True" VerticalAlignment="Stretch"   Name="PlayerStreamsListView" ItemsSource="{Binding Path=MainWindow.PlayerStreams}"  MouseDoubleClick="PlayerStreamsListView_MouseDoubleClick"  Margin="5,5,0,5" VerticalContentAlignment="Stretch" >
                         <ListView.ContextMenu>
                             <ContextMenu>
                                 <MenuItem Header="Add" Name="AddStreamMenuItem" Click="MenuItem_Click" />
@@ -220,7 +209,7 @@
                                             <DataTemplate.Resources>
                                                 <Style TargetType="{x:Type TextBlock}">
                                                     <Style.Triggers>
-                                                        <DataTrigger Binding="{Binding Path=IsPlaying}" Value="true" >
+                                                        <DataTrigger Binding="{Binding Path=MainWindow.IsPlaying}" Value="true" >
                                                             <Setter Property="Foreground" Value="Blue"/>
                                                         </DataTrigger>
                                                     </Style.Triggers>
@@ -235,8 +224,57 @@
                     </ListView>
                 </DockPanel>
             </TabItem>
+            <TabItem Header="Settings" DataContext="{Binding Settings}">
+                <DockPanel>
+                    <Grid Background="#FFE5E5E5">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <Grid Grid.Row="0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="100" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <Label Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2"  Content="Mpd" HorizontalAlignment="Center"  VerticalAlignment="Top" FontWeight="Bold" />
+                            <Label Grid.Column="0" Grid.Row="1"  Content="Address :" HorizontalAlignment="Left"  VerticalAlignment="Top" />
+                            <TextBox Grid.Column="1" Grid.Row="1" x:Name="TbMpdAddress" Height="23"/>
+                            <Label Grid.Column="0" Grid.Row="2" Content="Refresh interval :" HorizontalAlignment="Left" VerticalAlignment="Top" />
+                            <TextBox Grid.Column="1" Grid.Row="2" x:Name="TbMpdRefreshInterval" Height="23" Width="50" HorizontalAlignment="Left"  />
+                        </Grid>
+                        <Separator Grid.Row="1" Height="3"></Separator>
+                        <Grid  Grid.Row="2">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="100" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <Label Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2"  Content="Player" HorizontalAlignment="Center"  VerticalAlignment="Top" FontWeight="Bold" />
+                            <Label Grid.Column="0" Grid.Row="1"  Content="Output devices :" HorizontalAlignment="Left"  VerticalAlignment="Top" />
+                            <ComboBox Grid.Column="1" Grid.Row="1" x:Name="CbOutputDevices" Height="23" SelectedValuePath="DeviceID"  ItemsSource="{Binding Path=OutputDevices}" VerticalContentAlignment="Center" VerticalAlignment="Top" HorizontalContentAlignment="Center">
+                                <ComboBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock Text="{Binding FriendlyName}" />
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </ComboBox.ItemTemplate>
+                            </ComboBox>
+                        </Grid>
+                        <Button Grid.ColumnSpan="2" Grid.Row="3" HorizontalAlignment="Right" VerticalAlignment="Bottom"  Width="50" Content="Save" Click="OnSaveSettingsClicked" />
+                    </Grid>
+                </DockPanel>
+            </TabItem>
         </TabControl>
     </Grid>
-
-
 </Window>
