@@ -88,11 +88,15 @@ namespace Orpheus
 
         private void OnPlayClicked(object sender, RoutedEventArgs e)
         {
-            if (!_mainContext.MainWindow.IsPlayerPlaying)
+            if (!_mainContext.MainWindow.IsPlayerPlaying && _mainContext.MainWindow.PlayerStreams.Count > 0)
             {
+                var streamToPlay = _mainContext.MainWindow.PlayerStreams.FirstOrDefault(s => s.IsPlaying) ?? _mainContext.MainWindow.PlayerStreams.FirstOrDefault();
                 _mainContext.MainWindow.IsPlayerPlaying = true;
-                _player.Play(@"http://rasp-pi.tk:8000/");
+
+                _player.Play(streamToPlay.Url);
                 _player.Volume = (int)VolumeSlider.Value;
+
+                streamToPlay.IsPlaying = true;
             }
             else
             {
@@ -423,5 +427,20 @@ namespace Orpheus
         {
             SaveSettings();
         }
+
+        private void GridSplitter_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            if(TabControlHolder.Width.Value != 30)
+            {
+                PreviousGridSplitterWIdth = TabControlHolder.Width.Value;
+                TabControlHolder.Width = new GridLength(30, GridUnitType.Pixel);
+            }
+            else
+            {
+                TabControlHolder.Width = new GridLength(PreviousGridSplitterWIdth, GridUnitType.Pixel);
+            }
+        }
+
+        private double PreviousGridSplitterWIdth = 0;
     }
 }
