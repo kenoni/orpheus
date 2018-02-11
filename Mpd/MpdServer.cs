@@ -13,11 +13,11 @@
     You should have received a copy of the GNU General Public License
     along with Orpheus.  If not, see<http://www.gnu.org/licenses/>.*/
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
-using Orpheus.Commands;
 using Orpheus.Models;
+using Orpheus.Mpd.Commands;
 using Orpheus.Properties;
-using static Orpheus.Mpd.MpdHelper;
 namespace Orpheus.Mpd
 {
     public class MpdServer
@@ -62,12 +62,12 @@ namespace Orpheus.Mpd
 
         public void PlayId(string songId)
         {
-            RunCommand("Playing id...", new PlayIdCommand("playid", new[] { songId }));
+            RunCommand("Playing id...", new OneArgCommand("playid", new[] { songId }));
         }
 
         public void DeleteId(string songId)
         {
-            RunCommand("Deleting id...", new DeleteIdCommand("deleteid", new[] { songId }));
+            RunCommand("Deleting id...", new OneArgCommand("deleteid", new[] { songId }));
         }
 
         public void AddId(string uri)
@@ -87,12 +87,12 @@ namespace Orpheus.Mpd
 
         public void Update()
         {
-            RunCommand("Updating music database...", new UpdateCommand("update"));
+            RunCommand("Updating music database...", new NoArgCommand("update"));
         }
 
         public void SeekCur(string time)
         {
-            RunCommand("Seek current ...", new SeekCurrCommand("seekcur", new[] { time }));
+            RunCommand("Seek current ...", new OneArgCommand("seekcur", new[] { time }));
         }
 
         public void Stats(Action<MpdStats> callback)
@@ -100,6 +100,36 @@ namespace Orpheus.Mpd
             RunCommand("Fetching stats...", new StatsCommand("stats"), callback);
         }
 
+        public void Outputs(Action<List<MpdOutput>> callback)
+        {
+            RunCommand("Fetching outputs...", new OutputCommand("outputs"), callback);
+        }
+
+        public void EnableOutput(string outputId)
+        {
+            RunCommand("Enabling output...", new OneArgCommand("enableoutput", new[] { outputId }), null);
+        }
+        public void DisableOutput(string outputId)
+        {
+            RunCommand("Disabling output...", new OneArgCommand("disableoutput", new[] { outputId }), null);
+        }
+
+        public void Next()
+        {
+            RunCommand("Next...", new NoArgCommand("next"));
+        }
+
+        public void Previous()
+        {
+            RunCommand("Previous...", new NoArgCommand("previous"));
+        }
+
+        public void Stop()
+        {
+            RunCommand("Stop...", new NoArgCommand("stop"));
+        }
+
+        //public DisableOutput
         public string ConnectionAsString
         {
             get =>  $"{_address}:{_port}"; 

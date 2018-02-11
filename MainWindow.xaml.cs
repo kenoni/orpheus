@@ -442,5 +442,60 @@ namespace Orpheus
         }
 
         private double PreviousGridSplitterWIdth = 0;
+
+        private void CheckBox_Click(object sender, RoutedEventArgs e)
+        {
+            if(e.Source is CheckBox)
+            {
+                var checkbox = (CheckBox)e.Source;
+                var output = (MpdOutput)checkbox.DataContext;
+
+                if (checkbox.IsChecked ?? false)
+                {
+                    _mpd.EnableOutput(output.Id);
+                }
+                else
+                {
+                    _mpd.DisableOutput(output.Id);
+                }
+            }
+        }
+
+        private void button1_Click(object sender, RoutedEventArgs e)
+        {
+            (sender as Button).ContextMenu.IsEnabled = true;
+            (sender as Button).ContextMenu.PlacementTarget = (sender as Button);
+            (sender as Button).ContextMenu.Placement = System.Windows.Controls.Primitives.PlacementMode.Bottom;
+            (sender as Button).ContextMenu.IsOpen = true;
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void Button_Click_1(object sender, RoutedEventArgs e)
+        {
+            var firstSongInCurrentPlaylist = _mainContext.MainWindow.CurrentPlaylist.FirstOrDefault();
+            if(firstSongInCurrentPlaylist != null)
+            {
+                _mpd.PlayId(firstSongInCurrentPlaylist.Id);
+            }
+        }
+
+        private void Button_Click_2(object sender, RoutedEventArgs e)
+        {
+            _mpd.Next();
+        }
+
+        private void Button_Click_3(object sender, RoutedEventArgs e)
+        {
+            _mpd.Stop();
+        }
+
+        private void Button_Click_4(object sender, RoutedEventArgs e)
+        {
+            _mpd.Previous();
+        }
     }
 }

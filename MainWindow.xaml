@@ -109,11 +109,26 @@
         </ListView>
 
         <Border   Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="3" BorderBrush="Black" BorderThickness="0 .4 0 0">
-            <DockPanel  VerticalAlignment="Stretch" Height="30" >
+            <DockPanel  VerticalAlignment="Stretch" Height="30" LastChildFill="False" >
                 <Label Style="{StaticResource Label}" DockPanel.Dock="Left"  Content="{Binding Path=MainWindow.ElapsedTime, Converter={StaticResource TimeConverter}}"  />
                 <Label Style="{StaticResource Label}" DockPanel.Dock="Left"  Content="/"  />
                 <Label  Style="{StaticResource Label}" DockPanel.Dock="Left" Content="{Binding Path=MainWindow.Duration, Converter={StaticResource TimeConverter}}"  />
-                <Label  Style="{StaticResource Label}" Content="{Binding Path=MainWindow.PlayingSong}"  />
+                <Label  Style="{StaticResource Label}" DockPanel.Dock="Left" Content="{Binding Path=MainWindow.PlayingSong}"  />
+                <Button Width="20" Height="20"  Margin="0,0,5,0" DockPanel.Dock="Right" Click="Button_Click_2" >
+                    Next
+                </Button>
+                <Button Width="20" Height="20"  Margin="0,0,5,0" DockPanel.Dock="Right"  Click="Button_Click_1" >
+                    Play
+                </Button>
+                <Button Width="20" Height="20"  Margin="0,0,5,0" DockPanel.Dock="Right" Click="Button_Click_3">
+                    Stop
+                </Button>
+                <Button Width="20" Height="20"  Margin="0,0,5,0" DockPanel.Dock="Right" Click="Button_Click_4">
+                    Previous
+                </Button>
+                <Button Width="20" Height="20"  Margin="0,0,5,0" DockPanel.Dock="Right">
+                    Shuffle
+                </Button>
             </DockPanel>
         </Border>
 
@@ -142,6 +157,20 @@
                     <DockPanel Height="34" DockPanel.Dock="Top" Name="MpdActionsDockPanel">
                         <Button   Click="RescanFileSystem_Click" Width="32" Height="22" VerticalContentAlignment="Top" Background="Transparent" VerticalAlignment="Bottom" Margin="5,5,5,5" HorizontalContentAlignment="Center" HorizontalAlignment="Left" >
                             <Image Source="Icons/reload.png" />
+                        </Button>
+                        <Button  Height="23"  HorizontalAlignment="Right"   Name="button1" VerticalAlignment="Center" Width="70" Click="button1_Click" >
+                            <Button.Content>
+                                <TextBlock Text="Outputs" />
+                            </Button.Content>
+                            <Button.ContextMenu>
+                                <ContextMenu ItemsSource="{Binding Path=MainWindow.MpdOutputs}" >
+                                    <ContextMenu.ItemTemplate>
+                                        <DataTemplate>
+                                            <CheckBox Margin="-26,0,0,0" Content="{Binding Name}" IsChecked="{Binding IsSelected}" Click="CheckBox_Click"/>
+                                        </DataTemplate>
+                                    </ContextMenu.ItemTemplate>
+                                </ContextMenu>
+                            </Button.ContextMenu>
                         </Button>
                     </DockPanel>
                     <Controls:MultiSelectTreeView Style="{StaticResource MultiSelectTreeView}"  PreviewMouseDown="FileTreeview_PreviewMouseDown"  

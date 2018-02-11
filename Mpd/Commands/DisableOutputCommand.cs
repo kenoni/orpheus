@@ -1,20 +1,12 @@
-using System.Collections.Generic;
-using System.Linq;
-using System.Text.RegularExpressions;
-using System.Windows.Input;
-using Orpheus.Models;
-using Orpheus.Mpd;
-using System;
-
-namespace Orpheus.Commands
+namespace Orpheus.Mpd.Commands
 {
-    class DeleteIdCommand : IMpdCommand<string>
+    class DisableOutputCommand : IMpdCommand<string>
     {
         public string Command { get; set; }
 
         public string Response { get; set; }
         
-        public DeleteIdCommand(string command, string[] args)
+        public DisableOutputCommand(string command, string[] args)
         {
             Command = $"{command}  {args[0]}";
             Response = string.Empty;

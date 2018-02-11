@@ -1,6 +1,6 @@
 using Orpheus.Mpd;
 
-namespace Orpheus.Commands
+namespace Orpheus.Mpd.Commands
 {
     class UpdateCommand : IMpdCommand<string>
     {

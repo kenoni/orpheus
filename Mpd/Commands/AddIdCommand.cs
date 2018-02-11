@@ -1,12 +1,7 @@
-using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
-using System.Windows.Input;
-using Orpheus.Models;
-using Orpheus.Mpd;
-using System;
 
-namespace Orpheus.Commands
+namespace Orpheus.Mpd.Commands
 {
     class AddIdCommand : IMpdCommand<string>
     {

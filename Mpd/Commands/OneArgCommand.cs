@@ -1,20 +1,12 @@
-using System.Collections.Generic;
-using System.Linq;
-using System.Text.RegularExpressions;
-using System.Windows.Input;
-using Orpheus.Models;
-using Orpheus.Mpd;
-using System;
-
-namespace Orpheus.Commands
+namespace Orpheus.Mpd.Commands
 {
-    class PlayIdCommand : IMpdCommand<string>
+    class OneArgCommand : IMpdCommand<string>
     {
         public string Command { get; set; }
 
         public string Response { get; set; }
         
-        public PlayIdCommand(string command, string[] args)
+        public OneArgCommand(string command, string[] args)
         {
             Command = $"{command}  {args[0]}";
             Response = string.Empty;

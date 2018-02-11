@@ -25,8 +25,30 @@ namespace Orpheus.DataContext
 
             UpdatePlayList();
             UpdateStatus();
+            GetOutputs();
         }
 
+        private void GetOutputs()
+        {
+            _mpd.Outputs(FillOutputs);
+        }
+
+        public void FillOutputs(List<MpdOutput> outputs)
+        {
+            MpdOutputs = outputs;
+        }
+
+        private IList<MpdOutput> _mpdOutputs;
+
+        public IList<MpdOutput> MpdOutputs
+        {
+            get => _mpdOutputs;
+            set
+            {
+                _mpdOutputs = value;
+                NotifyPropertyChanged("MpdOutputs");
+            }
+        }
 
         private IList<PlayerStream> _playerStreams;
 

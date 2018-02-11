@@ -22,6 +22,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Orpheus.Models;
+using Orpheus.Mpd.Commands;
 
 namespace Orpheus.Mpd
 {

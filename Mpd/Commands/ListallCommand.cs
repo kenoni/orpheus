@@ -1,14 +1,10 @@
 ﻿using Orpheus.Models;
-using Orpheus.Mpd;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using Orpheus.Helpers;
 
-namespace Orpheus.Commands
+namespace Orpheus.Mpd.Commands
 {
     class ListallCommand : IMpdCommand<MpdFileSystem>
     {

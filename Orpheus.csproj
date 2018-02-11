@@ -68,14 +68,15 @@
     </ApplicationDefinition>
     <Compile Include="AppData\AppDataContent.cs" />
     <Compile Include="AppData\AppDataManager.cs" />
-    <Compile Include="Commands\ListallCommand.cs" />
-    <Compile Include="Commands\AddIdCommand.cs" />
-    <Compile Include="Commands\DeleteIdCommand.cs" />
-    <Compile Include="Commands\PlayIdCommand.cs" />
-    <Compile Include="Commands\SeekCurrCommand.cs" />
-    <Compile Include="Commands\StatsCommand.cs" />
-    <Compile Include="Commands\StatusCommand.cs" />
-    <Compile Include="Commands\UpdateCommand.cs" />
+    <Compile Include="Mpd\Commands\DisableOutputCommand.cs" />
+    <Compile Include="Mpd\Commands\OneArgCommand.cs" />
+    <Compile Include="Mpd\Commands\ListallCommand.cs" />
+    <Compile Include="Mpd\Commands\AddIdCommand.cs" />
+    <Compile Include="Mpd\Commands\OutputCommand.cs" />
+    <Compile Include="Mpd\Commands\StatsCommand.cs" />
+    <Compile Include="Mpd\Commands\StatusCommand.cs" />
+    <Compile Include="Mpd\Commands\NoArgCommand.cs" />
+    <Compile Include="Mpd\Commands\UpdateCommand.cs" />
     <Compile Include="Converters\UnixTimeToDateTime.cs" />
     <Compile Include="Converters\SecondsToTime.cs" />
     <Compile Include="CsCore\Helper.cs" />
@@ -86,9 +87,10 @@
     <Compile Include="Extensions.cs" />
     <Compile Include="Helpers\TreeBuilder.cs" />
     <Compile Include="Models\MpdFileSystem.cs" />
+    <Compile Include="Models\MpdOutput.cs" />
     <Compile Include="Models\MpdPlaylistEntry.cs" />
     <Compile Include="Models\MpdPlaylist.cs" />
-    <Compile Include="Commands\IMpdCommand.cs" />
+    <Compile Include="Mpd\Commands\IMpdCommand.cs" />
     <Compile Include="Models\MpdStats.cs" />
     <Compile Include="Models\MpdStatus.cs" />
     <Compile Include="Models\PlayerStream.cs" />
@@ -97,7 +99,7 @@
     <Compile Include="Mpd\MpdServer.cs" />
     <Compile Include="Mpd\MpdSession.cs" />
     <Compile Include="Mpd\TaskQueue.cs" />
-    <Compile Include="Commands\PlaylistInfoCommand.cs" />
+    <Compile Include="Mpd\Commands\PlaylistInfoCommand.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

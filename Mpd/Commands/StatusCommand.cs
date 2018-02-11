@@ -1,11 +1,8 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Text.RegularExpressions;
 using Orpheus.Models;
-using Orpheus.Mpd;
-using System;
 
-namespace Orpheus.Commands
+namespace Orpheus.Mpd.Commands
 {
     class StatusCommand : IMpdCommand<MpdStatus>
     {

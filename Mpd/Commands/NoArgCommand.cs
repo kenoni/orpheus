@@ -1,17 +1,16 @@
 using Orpheus.Mpd;
-using System;
 
-namespace Orpheus.Commands
+namespace Orpheus.Mpd.Commands
 {
-    class SeekCurrCommand : IMpdCommand<string>
+    class NoArgCommand : IMpdCommand<string>
     {
         public string Command { get; set; }
 
         public string Response { get; set; }
         
-        public SeekCurrCommand(string command, string[] args)
+        public NoArgCommand(string command)
         {
-            Command = $"{command}  {args[0]}";
+            Command = $"{command}";
             Response = string.Empty;
         }
 

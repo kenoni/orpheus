@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using Orpheus.Models;
-using Orpheus.Mpd;
 
-namespace Orpheus.Commands
+namespace Orpheus.Mpd.Commands
 {
     class PlaylistInfoCommand : IMpdCommand<MpdPlaylist>
     {
