@@ -17,13 +17,11 @@ using Orpheus.CsCore;
 
 namespace Orpheus
 {
-
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
     public partial class MainWindow : Window
     {
-        private Player _player;
         private MainContext _mainContext = null;
         public readonly SettingsWindowDataContext _settingsDataContext = null;
         private System.Windows.Threading.DispatcherTimer dispatcherTimer = null;
@@ -33,8 +31,8 @@ namespace Orpheus
 
         public MainWindow()
         {
+            
             InitializeComponent();
-            _player = new Player();
             VolumeSlider.Value = Settings.Default.Player_Volume;
             
             InitializeDataContext();
@@ -45,7 +43,7 @@ namespace Orpheus
 
         private void InitializeDataContext()
         {
-            _mpd = new MpdServer();
+            _mpd = MpdServer.Instance;
             _mainContext = new MainContext(_mpd);
             DataContext = _mainContext;
         }
@@ -93,37 +91,37 @@ namespace Orpheus
                 var streamToPlay = _mainContext.MainWindow.PlayerStreams.FirstOrDefault(s => s.IsPlaying) ?? _mainContext.MainWindow.PlayerStreams.FirstOrDefault();
                 _mainContext.MainWindow.IsPlayerPlaying = true;
 
-                _player.Play(streamToPlay.Url);
-                _player.Volume = (int)VolumeSlider.Value;
+                Player.Instance.Play(streamToPlay.Url);
+                Player.Instance.Volume = (int)VolumeSlider.Value;
 
                 streamToPlay.IsPlaying = true;
             }
             else
             {
                 _mainContext.MainWindow.IsPlayerPlaying = false;
-                _player.Stop();
+                Player.Instance.Stop();
             }
         }
 
         private void OnPauseClicked(object sender, RoutedEventArgs e)
         {
-            _player.Stop();
+            Player.Instance.Stop();
         }
 
         private void OnStopClicked(object sender, RoutedEventArgs e)
         {
-            _player.Pause();
+            Player.Instance.Pause();
         }
 
         private void OnClose(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            _player.Stop();
+            Player.Instance.Stop();
         }
 
         private void OnSliderValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             var volumeValue = (int)VolumeSlider.Value;
-            _player.Volume = volumeValue;
+            Player.Instance.Volume = volumeValue;
             Settings.Default.Player_Volume = volumeValue;
             Settings.Default.Save();
         }
@@ -343,11 +341,11 @@ namespace Orpheus
                     }
                     else
                     {
-                        _player.Stop();
+                        Player.Instance.Stop();
                     }
 
-                    _player.Play(stream.Url);
-                    _player.Volume = (int)VolumeSlider.Value;
+                    Player.Instance.Play(stream.Url);
+                    Player.Instance.Volume = (int)VolumeSlider.Value;
                 }
             }
 

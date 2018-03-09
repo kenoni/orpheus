@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using CSCore.Codecs;
 using CSCore.CoreAudioAPI;
+using CSCore.DMO;
 using static Orpheus.CsCore.Helper;
 using Orpheus.Properties;
 
@@ -12,14 +15,18 @@ namespace Orpheus.CsCore
 {
     class Player
     {
-        private readonly MusicPlayer _musicPlayer = new MusicPlayer();
+        private static Player _instance;
+        private readonly MusicPlayer _musicPlayer;
         private List<MMDevice> _devices = new List<MMDevice>();
         private MMDevice _usedOutputDevice = null;
 
-        public Player()
+        private Player()
         {
             SetOutputDevice();
+            _musicPlayer = new MusicPlayer();
         }
+
+        public static Player Instance => _instance ?? (_instance = new Player());
 
         private void SetOutputDevice()
         {
@@ -36,6 +43,10 @@ namespace Orpheus.CsCore
             {
                 _musicPlayer.Open(url, _usedOutputDevice);
                 _musicPlayer.Play();
+                //var wavesource = CodecFactory.Instance.GetCodec(url);
+               //((DmoStream) wavesource).pa
+                //_usedOutputDevice.
+                //CSCore.Tags.ID3.ID3v2.FromStream(_musicPlayer.)
             }
         }
 

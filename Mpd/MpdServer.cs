@@ -14,6 +14,7 @@
     along with Orpheus.  If not, see<http://www.gnu.org/licenses/>.*/
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Threading.Tasks;
 using Orpheus.Models;
 using Orpheus.Mpd.Commands;
@@ -27,6 +28,7 @@ namespace Orpheus.Mpd
         private MpdSession _session;
         private static TaskQueue _queue;
         public Action<string> DisplayStatus { get; set; }
+        private static MpdServer _instance;
 
         public MpdServer()
         {
@@ -39,6 +41,8 @@ namespace Orpheus.Mpd
             _session.DisplayStatus += _displayStatus;
             _queue = new TaskQueue();
         }
+
+        public static MpdServer Instance => _instance ?? (_instance = new MpdServer());
 
         private void _displayStatus(string message)
         {
