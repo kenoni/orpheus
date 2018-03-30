@@ -25,9 +25,9 @@ namespace Orpheus.Mpd
     {
         private readonly string _address;
         private readonly int _port;
-        private MpdSession _session;
+        private static MpdSession _session;
         private static TaskQueue _queue;
-        public Action<string> DisplayStatus { get; set; }
+        public  Action<string> DisplayStatus { get; set; }
         private static MpdServer _instance;
 
         public MpdServer()
@@ -37,21 +37,33 @@ namespace Orpheus.Mpd
             _address = mpdAddress[0];
             _port = (mpdAddress.Length > 1) ? Convert.ToInt32(mpdAddress[1]) : 6600 ;
 
-            _session = new MpdSession(_address, _port);
-            _session.DisplayStatus += _displayStatus;
             _queue = new TaskQueue();
+
+            CreateSession();
+        }
+
+        private async static Task CreateSession()
+        {
+            var mpdAddress = Settings.Default.Mpd_Address.ToMpdAddress();
+
+            Task<MpdSession> session = Task.Run(delegate { return new MpdSession(mpdAddress[0], (mpdAddress.Length > 1) ? Convert.ToInt32(mpdAddress[1]) : 6600); });
+
+            var session1 = await session;
+
+            _session = session1;
+            _session.DisplayStatus += _displayStatus;
         }
 
         public static MpdServer Instance => _instance ?? (_instance = new MpdServer());
 
-        private void _displayStatus(string message)
+        private static void _displayStatus(string message)
         {
-            DisplayStatus?.Invoke(message);
+           // DisplayStatus?.Invoke(message);
         }
 
         private async void RunCommand<T>(string message, IMpdCommand<T> task, Action<T> callback = null) {
             _displayStatus(message);
-            await _queue.Enqueue(() => Task.Run(delegate { _session.SendCommand(task, callback); }));
+            await _queue.Enqueue(() => Task.Run(delegate { if (_session?._tcpConnection != null) _session.SendCommand(task, callback); }));
         }
 
         public void PlaylistInfo(Action<MpdPlaylist> callback)

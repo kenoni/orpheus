@@ -255,5 +255,17 @@ namespace Orpheus.DataContext
             }
         }
 
+        private bool _mpdConnected;
+        public bool MpdConnected
+        {
+            get => _mpdConnected;
+            set
+            {
+                _mpdConnected = value;
+                NotifyPropertyChanged("MpdConnected");
+            }
+        }
+        
+
     }
 }

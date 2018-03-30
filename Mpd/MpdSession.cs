@@ -30,7 +30,7 @@ namespace Orpheus.Mpd
     {
         private TaskQueue _queue;
         private NetworkStream _mpdStream = null;
-        private TcpClient _tcpConnection;
+        public TcpClient _tcpConnection;
         private int _tcpTimeout = 5000;
         public bool Terminating = false;
         private string _address;
@@ -44,6 +44,7 @@ namespace Orpheus.Mpd
             _queue = new TaskQueue();
 
             Connect();
+
         }
 
         private void Connect()
@@ -69,8 +70,15 @@ namespace Orpheus.Mpd
                 }
                 else
                 {
-                    _tcpConnection.EndConnect(connectResult);
-                    _mpdStream = _tcpConnection.GetStream();
+                    try
+                    {
+                        _tcpConnection.EndConnect(connectResult);
+                        _mpdStream = _tcpConnection.GetStream();
+                    }
+                    catch
+                    {
+                        _tcpConnection = null;
+                    }
                 }
             }
         }

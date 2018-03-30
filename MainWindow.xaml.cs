@@ -44,7 +44,7 @@ namespace Orpheus
         private void InitializeDataContext()
         {
             _mpd = MpdServer.Instance;
-            _mainContext = new MainContext(_mpd);
+            _mainContext = MainContext.Instance;
             DataContext = _mainContext;
         }
 

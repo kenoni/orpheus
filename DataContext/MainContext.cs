@@ -12,11 +12,15 @@ namespace Orpheus.DataContext
         private readonly MainWindowDataContext _mainWindowDataContext = null;
         private readonly SettingsWindowDataContext _settingsDataContext = null;
 
-        public MainContext(MpdServer mpd)
+        private MainContext(MpdServer mpd)
         {
             _mainWindowDataContext = new MainWindowDataContext(mpd);
             _settingsDataContext = new SettingsWindowDataContext();
         }
+
+        private static MainContext _instance;
+
+        public static MainContext Instance => _instance ?? (_instance = new MainContext(MpdServer.Instance));
 
         public MainWindowDataContext MainWindow { get => _mainWindowDataContext; } 
         public SettingsWindowDataContext Settings { get => _settingsDataContext; }
