@@ -14,10 +14,11 @@ namespace Orpheus.DataContext
     {
         private MpdServer _mpd = null;
 
-        public MainWindowDataContext(MpdServer mpd)
+        public MainWindowDataContext()
         {
-            _mpd = mpd;
-            _mpd.DisplayStatus += (message) => { CommandsStatus = message; };
+            MpdServer.CreateInstance((message) => { CommandsStatus = message; }, UpdatePlayList);
+            _mpd = MpdServer.Instance;
+            //_mpd.DisplayStatus += ;
 
             CurrentPlaylist = new ObservableCollection<MpdPlaylistEntry>();
 
@@ -66,7 +67,7 @@ namespace Orpheus.DataContext
             }
         }
 
-           private void FillCurrentPlaylist(MpdPlaylist mpdPlaylist)
+        private void FillCurrentPlaylist(MpdPlaylist mpdPlaylist)
         {
             if (mpdPlaylist == null) return;
             CurrentPlaylist = mpdPlaylist.Items;

@@ -36,15 +36,15 @@ namespace Orpheus.Mpd
         private string _address;
         private int _port;
         public Action<string> DisplayStatus { get; set; }
-
-        public MpdSession(string address, int port)
+        public Action _connectedCallback;
+        public MpdSession(string address, int port, Action connectedCallback)
         {
             _address = address;
             _port = port;
+            _connectedCallback = connectedCallback;
             _queue = new TaskQueue();
 
             Connect();
-
         }
 
         private void Connect()
@@ -79,6 +79,11 @@ namespace Orpheus.Mpd
                     {
                         _tcpConnection = null;
                     }
+                }
+
+                if(_tcpConnection != null)
+                {
+                    _connectedCallback();
                 }
             }
         }

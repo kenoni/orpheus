@@ -26,11 +26,12 @@ namespace Orpheus.Mpd
         private readonly string _address;
         private readonly int _port;
         private static MpdSession _session;
-        private static TaskQueue _queue;
-        public  Action<string> DisplayStatus { get; set; }
+        private  TaskQueue _queue;
         private static MpdServer _instance;
+        private Action _connectedCallbackAction;
+        private Action<string> _displayStatusAction;
 
-        public MpdServer()
+        private MpdServer(Action<string> displayStatus, Action connectedCallback)
         {
             var mpdAddress = Settings.Default.Mpd_Address.ToMpdAddress();
 
@@ -39,31 +40,41 @@ namespace Orpheus.Mpd
 
             _queue = new TaskQueue();
 
+            _displayStatusAction = displayStatus;
+            _connectedCallbackAction = connectedCallback;
+
             CreateSession();
         }
 
-        private async static Task CreateSession()
+        private async Task CreateSession()
         {
-            var mpdAddress = Settings.Default.Mpd_Address.ToMpdAddress();
-
-            Task<MpdSession> session = Task.Run(delegate { return new MpdSession(mpdAddress[0], (mpdAddress.Length > 1) ? Convert.ToInt32(mpdAddress[1]) : 6600); });
-
+            _displayStatusAction("Connecting...");
+            Task<MpdSession> session = Task.Run(delegate { return new MpdSession(_address, _port, _connectedCallbackAction); });
+            
             var session1 = await session;
-
             _session = session1;
             _session.DisplayStatus += _displayStatus;
+            _session._connectedCallback();
         }
 
-        public static MpdServer Instance => _instance ?? (_instance = new MpdServer());
-
-        private static void _displayStatus(string message)
+        public static void CreateInstance(Action<string> displayStatus, Action connectedCallback)
         {
-           // DisplayStatus?.Invoke(message);
+            _instance = new MpdServer(displayStatus, connectedCallback);
+        }
+
+        public static MpdServer Instance => _instance;
+
+        private void _displayStatus(string message)
+        {
+            _displayStatusAction?.Invoke(message);
         }
 
         private async void RunCommand<T>(string message, IMpdCommand<T> task, Action<T> callback = null) {
-            _displayStatus(message);
-            await _queue.Enqueue(() => Task.Run(delegate { if (_session?._tcpConnection != null) _session.SendCommand(task, callback); }));
+            if (_session?._tcpConnection != null)
+            {
+                _displayStatus(message);
+                await _queue.Enqueue(() => Task.Run(delegate { _session.SendCommand(task, callback); }));
+            }
         }
 
         public void PlaylistInfo(Action<MpdPlaylist> callback)

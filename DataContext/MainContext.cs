@@ -14,7 +14,7 @@ namespace Orpheus.DataContext
 
         private MainContext(MpdServer mpd)
         {
-            _mainWindowDataContext = new MainWindowDataContext(mpd);
+            _mainWindowDataContext = new MainWindowDataContext();
             _settingsDataContext = new SettingsWindowDataContext();
         }
 
