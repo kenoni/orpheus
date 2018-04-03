@@ -179,5 +179,12 @@
     <Resource Include="Icons\connected.png" />
     <Resource Include="Icons\disconnected.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Icons\back_btn.png" />
+    <Resource Include="Icons\next_btn.png" />
+    <Resource Include="Icons\play-btn.png" />
+    <Resource Include="Icons\shuffle-btn.png" />
+    <Resource Include="Icons\stop_btn.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

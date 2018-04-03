@@ -112,30 +112,43 @@
 
         <Border   Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="3" BorderBrush="Black" BorderThickness="0 .4 0 0">
             <DockPanel  VerticalAlignment="Stretch" Height="30" LastChildFill="False" Visibility="{Binding Path=MainWindow.MpdConnected, Converter={StaticResource BooleanToVisibilityConverter}}" >
-                <Label Style="{StaticResource Label}" DockPanel.Dock="Left"  Content="{Binding Path=MainWindow.ElapsedTime, Converter={StaticResource TimeConverter}}"  />
-                <Label Style="{StaticResource Label}" DockPanel.Dock="Left"  Content="/"  />
-                <Label  Style="{StaticResource Label}" DockPanel.Dock="Left" Content="{Binding Path=MainWindow.Duration, Converter={StaticResource TimeConverter}}"  />
                 <Label  Style="{StaticResource Label}" DockPanel.Dock="Left" Content="{Binding Path=MainWindow.PlayingSong}"  />
-                <Button Width="20" Height="20"  Margin="0,0,5,0" DockPanel.Dock="Right" Click="Button_Click_2" >
-                    Next
+                <Button Width="30" Height="24"  Margin="0,0,5,0" DockPanel.Dock="Right" Click="Button_Click_2" >
+                    <Image Height="18" Source="Icons/next_btn.png" />
                 </Button>
-                <Button Width="20" Height="20"  Margin="0,0,5,0" DockPanel.Dock="Right"  Click="Button_Click_1" >
-                    Play
+                <Button Width="30" Height="24"  Margin="0,0,5,0" DockPanel.Dock="Right"  Click="Button_Click_1" >
+                    <Image Height="18" Source="Icons/play-btn.png" />
                 </Button>
-                <Button Width="20" Height="20"  Margin="0,0,5,0" DockPanel.Dock="Right" Click="Button_Click_3">
-                    Stop
+                <Button Width="30" Height="24"  Margin="0,0,5,0" DockPanel.Dock="Right" Click="Button_Click_3">
+                    <Image Height="18" Source="Icons/stop_btn.png" />
                 </Button>
-                <Button Width="20" Height="20"  Margin="0,0,5,0" DockPanel.Dock="Right" Click="Button_Click_4">
-                    Previous
+                <Button Width="30" Height="24"  Margin="0,0,5,0" DockPanel.Dock="Right" Click="Button_Click_4">
+                    <Image Height="18" Source="Icons/back_btn.png" />
                 </Button>
-                <Button Width="20" Height="20"  Margin="0,0,5,0" DockPanel.Dock="Right">
-                    Shuffle
+                <Button Width="30" Height="24"  Margin="0,0,5,0" DockPanel.Dock="Right">
+                    <Image Height="18" Source="Icons/shuffle-btn.png" />
                 </Button>
             </DockPanel>
         </Border>
 
         <DockPanel Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="3" VerticalAlignment="Stretch" Height="30" Dock="Bottom" Name="PlaylisItemSliderPanel" Margin="10,0,10,10" Visibility="{Binding Path=MainWindow.MpdConnected, Converter={StaticResource BooleanToVisibilityConverter}}">
-            <Slider  Width="{Binding Path=ActualWidth, ElementName=PlaylisItemSliderPanel}" IsMoveToPointEnabled="True" Margin="0,0,0,0" Maximum="{Binding Path=MainWindow.Duration}" Value="{Binding Path=MainWindow.ElapsedTime}" Name="PlaylisItemSlider" VerticalContentAlignment="Bottom" PreviewMouseUp="PlaylisItemSlider_OnValueChanged" HorizontalContentAlignment="Center" VerticalAlignment="Bottom" HorizontalAlignment="Center" Height="20"  />
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition  Height="30"/>
+                </Grid.RowDefinitions>
+                <Label Grid.Column="0" Style="{StaticResource Label}" DockPanel.Dock="Left"  Content="{Binding Path=MainWindow.ElapsedTime, Converter={StaticResource TimeConverter}}"  />
+                <Slider Grid.Column="1" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" IsMoveToPointEnabled="True" Margin="0,3,0,0" Maximum="{Binding Path=MainWindow.Duration}" Value="{Binding Path=MainWindow.ElapsedTime}" Name="PlaylisItemSlider" VerticalContentAlignment="Bottom" PreviewMouseUp="PlaylisItemSlider_OnValueChanged"  Height="20" />
+                <Label Grid.Column="2" Style="{StaticResource Label}" DockPanel.Dock="Left" Content="{Binding Path=MainWindow.Duration, Converter={StaticResource TimeConverter}}"  />
+            </Grid>
+            
+            <!--<Slider DockPanel.Dock="Left"  Width="{Binding Path=ActualWidth, ElementName=PlaylisItemSliderPanel}" IsMoveToPointEnabled="True" Margin="0,0,0,0" Maximum="{Binding Path=MainWindow.Duration}" Value="{Binding Path=MainWindow.ElapsedTime}" Name="PlaylisItemSlider" VerticalContentAlignment="Bottom" PreviewMouseUp="PlaylisItemSlider_OnValueChanged"  Height="20"  />-->
+            
         </DockPanel>
 
         <StatusBar Grid.Row="5" Grid.ColumnSpan="3" Grid.Column="0" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" >
@@ -175,8 +188,8 @@
             <TabItem Header="Mpd" Style="{StaticResource TabControl}">
                 <DockPanel  Name="MpdDockPanel">
                     <DockPanel Height="34" DockPanel.Dock="Top" Name="MpdActionsDockPanel">
-                        <Button   Click="RescanFileSystem_Click" Width="32" Height="22" VerticalContentAlignment="Top" Background="Transparent" VerticalAlignment="Bottom" Margin="5,5,5,5" HorizontalContentAlignment="Center" HorizontalAlignment="Left" >
-                            <Image Source="Icons/reload.png" />
+                        <Button   Click="RescanFileSystem_Click" Width="30" Height="24" VerticalAlignment="Bottom" Margin="5,5,5,5" HorizontalContentAlignment="Center" HorizontalAlignment="Left" >
+                            <Image Height="18" Source="Icons/reload.png" />
                         </Button>
                         <Button  Height="23"  HorizontalAlignment="Right"   Name="button1" VerticalAlignment="Center" Width="70" Click="button1_Click" >
                             <Button.Content>
@@ -211,8 +224,8 @@
                 <DockPanel  Name="PlayerDockPanel">
 
                     <DockPanel Height="34" HorizontalAlignment="Right" LastChildFill="False" Margin="5,0" DockPanel.Dock="Top" VerticalAlignment="Top" >
-                        <ToggleButton HorizontalAlignment="Left" Margin="1,0,0,0" VerticalAlignment="Center" Width="24"  Click="OnPlayClicked">
-                            <Image Height="18" Width="16">
+                        <ToggleButton Height="24" Width="30" HorizontalAlignment="Left" Margin="1,0,0,0" VerticalAlignment="Center"   Click="OnPlayClicked">
+                            <Image Height="18" >
                                 <Image.Style>
                                     <Style TargetType="{x:Type Image}">
                                         <Style.Triggers>
