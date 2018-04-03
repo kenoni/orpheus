@@ -68,6 +68,7 @@
     </ApplicationDefinition>
     <Compile Include="AppData\AppDataContent.cs" />
     <Compile Include="AppData\AppDataManager.cs" />
+    <Compile Include="Converters\BooleanToVisibility.cs" />
     <Compile Include="Mpd\Commands\DisableOutputCommand.cs" />
     <Compile Include="Mpd\Commands\OneArgCommand.cs" />
     <Compile Include="Mpd\Commands\ListallCommand.cs" />

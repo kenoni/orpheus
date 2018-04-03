@@ -19,7 +19,7 @@ namespace Orpheus.AppData
 
         public void GetData()
         {
-            var json = FileManger.ReadFrom(_dataFileName);
+            var json = FileManager.ReadFrom(_dataFileName);
             if(json != string.Empty)
             {
                 ParseJsonData(json);
@@ -28,7 +28,7 @@ namespace Orpheus.AppData
             else
             {
                 SaveData();
-                json = FileManger.ReadFrom(_dataFileName);
+                json = FileManager.ReadFrom(_dataFileName);
                 ParseJsonData(json);
             }
         }
@@ -44,11 +44,11 @@ namespace Orpheus.AppData
         {
             _appDataContent.Streams = _appDataContent.StreamsFromContext;
             var contentStr = Serializer.ToString<AppDataContent>(_appDataContent);
-            FileManger.SaveTo(_dataFileName, contentStr);
+            FileManager.SaveTo(_dataFileName, contentStr);
         }
     }
 
-    public static class FileManger
+    public static class FileManager
     {
         public static void SaveTo(string fileName, string content)
         {

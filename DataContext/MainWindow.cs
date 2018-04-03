@@ -12,18 +12,21 @@ namespace Orpheus.DataContext
 {
     public class MainWindowDataContext : INotifyPropertyChanged
     {
-        private MpdServer _mpd = null;
-
         public MainWindowDataContext()
         {
-            MpdServer.CreateInstance((message) => { CommandsStatus = message; }, UpdatePlayList);
-            _mpd = MpdServer.Instance;
-            //_mpd.DisplayStatus += ;
-
+            
             CurrentPlaylist = new ObservableCollection<MpdPlaylistEntry>();
 
             IsPlayerPlaying = false;
+        }
 
+        public void DisplayMessage(string message)
+        {
+            CommandsStatus = message;
+        }
+
+        public void UpdateUI()
+        {
             UpdatePlayList();
             UpdateStatus();
             GetOutputs();
@@ -31,7 +34,7 @@ namespace Orpheus.DataContext
 
         private void GetOutputs()
         {
-            _mpd.Outputs(FillOutputs);
+            MpdServer.Instance.Outputs(FillOutputs);
         }
 
         public void FillOutputs(List<MpdOutput> outputs)
@@ -75,14 +78,14 @@ namespace Orpheus.DataContext
 
         public void  UpdatePlayList()
         {
-            _mpd.PlaylistInfo(FillCurrentPlaylist);
+            MpdServer.Instance.PlaylistInfo(FillCurrentPlaylist);
         }
 
         private void FillStatusFields(MpdStatus status)
         {
             if (status == null) return;
 
-            State = $"{status.State}@{_mpd.ConnectionAsString}";
+            State = $"{status.State}@{MpdServer.Instance.ConnectionAsString}";
             Duration = status.Duration;
             ElapsedTime = status.Elapsed;
 
@@ -127,8 +130,8 @@ namespace Orpheus.DataContext
 
         public void UpdateStatus()
         {
-            _mpd.Status(FillStatusFields);
-            _mpd.Stats(FillStatsFields);
+            MpdServer.Instance.Status(FillStatusFields);
+            MpdServer.Instance.Stats(FillStatsFields);
         }
 
         private void FillFileSystem(MpdFileSystem files)
@@ -138,7 +141,7 @@ namespace Orpheus.DataContext
 
         public void GetMpdFiles()
         {
-            _mpd.FilelistInfo(FillFileSystem);
+            MpdServer.Instance.FilelistInfo(FillFileSystem);
         }
 
         private IList<MpdPlaylistEntry> _currentPlaylist;

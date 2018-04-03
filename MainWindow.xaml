@@ -16,6 +16,8 @@
     <Window.Resources>
         <converters:SecondsToTimeConverter x:Key="TimeConverter" />
         <converters:UnixTimeToDateTimeConverter x:Key="UnixTimeConverter" />
+        <converters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+        
     </Window.Resources>
     <Grid Name="MainGrid" Style="{StaticResource GridStyle}" >
         <Grid.ColumnDefinitions>
@@ -109,7 +111,7 @@
         </ListView>
 
         <Border   Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="3" BorderBrush="Black" BorderThickness="0 .4 0 0">
-            <DockPanel  VerticalAlignment="Stretch" Height="30" LastChildFill="False" >
+            <DockPanel  VerticalAlignment="Stretch" Height="30" LastChildFill="False" Visibility="{Binding Path=MainWindow.MpdConnected, Converter={StaticResource BooleanToVisibilityConverter}}" >
                 <Label Style="{StaticResource Label}" DockPanel.Dock="Left"  Content="{Binding Path=MainWindow.ElapsedTime, Converter={StaticResource TimeConverter}}"  />
                 <Label Style="{StaticResource Label}" DockPanel.Dock="Left"  Content="/"  />
                 <Label  Style="{StaticResource Label}" DockPanel.Dock="Left" Content="{Binding Path=MainWindow.Duration, Converter={StaticResource TimeConverter}}"  />
@@ -132,18 +134,18 @@
             </DockPanel>
         </Border>
 
-        <DockPanel Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="3" VerticalAlignment="Stretch" Height="30" Dock="Bottom" Name="PlaylisItemSliderPanel" Margin="10,0,10,10">
+        <DockPanel Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="3" VerticalAlignment="Stretch" Height="30" Dock="Bottom" Name="PlaylisItemSliderPanel" Margin="10,0,10,10" Visibility="{Binding Path=MainWindow.MpdConnected, Converter={StaticResource BooleanToVisibilityConverter}}">
             <Slider  Width="{Binding Path=ActualWidth, ElementName=PlaylisItemSliderPanel}" IsMoveToPointEnabled="True" Margin="0,0,0,0" Maximum="{Binding Path=MainWindow.Duration}" Value="{Binding Path=MainWindow.ElapsedTime}" Name="PlaylisItemSlider" VerticalContentAlignment="Bottom" PreviewMouseUp="PlaylisItemSlider_OnValueChanged" HorizontalContentAlignment="Center" VerticalAlignment="Bottom" HorizontalAlignment="Center" Height="20"  />
         </DockPanel>
 
         <StatusBar Grid.Row="5" Grid.ColumnSpan="3" Grid.Column="0" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" >
-            <StatusBarItem>
+            <StatusBarItem Visibility="{Binding Path=MainWindow.MpdConnected, Converter={StaticResource BooleanToVisibilityConverter}}">
                 <TextBlock  Name="StatusBarLabel" Text="{Binding Path=MainWindow.State}" />
             </StatusBarItem>
-            <StatusBarItem HorizontalAlignment="Right">
+            <StatusBarItem HorizontalAlignment="Right" Visibility="{Binding Path=MainWindow.MpdConnected, Converter={StaticResource BooleanToVisibilityConverter}}">
                 <TextBlock  Text="Last db update:" />
             </StatusBarItem>
-            <StatusBarItem HorizontalAlignment="Right">
+            <StatusBarItem HorizontalAlignment="Right" Visibility="{Binding Path=MainWindow.MpdConnected, Converter={StaticResource BooleanToVisibilityConverter}}">
                 <TextBlock  Name="MpdCommandsStatsLabel" Text="{Binding Path=MainWindow.UpdateDbTime , Converter={StaticResource UnixTimeConverter}}" />
             </StatusBarItem>
             <StatusBarItem HorizontalAlignment="Right">

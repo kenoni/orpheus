@@ -84,6 +84,7 @@ namespace Orpheus.Mpd
                 if(_tcpConnection != null)
                 {
                     _connectedCallback();
+                    DataContext.MainContext.Instance.MainWindow.MpdConnected = true;
                 }
             }
         }
