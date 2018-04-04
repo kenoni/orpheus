@@ -14,9 +14,7 @@ namespace Orpheus.DataContext
     {
         public MainWindowDataContext()
         {
-            
             CurrentPlaylist = new ObservableCollection<MpdPlaylistEntry>();
-
             IsPlayerPlaying = false;
         }
 

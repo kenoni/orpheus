@@ -35,28 +35,24 @@ namespace Orpheus.Mpd
         public bool Terminating = false;
         private string _address;
         private int _port;
-        public Action<string> DisplayStatus { get; set; }
-        public Action _connectedCallback;
-        public MpdSession(string address, int port, Action connectedCallback)
+        public event Action<string> DisplayMessage;
+        public event Action Connected;
+
+        public MpdSession(string address, int port)
         {
             _address = address;
             _port = port;
-            _connectedCallback = connectedCallback;
             _queue = new TaskQueue();
-
-            Connect();
         }
 
-        private void Connect()
+        public void Connect()
         {
             while (_tcpConnection == null)
             {
                 _tcpConnection = new TcpClient();
                 _tcpConnection.SendTimeout = _tcpTimeout;
                 _tcpConnection.ReceiveTimeout = _tcpTimeout;
-
-                //m_Parent.OnConnectionStateChanged(ServerSession.SessionState.Connecting);
-                //m_Parent.OnActivityChanged("");
+                
                 IAsyncResult connectResult = _tcpConnection.BeginConnect(_address, _port, null, null);
 
                 while (!connectResult.IsCompleted && !Terminating)
@@ -83,7 +79,7 @@ namespace Orpheus.Mpd
 
                 if(_tcpConnection != null)
                 {
-                    _connectedCallback();
+                    Connected?.Invoke();
                     DataContext.MainContext.Instance.MainWindow.MpdConnected = true;
                 }
             }
@@ -118,7 +114,7 @@ namespace Orpheus.Mpd
                     var mpdResponse = command.Parse(rawResponse);
 
                     callback?.Invoke(mpdResponse);
-                    DisplayStatus?.Invoke("Idle");
+                    DisplayMessage?.Invoke("Idle");
 
                     break;
                 }
