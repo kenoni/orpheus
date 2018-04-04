@@ -39,7 +39,7 @@ namespace Orpheus.Mpd.Commands
                     if (matchFileId.Success && item != null)
                     {
                         item.Id = matchFileId.Groups[1].Value;
-                        item.Name = $"{item.Id} - {item.Name}";
+                        item.Name = item.Name;
                         Response.Items.Add(item);
                     }
                 }

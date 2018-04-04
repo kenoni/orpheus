@@ -89,8 +89,8 @@
                                 <DataTemplate.Resources>
                                     <Style TargetType="{x:Type TextBlock}">
                                         <Style.Triggers>
-                                            <DataTrigger Binding="{Binding Path=MainWindow.IsCurrentlyPlaying}" Value="true" >
-                                                <Setter Property="Foreground" Value="Blue"/>
+                                            <DataTrigger Binding="{Binding Path=IsCurrentlyPlaying}" Value="true" >
+                                                <Setter Property="Foreground" Value="Red"/>
                                             </DataTrigger>
                                         </Style.Triggers>
                                     </Style>
@@ -112,7 +112,7 @@
 
         <Border   Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="3" BorderBrush="Black" BorderThickness="0 .4 0 0">
             <DockPanel  VerticalAlignment="Stretch" Height="30" LastChildFill="False" Visibility="{Binding Path=MainWindow.MpdConnected, Converter={StaticResource BooleanToVisibilityConverter}}" >
-                <Label  Style="{StaticResource Label}" DockPanel.Dock="Left" Content="{Binding Path=MainWindow.PlayingSong}"  />
+                <Label  Style="{StaticResource Label}" DockPanel.Dock="Left" Margin="0,3,0,0" Content="{Binding Path=MainWindow.PlayingSong}"  />
                 <Button Width="30" Height="24"  Margin="0,0,5,0" DockPanel.Dock="Right" Click="Button_Click_2" >
                     <Image Height="18" Source="Icons/next_btn.png" />
                 </Button>
@@ -163,7 +163,7 @@
             </StatusBarItem>
             <StatusBarItem HorizontalAlignment="Right">
                 <StackPanel Orientation="Horizontal">
-                    <TextBlock HorizontalAlignment="Right"  Name="MpdCommandsStatusLabel" Text="{Binding Path=MainWindow.CommandsStatus}" />
+                    <TextBlock HorizontalAlignment="Right" Margin="0,2,0,0"  Name="MpdCommandsStatusLabel" Text="{Binding Path=MainWindow.CommandsStatus}" />
                     <Image Width="24" Height="20">
                         <Image.Style>
                             <Style TargetType="{x:Type Image}">

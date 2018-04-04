@@ -18,6 +18,8 @@ namespace Orpheus.Models
     {
         string Uri { get; set; }
         IList<ITreeItem<T>> Children { get; set; }
+        MpdFileType Type { get; set; }
+        string Name { get; set; }
     }
 
     public class MpdFile : INotifyPropertyChanged, ITreeItem<MpdFile>

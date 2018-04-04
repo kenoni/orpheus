@@ -35,7 +35,14 @@ namespace Orpheus.Helpers
                 treeItem.Children = _items.Where(x => x.Uri.StartsWith(treeItem.Uri + _delimiter) && slashCount + 1 == x.Uri.Count(x1 => x1 == _delimiter)).ToList();
 
                 foreach (var child in treeItem.Children)
+                {
+                    if (!string.IsNullOrEmpty(treeItem.Uri) && child.Name.StartsWith($"{treeItem.Uri}/") && child.Type == MpdFileType.Folder && treeItem.Type == MpdFileType.Folder)
+                    {
+                        child.Name = child.Name.Substring(treeItem.Name.Length + 1);
+                    }
+
                     AddChildren(child);
+                }
             }
             else
             {
