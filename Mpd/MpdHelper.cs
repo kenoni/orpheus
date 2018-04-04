@@ -24,35 +24,7 @@ namespace Orpheus.Mpd
 {
     public static class MpdHelper
     {
-        public static bool IsConnected(this Socket client)
-        {
-            
-            // This is how you can determine whether a socket is still connected.
-            bool blockingState = client.Blocking;
-            try
-            {
-                byte[] tmp = new byte[1];
-
-                client.Blocking = false;
-                client.Send(tmp, 0, 0);
-
-                DataContext.MainContext.Instance.MainWindow.MpdConnected = true;
-
-                return true;
-            }
-            catch (SocketException e)
-            {
-                // 10035 == WSAEWOULDBLOCK
-                
-                DataContext.MainContext.Instance.MainWindow.MpdConnected = (e.NativeErrorCode.Equals(10035));
-                return (e.NativeErrorCode.Equals(10035));
-                
-            }
-            finally
-            {
-                client.Blocking = blockingState;
-            }
-        }
+       
 
         public static string[] ToMpdAddress(this string address)
         {

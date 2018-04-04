@@ -51,6 +51,11 @@ namespace Orpheus.Mpd
         {
             _displayMessage?.Invoke("Connecting...");
 
+            if (_session != null)
+            {
+                _session.Terminating = true;
+            }
+
             _session = new MpdSession(_address, _port);
             _session.DisplayMessage += _displayMessage;
             _session.Connected += _connected;
@@ -58,8 +63,6 @@ namespace Orpheus.Mpd
             Task initSession = Task.Run(delegate { _session.Connect(); });
             
             await initSession;
-            //_session = session1;
-            
         }
 
         public static void CreateInstance(Action<string> displayStatus, Action connectedCallback)

@@ -47,7 +47,7 @@ namespace Orpheus.Mpd
 
         public void Connect()
         {
-            while (_tcpConnection == null)
+            while (_tcpConnection == null && !Terminating)
             {
                 _tcpConnection = new TcpClient();
                 _tcpConnection.SendTimeout = _tcpTimeout;
@@ -94,9 +94,9 @@ namespace Orpheus.Mpd
                    // SendCommand("close").Wait();
                 }
 
-                _mpdStream.Close();
+                _mpdStream?.Close();
                 _mpdStream = null;
-                _tcpConnection.Close();
+                _tcpConnection?.Close();
                 _tcpConnection = null;
             }
         }
@@ -130,10 +130,13 @@ namespace Orpheus.Mpd
         {
             while (true)
             {
-                var connected = _tcpConnection.Client.IsConnected();
-                if (connected)
+                if(_tcpConnection?.Client != null)
                 {
-                    break;
+                    var connected = IsConnected(_tcpConnection.Client);
+                    if (connected)
+                    {
+                        break;
+                    }
                 }
 
                 Close();
@@ -145,6 +148,30 @@ namespace Orpheus.Mpd
             return true;
         }
 
+        private bool IsConnected(Socket client)
+        {
+            bool blockingState = client.Blocking;
+            try
+            {
+                byte[] tmp = new byte[1];
+
+                client.Blocking = false;
+                client.Send(tmp, 0, 0);
+
+                DataContext.MainContext.Instance.MainWindow.MpdConnected = true;
+
+                return true;
+            }
+            catch (SocketException e)
+            {
+                DataContext.MainContext.Instance.MainWindow.MpdConnected = (e.NativeErrorCode.Equals(10035));
+                return (e.NativeErrorCode.Equals(10035));
+            }
+            finally
+            {
+                client.Blocking = blockingState;
+            }
+        }
 
         private MpdResponse ReadResponse()
         {
