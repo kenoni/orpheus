@@ -9,7 +9,7 @@ Screenshots
 ===
 
 <p>
-  <p><img src="https://github.com/kenoni/orpheus/blob/master/Screenshots/2018-02-09%2011_13_19-Orpheus.png" width="400"/></p>
-  <p><img src="https://github.com/kenoni/orpheus/blob/master/Screenshots/2018-02-09%2011_14_19-Orpheus.png" width="400"/></p>
-  <p><img src="https://github.com/kenoni/orpheus/blob/master/Screenshots/2018-02-09%2011_15_19-Orpheus.png" width="400"/></p>
+  <p><img src="https://github.com/kenoni/orpheus/blob/master/Screenshots/mpd.png" width="400"/></p>
+  <p><img src="https://github.com/kenoni/orpheus/blob/master/Screenshots/player.png" width="400"/></p>
+  <p><img src="https://github.com/kenoni/orpheus/blob/master/Screenshots/settings.png" width="400"/></p>
 </p>
