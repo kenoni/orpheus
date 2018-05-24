@@ -78,7 +78,7 @@ namespace Orpheus.Mpd
         //}
 
         private async void RunCommand<T>(string message, IMpdCommand<T> task, Action<T> callback = null) {
-            if (_session?._tcpConnection != null)
+            if (_session?._tcpConnection != null &&  _session?._tcpConnection?.Connected != false)
             {
                 _displayMessage?.Invoke(message);
                 await _queue.Enqueue(() => Task.Run(delegate { _session.SendCommand(task, callback); }));

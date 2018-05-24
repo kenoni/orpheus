@@ -72,7 +72,10 @@ namespace Orpheus
 
         private void dispatcherTimer_Tick(object sender, EventArgs e)
         {
-            MainContext.Instance.MainWindow.ElapsedTime++;
+            if (MainContext.Instance.MainWindow.ElapsedTime != 0 && MainContext.Instance.MainWindow.Duration != 0)
+            {
+                MainContext.Instance.MainWindow.ElapsedTime++;
+            }
         }
 
         private void dispatcherTimer_Tick1(object sender, EventArgs e)

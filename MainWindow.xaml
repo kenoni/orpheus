@@ -17,9 +17,9 @@
         <converters:SecondsToTimeConverter x:Key="TimeConverter" />
         <converters:UnixTimeToDateTimeConverter x:Key="UnixTimeConverter" />
         <converters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
-        
+       
     </Window.Resources>
-    <Grid Name="MainGrid" Style="{StaticResource GridStyle}" >
+    <Grid Background="#FFC3C3C3" Name="MainGrid" Style="{StaticResource GridStyle}" >
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="50*" />
             <ColumnDefinition Width="5" />
@@ -185,8 +185,8 @@
         </StatusBar>
         <TabControl  SelectionChanged="TabControl_SelectionChanged"  Grid.Column="2" Grid.Row="2" TabStripPlacement="Left" >
 
-            <TabItem Header="Mpd" Style="{StaticResource TabControl}">
-                <DockPanel  Name="MpdDockPanel">
+            <TabItem Header="Mpd"  Style="{StaticResource TabControl}">
+                <DockPanel Background="#FFC3C3C3" Name="MpdDockPanel">
                     <DockPanel Height="34" DockPanel.Dock="Top" Name="MpdActionsDockPanel">
                         <Button   Click="RescanFileSystem_Click" Width="30" Height="24" VerticalAlignment="Bottom" Margin="5,5,5,5" HorizontalContentAlignment="Center" HorizontalAlignment="Left" >
                             <Image Height="18" Source="Icons/reload.png" />
@@ -220,8 +220,8 @@
                     </Controls:MultiSelectTreeView>
                 </DockPanel>
             </TabItem>
-            <TabItem Header="Player" Style="{StaticResource TabControl}">
-                <DockPanel  Name="PlayerDockPanel">
+            <TabItem Header="Player"  Style="{StaticResource TabControl}">
+                <DockPanel Background="#FFC3C3C3"  Name="PlayerDockPanel">
 
                     <DockPanel Height="34" HorizontalAlignment="Right" LastChildFill="False" Margin="5,0" DockPanel.Dock="Top" VerticalAlignment="Top" >
                         <ToggleButton Height="24" Width="30" HorizontalAlignment="Left" Margin="1,0,0,0" VerticalAlignment="Center"   Click="OnPlayClicked">
@@ -279,7 +279,7 @@
             </TabItem>
             <TabItem  Style="{StaticResource TabControl}" Header="Settings" DataContext="{Binding Settings}">
                 <DockPanel>
-                    <Grid Background="#FFE5E5E5">
+                    <Grid Background="#FFC3C3C3">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="Auto"/>
