@@ -34,7 +34,7 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
-        <GridSplitter MouseDoubleClick="GridSplitter_MouseLeftButtonDown"  Name="GridSplitter1" Visibility="Visible" Grid.Row="2" Grid.Column="1" HorizontalAlignment="Right" Width="3" VerticalAlignment="Stretch"  ResizeBehavior="PreviousAndNext" Height="Auto" Background="Blue" IsEnabled="True" ResizeDirection="Columns" Cursor="SizeWE"/>
+        <GridSplitter MouseDoubleClick="GridSplitter_MouseLeftButtonDown"  Name="GridSplitter1" Visibility="Visible" Grid.Row="2" Grid.Column="1" HorizontalAlignment="Right" Width="2" VerticalAlignment="Stretch"  ResizeBehavior="PreviousAndNext" Height="Auto" Background="White" IsEnabled="True" ResizeDirection="Columns" Cursor="SizeWE"/>
 
         <Popup x:Name="AddStreamPopup"  AllowsTransparency="True" IsOpen="False" Width="290"  PlacementTarget="{Binding ElementName=MainWindow.PlayerStreamsListView}" Placement="Top" Margin="0">
             <Grid Background="AliceBlue" Width="290">
@@ -183,10 +183,10 @@
                
             </StatusBarItem>
         </StatusBar>
-        <TabControl  SelectionChanged="TabControl_SelectionChanged"  Grid.Column="2" Grid.Row="2" TabStripPlacement="Left" >
+        <TabControl Background="#FFC3C3C3" SelectionChanged="TabControl_SelectionChanged"  Grid.Column="2" Grid.Row="2" TabStripPlacement="Left" >
 
             <TabItem Header="Mpd"  Style="{StaticResource TabControl}">
-                <DockPanel Background="#FFC3C3C3" Name="MpdDockPanel">
+                <DockPanel  Name="MpdDockPanel">
                     <DockPanel Height="34" DockPanel.Dock="Top" Name="MpdActionsDockPanel">
                         <Button   Click="RescanFileSystem_Click" Width="30" Height="24" VerticalAlignment="Bottom" Margin="5,5,5,5" HorizontalContentAlignment="Center" HorizontalAlignment="Left" >
                             <Image Height="18" Source="Icons/reload.png" />
