@@ -72,12 +72,11 @@
             </Grid>
         </Popup>
 
-        <ListView  Style="{StaticResource ListView}" AllowDrop="True" Grid.Row="2" Grid.Column="0" PreviewDrop="PlayListView_PreviewDrop" VerticalAlignment="Stretch" PreviewKeyDown="PlayListView_PreviewKeyDown"  Name="PlayListView" ItemsSource="{Binding Path=MainWindow.CurrentPlaylist}"  MouseDoubleClick="OnPlaylistViewDoubleClicked"  Margin="5,5,0,5" VerticalContentAlignment="Stretch" >
+        <ListView ItemContainerStyle="{StaticResource ListViewBoxItem}"  Style="{StaticResource ListView}"  AllowDrop="True" Grid.Row="2" Grid.Column="0" PreviewDrop="PlayListView_PreviewDrop" VerticalAlignment="Stretch" PreviewKeyDown="PlayListView_PreviewKeyDown"  Name="PlayListView" ItemsSource="{Binding Path=MainWindow.CurrentPlaylist}"  MouseDoubleClick="OnPlaylistViewDoubleClicked"  Margin="5,5,0,5" VerticalContentAlignment="Stretch" >
             <ListView.Resources>
                 <Style TargetType="GridViewColumnHeader">
                     <Setter Property="Visibility" Value="Collapsed" />
                 </Style>
-                
             </ListView.Resources>
             <ListView.View>
                 <GridView>
@@ -87,10 +86,11 @@
                             
                             <DataTemplate>
                                 <DataTemplate.Resources>
+                                    
                                     <Style TargetType="{x:Type TextBlock}">
                                         <Style.Triggers>
                                             <DataTrigger Binding="{Binding Path=IsCurrentlyPlaying}" Value="true" >
-                                                <Setter Property="Foreground" Value="Red"/>
+                                                <Setter Property="FontWeight" Value="Bold" />
                                             </DataTrigger>
                                         </Style.Triggers>
                                     </Style>
@@ -206,7 +206,7 @@
                             </Button.ContextMenu>
                         </Button>
                     </DockPanel>
-                    <Controls:MultiSelectTreeView Style="{StaticResource MultiSelectTreeView}"  PreviewMouseDown="FileTreeview_PreviewMouseDown"  
+                    <Controls:MultiSelectTreeView Style="{StaticResource MultiSelectTreeView}" ItemContainerStyle="{StaticResource MultiSelectListViewBoxItem}" PreviewMouseDown="FileTreeview_PreviewMouseDown"  
                                            HorizontalContentAlignment="Stretch" 
                                            ItemsSource="{Binding Path=MainWindow.MpdFileSystem}"  
                                            VerticalContentAlignment="Stretch" 
@@ -243,7 +243,7 @@
                         <Slider x:Name="VolumeSlider" HorizontalAlignment="Right" IsMoveToPointEnabled="True"  Height="20" Maximum="100"   TickFrequency="15" VerticalAlignment="Center" Margin="5,0" Width="120"  HorizontalContentAlignment="Center" VerticalContentAlignment="Center" RenderTransformOrigin="2.919,0.567"  ValueChanged="OnSliderValueChanged"/>
                     </DockPanel>
 
-                    <ListView Style="{StaticResource ListView}" PreviewKeyDown="PlayerStreamsListView_PreviewKeyDown" AllowDrop="True" VerticalAlignment="Stretch"   Name="PlayerStreamsListView" ItemsSource="{Binding Path=MainWindow.PlayerStreams}"  MouseDoubleClick="PlayerStreamsListView_MouseDoubleClick"  Margin="5,5,0,5" VerticalContentAlignment="Stretch" >
+                    <ListView Style="{StaticResource ListView}" ItemContainerStyle="{StaticResource ListViewBoxItem}" PreviewKeyDown="PlayerStreamsListView_PreviewKeyDown" AllowDrop="True" VerticalAlignment="Stretch"   Name="PlayerStreamsListView" ItemsSource="{Binding Path=MainWindow.PlayerStreams}"  MouseDoubleClick="PlayerStreamsListView_MouseDoubleClick"  Margin="5,5,0,5" VerticalContentAlignment="Stretch" >
                         <ListView.ContextMenu>
                             <ContextMenu>
                                 <MenuItem Header="Add" Name="AddStreamMenuItem" Click="MenuItem_Click" />
@@ -263,7 +263,7 @@
                                                 <Style TargetType="{x:Type TextBlock}">
                                                     <Style.Triggers>
                                                         <DataTrigger Binding="{Binding Path=MainWindow.IsPlaying}" Value="true" >
-                                                            <Setter Property="Foreground" Value="Blue"/>
+                                                            <Setter Property="FontWeight" Value="Bold" />
                                                         </DataTrigger>
                                                     </Style.Triggers>
                                                 </Style>
