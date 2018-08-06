@@ -28,10 +28,10 @@ namespace Orpheus.Mpd
 
         public static string[] ToMpdAddress(this string address)
         {
-            var mpdAddressRegEx = new Regex(@"([\S]+)[:]{1}([\d]+)");
+            var mpdAddressRegEx = new Regex(@"([\S]+)[:]{1}([\d]+)[:]([\S]+)");
             var matchMpdAddress = mpdAddressRegEx.Match(address);
 
-            return (matchMpdAddress.Success) ? new[] { matchMpdAddress.Groups[1].Value, matchMpdAddress.Groups[2].Value }
+            return (matchMpdAddress.Success) ? new[] { matchMpdAddress.Groups[1].Value, matchMpdAddress.Groups[2].Value, matchMpdAddress.Groups[3].Value }
                                              : new[] { address };
         }
     }

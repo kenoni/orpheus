@@ -37,6 +37,7 @@ namespace Orpheus.Mpd
         private int _port;
         public event Action<string> DisplayMessage;
         public event Action Connected;
+        public event Action Authenticate;
 
         public MpdSession(string address, int port)
         {
@@ -80,6 +81,7 @@ namespace Orpheus.Mpd
                 if(_tcpConnection != null)
                 {
                     Connected?.Invoke();
+                    Authenticate?.Invoke();
                     DataContext.MainContext.Instance.MainWindow.MpdConnected = true;
                 }
             }

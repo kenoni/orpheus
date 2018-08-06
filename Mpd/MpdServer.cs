@@ -30,6 +30,7 @@ namespace Orpheus.Mpd
         private static MpdServer _instance;
 
         private Action _connected;
+        private Action _authenticate;
         private Action<string> _displayMessage;
 
         private MpdServer(Action<string> displayStatus, Action connectedCallback)
@@ -43,6 +44,7 @@ namespace Orpheus.Mpd
 
             _displayMessage = displayStatus;
             _connected = connectedCallback;
+            if (mpdAddress.Length > 2) _authenticate = delegate { RunCommand("Deleting id...", new OneArgCommand("password", new[] { mpdAddress[2] })); };
 
             CreateSession();
         }
@@ -59,6 +61,7 @@ namespace Orpheus.Mpd
             _session = new MpdSession(_address, _port);
             _session.DisplayMessage += _displayMessage;
             _session.Connected += _connected;
+            _session.Authenticate += _authenticate;
 
             Task initSession = Task.Run(delegate { _session.Connect(); });
             
