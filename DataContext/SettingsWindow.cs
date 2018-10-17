@@ -24,7 +24,7 @@ namespace Orpheus.DataContext
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(info));
         }
 
-        private IList<MMDevice> _outputDevices = null;
+        private IList<MMDevice> _outputDevices;
         public IList<MMDevice> OutputDevices
         {
             get => _outputDevices;
