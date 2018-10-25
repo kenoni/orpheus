@@ -149,11 +149,17 @@ namespace Orpheus.DataContext
             get => _currentPlaylist;
             set
             {
-                _currentPlaylist = value;
-                NotifyPropertyChanged("CurrentPlaylist");
-                foreach (var item in _currentPlaylist)
+                if (value == null || value.Count > 0)
                 {
-                    item.PropertyChanged += PropertyChanged;
+                    _currentPlaylist = value;
+                    NotifyPropertyChanged("CurrentPlaylist");
+                    if (_currentPlaylist != null)
+                    {
+                        foreach (var item in _currentPlaylist)
+                        {
+                            item.PropertyChanged += PropertyChanged;
+                        }
+                    }
                 }
             }
         }

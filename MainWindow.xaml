@@ -6,6 +6,7 @@
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         xmlns:converters="clr-namespace:Orpheus.Converters"
         xmlns:models="clr-namespace:Orpheus.Models"
+        xmlns:fa="http://schemas.fontawesome.io/icons/"
         x:Class="Orpheus.MainWindow"
         mc:Ignorable="d"
         Closing="OnClose"
@@ -71,62 +72,74 @@
 
             </Grid>
         </Popup>
+        
+            <Grid Margin="5" Grid.Row="2" Grid.Column="0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                <fa:ImageAwesome Grid.Row="0"  Visibility="{Binding Path=MainWindow.CurrentPlaylist, TargetNullValue=Visible, FallbackValue=Hidden }" Grid.ZIndex="1" Icon="Refresh" Spin="True" Height="24" Width="24" />
+                <ListView ItemContainerStyle="{StaticResource ListViewBoxItem}"  Style="{StaticResource ListView}"  AllowDrop="True"  PreviewDrop="PlayListView_PreviewDrop" VerticalAlignment="Stretch" PreviewKeyDown="PlayListView_PreviewKeyDown"  Name="PlayListView" ItemsSource="{Binding Path=MainWindow.CurrentPlaylist}"  MouseDoubleClick="OnPlaylistViewDoubleClicked"  Margin="5,5,0,5" VerticalContentAlignment="Stretch" >
+                    <ListView.Resources>
+                        <Style TargetType="GridViewColumnHeader">
+                            <Setter Property="Visibility" Value="Collapsed" />
+                        </Style>
+                    </ListView.Resources>
+                    <ListView.View>
+                        <GridView>
+                            <GridViewColumn>
 
-        <ListView ItemContainerStyle="{StaticResource ListViewBoxItem}"  Style="{StaticResource ListView}"  AllowDrop="True" Grid.Row="2" Grid.Column="0" PreviewDrop="PlayListView_PreviewDrop" VerticalAlignment="Stretch" PreviewKeyDown="PlayListView_PreviewKeyDown"  Name="PlayListView" ItemsSource="{Binding Path=MainWindow.CurrentPlaylist}"  MouseDoubleClick="OnPlaylistViewDoubleClicked"  Margin="5,5,0,5" VerticalContentAlignment="Stretch" >
-            <ListView.Resources>
-                <Style TargetType="GridViewColumnHeader">
-                    <Setter Property="Visibility" Value="Collapsed" />
-                </Style>
-            </ListView.Resources>
-            <ListView.View>
-                <GridView>
-                    <GridViewColumn>
-                        
-                        <GridViewColumn.CellTemplate>
-                            
-                            <DataTemplate>
-                                <DataTemplate.Resources>
-                                    
-                                    <Style TargetType="{x:Type TextBlock}">
-                                        <Style.Triggers>
-                                            <DataTrigger Binding="{Binding Path=IsCurrentlyPlaying}" Value="true" >
-                                                <Setter Property="FontWeight" Value="Bold" />
-                                            </DataTrigger>
-                                        </Style.Triggers>
-                                    </Style>
-                                    <Style TargetType="{x:Type ListViewItem}">
-                                        <Style.Triggers>
-                                            <Trigger Property="IsMouseOver" Value="true">
-                                                <Setter Property="Foreground" Value="Black" />
-                                            </Trigger>
-                                        </Style.Triggers>
-                                    </Style>
-                                </DataTemplate.Resources>
-                                <TextBlock Text="{Binding Name}" Name="PlaylistEntryName"  TextAlignment="Right" />
-                            </DataTemplate>
-                        </GridViewColumn.CellTemplate>
-                    </GridViewColumn>
-                </GridView>
-            </ListView.View>
-        </ListView>
+                                <GridViewColumn.CellTemplate>
+
+                                    <DataTemplate>
+                                        <DataTemplate.Resources>
+
+                                            <Style TargetType="{x:Type TextBlock}">
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding Path=IsCurrentlyPlaying}" Value="true" >
+                                                        <Setter Property="FontWeight" Value="Bold" />
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                            <Style TargetType="{x:Type ListViewItem}">
+                                                <Style.Triggers>
+                                                    <Trigger Property="IsMouseOver" Value="true">
+                                                        <Setter Property="Foreground" Value="Black" />
+                                                    </Trigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </DataTemplate.Resources>
+                                        <TextBlock Text="{Binding Name}" Name="PlaylistEntryName"  TextAlignment="Right" />
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                        </GridView>
+                    </ListView.View>
+                </ListView>
+            </Grid>
+
+        
+        
 
         <Border   Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="3" BorderBrush="Black" BorderThickness="0 .4 0 0">
             <DockPanel  VerticalAlignment="Stretch" Height="30" LastChildFill="False" Visibility="{Binding Path=MainWindow.MpdConnected, Converter={StaticResource BooleanToVisibilityConverter}}" >
                 <Label  Style="{StaticResource Label}" DockPanel.Dock="Left" Margin="0,3,0,0" Content="{Binding Path=MainWindow.PlayingSong}"  />
                 <Button Width="30" Height="24"  Margin="0,0,5,0" DockPanel.Dock="Right" Click="Button_Click_2" >
-                    <Image Height="18" Source="Icons/next_btn.png" />
+                    <fa:ImageAwesome  Icon="StepForward"></fa:ImageAwesome>
                 </Button>
                 <Button Width="30" Height="24"  Margin="0,0,5,0" DockPanel.Dock="Right"  Click="Button_Click_1" >
-                    <Image Height="18" Source="Icons/play-btn.png" />
+                    <fa:ImageAwesome Height="18" Icon="Play"></fa:ImageAwesome>
                 </Button>
                 <Button Width="30" Height="24"  Margin="0,0,5,0" DockPanel.Dock="Right" Click="Button_Click_3">
-                    <Image Height="18" Source="Icons/stop_btn.png" />
+                    <fa:ImageAwesome Height="18" Icon="Stop"></fa:ImageAwesome>
                 </Button>
                 <Button Width="30" Height="24"  Margin="0,0,5,0" DockPanel.Dock="Right" Click="Button_Click_4">
-                    <Image Height="18" Source="Icons/back_btn.png" />
+                    <fa:ImageAwesome Icon="StepBackward"></fa:ImageAwesome>
                 </Button>
-                <Button Width="30" Height="24"  Margin="0,0,5,0" DockPanel.Dock="Right">
-                    <Image Height="18" Source="Icons/shuffle-btn.png" />
+                <Button Width="30" Height="24"  Margin="0,0,5,0" DockPanel.Dock="Right" Click="Button_Click_5">
+                    <fa:ImageAwesome Icon="Random"></fa:ImageAwesome>
+                </Button>
+                <Button Width="30" Height="24"  Margin="0,0,5,0" DockPanel.Dock="Right" Click="Button_Click_6">
+                    <fa:ImageAwesome Icon="Repeat"></fa:ImageAwesome>
                 </Button>
             </DockPanel>
         </Border>
@@ -164,21 +177,20 @@
             <StatusBarItem HorizontalAlignment="Right">
                 <StackPanel Orientation="Horizontal">
                     <TextBlock HorizontalAlignment="Right" Margin="0,2,0,0"  Name="MpdCommandsStatusLabel" Text="{Binding Path=MainWindow.CommandsStatus}" />
-                    <Image Width="24" Height="20">
-                        <Image.Style>
-                            <Style TargetType="{x:Type Image}">
+                    <fa:ImageAwesome Width="24" Height="16" >
+                        <fa:ImageAwesome.Style>
+                            <Style TargetType="{x:Type fa:ImageAwesome}">
                                 <Style.Triggers>
                                     <DataTrigger Binding="{Binding Path=MainWindow.MpdConnected}" Value="true">
-                                        <Setter Property="Source" Value="Icons/connected.png"/>
+                                        <Setter Property="Icon" Value="Link"/>
                                     </DataTrigger>
                                     <DataTrigger Binding="{Binding Path=MainWindow.MpdConnected}" Value="false">
-                                        <Setter Property="Source" Value="Icons/disconnected.png"/>
+                                        <Setter Property="Icon" Value="UnLink"/>
                                     </DataTrigger>
                                 </Style.Triggers>
                             </Style>
-                        </Image.Style>
-                    </Image>
-                    
+                        </fa:ImageAwesome.Style>
+                    </fa:ImageAwesome>
                 </StackPanel>
                
             </StatusBarItem>
@@ -189,7 +201,7 @@
                 <DockPanel  Name="MpdDockPanel">
                     <DockPanel Height="34" DockPanel.Dock="Top" Name="MpdActionsDockPanel">
                         <Button   Click="RescanFileSystem_Click" Width="30" Height="24" VerticalAlignment="Bottom" Margin="5,5,5,5" HorizontalContentAlignment="Center" HorizontalAlignment="Left" >
-                            <Image Height="18" Source="Icons/reload.png" />
+                            <fa:ImageAwesome  Icon="Refresh"></fa:ImageAwesome>
                         </Button>
                         <Button  Height="23"  HorizontalAlignment="Right"   Name="button1" VerticalAlignment="Center" Width="70" Click="button1_Click" >
                             <Button.Content>
@@ -206,18 +218,32 @@
                             </Button.ContextMenu>
                         </Button>
                     </DockPanel>
-                    <Controls:MultiSelectTreeView Style="{StaticResource MultiSelectTreeView}" ItemContainerStyle="{StaticResource MultiSelectListViewBoxItem}" PreviewMouseDown="FileTreeview_PreviewMouseDown"  
-                                           HorizontalContentAlignment="Stretch" 
-                                           ItemsSource="{Binding Path=MainWindow.MpdFileSystem}"  
-                                           VerticalContentAlignment="Stretch" 
-                                           Name="FileTreeview" 
-                                           Margin="5" >
-                        <Controls:MultiSelectTreeView.Resources>
-                            <HierarchicalDataTemplate DataType="{x:Type models:MpdFile}" ItemsSource="{Binding Path=Children}">
-                                <TextBlock Text="{Binding Name}" PreviewMouseLeftButtonDown="TextBlock_PreviewMouseLeftButtonDown" PreviewMouseMove="TextBlock_PreviewMouseMove"></TextBlock>
-                            </HierarchicalDataTemplate>
-                        </Controls:MultiSelectTreeView.Resources>
-                    </Controls:MultiSelectTreeView>
+                    
+                    <DockPanel>
+                        <Grid Margin="5">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*" />
+                            </Grid.RowDefinitions>
+                            <fa:ImageAwesome Grid.Row="0"  Visibility="{Binding Path=MainWindow.MpdFileSystem, TargetNullValue=Visible, FallbackValue=Hidden }" Grid.ZIndex="1" Icon="Refresh" Spin="True" Height="24" Width="24" />
+                            <Controls:MultiSelectTreeView   Grid.Row="0"  Style="{StaticResource MultiSelectTreeView}" ItemContainerStyle="{StaticResource MultiSelectListViewBoxItem}" PreviewMouseDown="FileTreeview_PreviewMouseDown"  
+                                                            HorizontalContentAlignment="Stretch" 
+                                                            ItemsSource="{Binding Path=MainWindow.MpdFileSystem}"  
+                                                            VerticalContentAlignment="Stretch" 
+                                                            Name="FileTreeview" 
+                                                            Margin="5" >
+
+                                <Controls:MultiSelectTreeView.Resources>
+                                    <HierarchicalDataTemplate DataType="{x:Type models:MpdFile}" ItemsSource="{Binding Path=Children}">
+                                        <TextBlock Text="{Binding Name}" PreviewMouseLeftButtonDown="TextBlock_PreviewMouseLeftButtonDown" PreviewMouseMove="TextBlock_PreviewMouseMove">
+
+                                        </TextBlock>
+                                    </HierarchicalDataTemplate>
+                                </Controls:MultiSelectTreeView.Resources>
+                            </Controls:MultiSelectTreeView>
+                        </Grid>
+                        
+                    </DockPanel>
+                    
                 </DockPanel>
             </TabItem>
             <TabItem Header="Player"  Style="{StaticResource TabControl}">
@@ -225,20 +251,20 @@
 
                     <DockPanel Height="34" HorizontalAlignment="Right" LastChildFill="False" Margin="5,0" DockPanel.Dock="Top" VerticalAlignment="Top" >
                         <ToggleButton Height="24" Width="30" HorizontalAlignment="Left" Margin="1,0,0,0" VerticalAlignment="Center"   Click="OnPlayClicked">
-                            <Image Height="18" >
-                                <Image.Style>
-                                    <Style TargetType="{x:Type Image}">
+                            <fa:ImageAwesome Height="18" >
+                                <fa:ImageAwesome.Style>
+                                    <Style TargetType="{x:Type fa:ImageAwesome}">
                                         <Style.Triggers>
                                             <DataTrigger  Binding="{Binding MainWindow.IsPlayerPlaying}" Value="False">
-                                                <Setter Property="Source" Value="Icons/play-button.png"/>
+                                                <Setter Property="Icon" Value="Play"/>
                                             </DataTrigger>
                                             <DataTrigger  Binding="{Binding MainWindow.IsPlayerPlaying}" Value="True">
-                                                <Setter Property="Source" Value="Icons/stop.png"/>
+                                                <Setter Property="Icon" Value="Stop"/>
                                             </DataTrigger>
                                         </Style.Triggers>
                                     </Style>
-                                </Image.Style>
-                            </Image>
+                                </fa:ImageAwesome.Style>
+                            </fa:ImageAwesome>
                         </ToggleButton>
                         <Slider x:Name="VolumeSlider" HorizontalAlignment="Right" IsMoveToPointEnabled="True"  Height="20" Maximum="100"   TickFrequency="15" VerticalAlignment="Center" Margin="5,0" Width="120"  HorizontalContentAlignment="Center" VerticalContentAlignment="Center" RenderTransformOrigin="2.919,0.567"  ValueChanged="OnSliderValueChanged"/>
                     </DockPanel>

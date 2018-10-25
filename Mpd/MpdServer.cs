@@ -125,7 +125,7 @@ namespace Orpheus.Mpd
 
         public void Update()
         {
-            RunCommand("Updating music database...", new NoArgCommand("update"));
+            RunCommand("Updating music database...", new NoArgCommand("rescan"));
         }
 
         public void SeekCur(string time)
@@ -165,6 +165,16 @@ namespace Orpheus.Mpd
         public void Stop()
         {
             RunCommand("Stop...", new NoArgCommand("stop"));
+        }
+
+        public void Random(string state)
+        {
+            RunCommand("Toggling random...", new OneArgCommand("random", new[] { state }), null);
+        }
+
+        public void Repeat(string state)
+        {
+            RunCommand("Toggling repeat...", new OneArgCommand("repeat", new[] { state }), null);
         }
 
         //public DisableOutput

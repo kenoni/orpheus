@@ -37,6 +37,9 @@
     <Reference Include="CSCore, Version=1.2.1.2, Culture=neutral, PublicKeyToken=5a08f2b6f4415dea, processorArchitecture=MSIL">
       <HintPath>packages\CSCore.1.2.1.2\lib\net35-client\CSCore.dll</HintPath>
     </Reference>
+    <Reference Include="FontAwesome.WPF, Version=4.7.0.37774, Culture=neutral, PublicKeyToken=0758b07a11a4f466, processorArchitecture=MSIL">
+      <HintPath>packages\FontAwesome.WPF.4.7.0.9\lib\net40\FontAwesome.WPF.dll</HintPath>
+    </Reference>
     <Reference Include="log4net, Version=2.0.8.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
       <HintPath>packages\log4net.2.0.8\lib\net45-full\log4net.dll</HintPath>
     </Reference>
@@ -153,38 +156,7 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Icons\folders.png" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="Icons\Orpheus32x32.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Icons\back.png" />
-    <Resource Include="Icons\next.png" />
-    <Resource Include="Icons\play-button.png" />
-    <Resource Include="Icons\repeat.png" />
-    <Resource Include="Icons\shuffle-arrows.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Icons\stop.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Icons\folder.png" />
-    <Resource Include="Icons\reload.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Icons\play-button1.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Icons\connected.png" />
-    <Resource Include="Icons\disconnected.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Icons\back_btn.png" />
-    <Resource Include="Icons\next_btn.png" />
-    <Resource Include="Icons\play-btn.png" />
-    <Resource Include="Icons\shuffle-btn.png" />
-    <Resource Include="Icons\stop_btn.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

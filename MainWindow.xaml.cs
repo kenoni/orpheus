@@ -319,6 +319,7 @@ namespace Orpheus
 
         private void RescanFileSystem_Click(object sender, RoutedEventArgs e)
         {
+            MainContext.Instance.MainWindow.MpdFileSystem = null;
             MpdServer.Instance.Update();
         }
 
@@ -495,6 +496,16 @@ namespace Orpheus
         private void Button_Click_4(object sender, RoutedEventArgs e)
         {
             MpdServer.Instance.Previous();
+        }
+
+        private void Button_Click_5(object sender, RoutedEventArgs e)
+        {
+            MpdServer.Instance.Random("1");
+        }
+
+        private void Button_Click_6(object sender, RoutedEventArgs e)
+        {
+            MpdServer.Instance.Repeat("1");
         }
     }
 }
