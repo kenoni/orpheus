@@ -13,22 +13,16 @@
     You should have received a copy of the GNU General Public License
     along with Orpheus.  If not, see<http://www.gnu.org/licenses/>.*/
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Net.Sockets;
-using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
-using Orpheus.Models;
 using Orpheus.Mpd.Commands;
 
 namespace Orpheus.Mpd
 {
     class MpdSession
     {
-        private TaskQueue _queue;
         private NetworkStream _mpdStream = null;
         public TcpClient _tcpConnection;
         private int _tcpTimeout = 5000;
@@ -38,12 +32,11 @@ namespace Orpheus.Mpd
         public event Action<string> DisplayMessage;
         public event Action Connected;
         public event Action Authenticate;
-
+        private object obj = new object();
         public MpdSession(string address, int port)
         {
             _address = address;
             _port = port;
-            _queue = new TaskQueue();
         }
 
         public void Connect()
@@ -105,26 +98,29 @@ namespace Orpheus.Mpd
 
         public  void SendCommand<T>(IMpdCommand<T> command, Action<T> callback)
         {
-            while (true)
+            lock (obj)
             {
-                try
+                while (true)
                 {
-                    var buffer = Encoding.UTF8.GetBytes($"{command.Command}\n");
-                     _mpdStream.Write(buffer, 0, buffer.Length);
+                    try
+                    {
+                        var buffer = Encoding.UTF8.GetBytes($"{command.Command}\n");
+                        _mpdStream.Write(buffer, 0, buffer.Length);
 
-                    var rawResponse = ReadResponse();
-                    var mpdResponse = command.Parse(rawResponse);
+                        var rawResponse = ReadResponse();
+                        var mpdResponse = command.Parse(rawResponse);
 
-                    callback?.Invoke(mpdResponse);
-                    DisplayMessage?.Invoke("Idle");
+                        callback?.Invoke(mpdResponse);
+                        DisplayMessage?.Invoke("Idle");
 
-                    break;
+                        break;
+                    }
+                    catch (Exception ex)
+                    {
+                        Reconnect();
+                    }
+
                 }
-                catch (Exception ex)
-                {
-                    Reconnect();
-                }
-
             }
         }
 

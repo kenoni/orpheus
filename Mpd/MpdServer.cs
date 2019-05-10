@@ -14,7 +14,6 @@
     along with Orpheus.  If not, see<http://www.gnu.org/licenses/>.*/
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Threading.Tasks;
 using Orpheus.Models;
 using Orpheus.Mpd.Commands;
@@ -26,9 +25,6 @@ namespace Orpheus.Mpd
         private readonly string _address;
         private readonly int _port;
         private static MpdSession _session;
-        private  TaskQueue _queue;
-        private static MpdServer _instance;
-
         private Action _connected;
         private Action _authenticate;
         private Action<string> _displayMessage;
@@ -40,8 +36,6 @@ namespace Orpheus.Mpd
             _address = mpdAddress[0];
             _port = (mpdAddress.Length > 1) ? Convert.ToInt32(mpdAddress[1]) : 6600 ;
 
-            _queue = new TaskQueue();
-
             _displayMessage = displayStatus;
             _connected = connectedCallback;
             if (mpdAddress.Length > 2) _authenticate = delegate { RunCommand("Deleting id...", new OneArgCommand("password", new[] { mpdAddress[2] })); };
@@ -49,7 +43,7 @@ namespace Orpheus.Mpd
             CreateSession();
         }
 
-        private async Task CreateSession()
+        private async void CreateSession()
         {
             _displayMessage?.Invoke("Connecting...");
 
@@ -63,28 +57,23 @@ namespace Orpheus.Mpd
             _session.Connected += _connected;
             _session.Authenticate += _authenticate;
 
-            Task initSession = Task.Run(delegate { _session.Connect(); });
+            Task initSession = Task.Run(() => { _session.Connect(); });
             
             await initSession;
         }
 
         public static void CreateInstance(Action<string> displayStatus, Action connectedCallback)
         {
-            _instance = new MpdServer(displayStatus, connectedCallback);
+            Instance = new MpdServer(displayStatus, connectedCallback);
         }
 
-        public static MpdServer Instance => _instance;
+        public static MpdServer Instance { get; private set; }
 
-        //private void _displayStatus(string message)
-        //{
-        //    _displayStatusAction?.Invoke(message);
-        //}
-
-        private async void RunCommand<T>(string message, IMpdCommand<T> task, Action<T> callback = null) {
+        private  void RunCommand<T>(string message, IMpdCommand<T> task, Action<T> callback = null) {
             if (_session?._tcpConnection != null &&  _session?._tcpConnection?.Connected != false)
             {
                 _displayMessage?.Invoke(message);
-                await _queue.Enqueue(() => Task.Run(delegate { _session.SendCommand(task, callback); }));
+                Task.Factory.StartNew(() => _session.SendCommand(task, callback));
             }
         }
 
