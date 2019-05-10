@@ -19,13 +19,15 @@ namespace Orpheus.Mpd.Commands
         public ListallCommand(string command)
         {
             Command = command;
-            Response = new MpdFileSystem { Items = new List<ITreeItem<MpdFile>>() };
+            Response = new MpdFileSystem { Items = new Dictionary<int, ITreeItem<MpdFile>>() };
         }
 
         public MpdFileSystem Parse(MpdResponse response)
         {
+            var id = 0;
             foreach(var line in response.ResponseLines.ToList())
             {
+                id++;
                 var matchFolder = _folderRegex.Match(line);
                 if (matchFolder.Success)
                 {
@@ -35,7 +37,7 @@ namespace Orpheus.Mpd.Commands
                         Uri = matchFolder.Groups[1].Value,
                         Name = matchFolder.Groups[1].Value
                     };
-                    Response.Items.Add(item);
+                    Response.Items.Add(id,item);
                     continue;
                 }
 
@@ -49,7 +51,7 @@ namespace Orpheus.Mpd.Commands
                         Name = matchFile.Groups[3].Value
                     };
 
-                    Response.Items.Add(item);
+                    Response.Items.Add(id,item);
                 }
             }
             var treeBuilder = new TreeBuilder<MpdFile>(Response.Items, '/');

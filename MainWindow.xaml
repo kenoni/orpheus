@@ -232,7 +232,7 @@
                                                             Margin="5" >
 
                                 <controls:MultiSelectTreeView.Resources>
-                                    <HierarchicalDataTemplate DataType="{x:Type models:MpdFile}" ItemsSource="{Binding Path=Children}">
+                                    <HierarchicalDataTemplate DataType="{x:Type models:MpdFile}" ItemsSource="{Binding Path=Children.Values}">
                                         <TextBlock Text="{Binding Name}" PreviewMouseLeftButtonDown="TextBlock_PreviewMouseLeftButtonDown" PreviewMouseMove="TextBlock_PreviewMouseMove">
 
                                         </TextBlock>

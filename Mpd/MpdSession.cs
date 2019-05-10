@@ -122,6 +122,7 @@ namespace Orpheus.Mpd
 
                 }
             }
+            
         }
 
         public bool Reconnect()

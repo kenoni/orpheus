@@ -6,52 +6,51 @@ namespace Orpheus.Helpers
 {
     public class TreeBuilder<T>
     {
-        private readonly IList<ITreeItem<T>> _items;
+        private readonly Dictionary<int,ITreeItem<T>> _items;
         private readonly char _delimiter;
 
-        public TreeBuilder(IList<ITreeItem<T>> items, char delimiter)
+        public TreeBuilder(Dictionary<int,ITreeItem<T>> items, char delimiter)
         {
             _items = items;
             _delimiter = delimiter;
         }
 
-        public IList<ITreeItem<T>> BuildTree()
+        public Dictionary<int,ITreeItem<T>> BuildTree()
         {
-            var roots = _items.Where(x => !x.Uri.Contains(_delimiter)).ToList();
+            var roots = _items.Where(x => !x.Value.Uri.Contains(_delimiter)).ToDictionary(x => x.Key, x => x.Value);
 
             if (roots.Count <= 0) return roots;
 
             foreach (var child in roots)
-                AddChildren(child);
+                AddChildren(child.Value);
 
             return roots;
         }
 
         private void AddChildren(ITreeItem<T> treeItem)
         {
-            if (_items.Any(x => x.Uri.StartsWith(treeItem.Uri)))
+            if (_items.Any(x => x.Value.Uri.StartsWith(treeItem.Uri)))
             {
                 var slashCount = treeItem.Uri.Count(x => x == _delimiter);
-                treeItem.Children = _items.Where(x => x.Uri.StartsWith(treeItem.Uri + _delimiter) 
-                                                        && slashCount + 1 == x.Uri.Count(x1 => x1 == _delimiter))
-                                          .ToList();
+                treeItem.Children = _items.Where(x => x.Value.Uri.StartsWith(treeItem.Uri + _delimiter) 
+                                                        && slashCount + 1 == x.Value.Uri.Count(x1 => x1 == _delimiter)).ToDictionary(x => x.Key,x => x.Value);
 
                 foreach (var child in treeItem.Children)
                 {
                     if (!string.IsNullOrEmpty(treeItem.Uri) 
-                        && child.Name.StartsWith($"{treeItem.Uri}/") 
-                        && child.Type == MpdFileType.Folder 
+                        && child.Value.Name.StartsWith($"{treeItem.Uri}/") 
+                        && child.Value.Type == MpdFileType.Folder 
                         && treeItem.Type == MpdFileType.Folder)
                     {
-                        child.Name = child.Name.Substring(treeItem.Name.Length + 1);
+                        child.Value.Name = child.Value.Name.Substring(treeItem.Name.Length + 1);
                     }
 
-                    AddChildren(child);
+                    AddChildren(child.Value);
                 }
             }
             else
             {
-                treeItem.Children = new List<ITreeItem<T>>();
+                treeItem.Children = new Dictionary<int, ITreeItem<T>>();
             }
         }
     }

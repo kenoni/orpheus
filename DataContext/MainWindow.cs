@@ -134,7 +134,7 @@ namespace Orpheus.DataContext
 
         private void FillFileSystem(MpdFileSystem files)
         {
-            MpdFileSystem = files.Items.Select(x => (MpdFile)x).ToList();
+            MpdFileSystem = files.Items.Select(x => (MpdFile)x.Value).ToList();
         }
 
         public void GetMpdFiles()
