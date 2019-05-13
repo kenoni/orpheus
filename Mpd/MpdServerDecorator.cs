@@ -3,18 +3,18 @@ using Orpheus.Mpd.Commands;
 
 namespace Orpheus.Mpd
 {
-    public class MpdServerDecorator : IMpdServer
+    public class MpdServerDecorator : MpdServerBase
     {
-        protected readonly IMpdServer _server;
+        protected readonly MpdServerBase _server;
 
-        public MpdServerDecorator(IMpdServer server)
+        public MpdServerDecorator(MpdServerBase server)
         {
             _server = server;
         }
 
-        public string ConnectionAsString => _server.ConnectionAsString;
+        public override string ConnectionAsString => _server.ConnectionAsString;
 
-        public void RunCommand<T>(string message, IMpdCommand<T> task, Action<T> callback = null)
+        public override void RunCommand<T>(string message, IMpdCommand<T> task, Action<T> callback = null)
         {
             _server.RunCommand(message, task, callback);
         }

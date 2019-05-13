@@ -7,7 +7,7 @@ namespace Orpheus.Mpd
 {
     public class MpdServerWithCommands : MpdServerDecorator
     {
-        public MpdServerWithCommands(IMpdServer server) : base(server) { }
+        public MpdServerWithCommands(MpdServerBase server) : base(server) { }
 
         public void PlaylistInfo(Action<MpdPlaylist> callback)
         {

@@ -103,7 +103,7 @@
     <Compile Include="Models\MpdStats.cs" />
     <Compile Include="Models\MpdStatus.cs" />
     <Compile Include="Models\PlayerStream.cs" />
-    <Compile Include="Mpd\IMpdServer.cs" />
+    <Compile Include="Mpd\MpdServerBase.cs" />
     <Compile Include="Mpd\MpdHelper.cs" />
     <Compile Include="Mpd\MpdResponse.cs" />
     <Compile Include="Mpd\MpdServer.cs" />

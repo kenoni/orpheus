@@ -18,7 +18,7 @@ using Orpheus.Mpd.Commands;
 using Orpheus.Properties;
 namespace Orpheus.Mpd
 {
-    public class MpdServer : IMpdServer
+    public class MpdServer : MpdServerBase
     {
         private readonly string _address;
         private readonly int _port;
@@ -68,12 +68,12 @@ namespace Orpheus.Mpd
         public static MpdServerWithCommands Instance { get; private set; }
 
         //public DisableOutput
-        public string ConnectionAsString
+        public override string ConnectionAsString
         {
             get => $"{_address}:{_port}";
         }
 
-        public void RunCommand<T>(string message, IMpdCommand<T> task, Action<T> callback = null)
+        public override void RunCommand<T>(string message, IMpdCommand<T> task, Action<T> callback = null)
         {
             if (_session?._tcpConnection != null && _session?._tcpConnection?.Connected != false)
             {
