@@ -13,14 +13,12 @@
     You should have received a copy of the GNU General Public License
     along with Orpheus.  If not, see<http://www.gnu.org/licenses/>.*/
 using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
-using Orpheus.Models;
 using Orpheus.Mpd.Commands;
 using Orpheus.Properties;
 namespace Orpheus.Mpd
 {
-    public class MpdServer : MpdServerBase
+    public class MpdServer : IMpdServer
     {
         private readonly string _address;
         private readonly int _port;
@@ -64,18 +62,18 @@ namespace Orpheus.Mpd
 
         public static void CreateInstance(Action<string> displayStatus, Action connectedCallback)
         {
-            Instance = new CommandDecorator(new MpdServer(displayStatus, connectedCallback));
+            Instance = new MpdServerWithCommands(new MpdServer(displayStatus, connectedCallback));
         }
 
-        public static MpdServerBase Instance { get; private set; }
+        public static MpdServerWithCommands Instance { get; private set; }
 
         //public DisableOutput
-        public override string ConnectionAsString
+        public string ConnectionAsString
         {
             get => $"{_address}:{_port}";
         }
 
-        public override void RunCommand<T>(string message, IMpdCommand<T> task, Action<T> callback = null)
+        public void RunCommand<T>(string message, IMpdCommand<T> task, Action<T> callback = null)
         {
             if (_session?._tcpConnection != null && _session?._tcpConnection?.Connected != false)
             {

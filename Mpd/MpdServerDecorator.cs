@@ -1,19 +1,22 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Orpheus.Mpd.Commands;
 
 namespace Orpheus.Mpd
 {
-    class MpdServerDecorator : MpdServerBase
+    public class MpdServerDecorator : IMpdServer
     {
-        protected readonly MpdServerBase _server;
+        protected readonly IMpdServer _server;
 
-        public MpdServerDecorator(MpdServerBase server)
+        public MpdServerDecorator(IMpdServer server)
         {
             _server = server;
         }
-        public override string ConnectionAsString => _server.ConnectionAsString;
+
+        public string ConnectionAsString => _server.ConnectionAsString;
+
+        public void RunCommand<T>(string message, IMpdCommand<T> task, Action<T> callback = null)
+        {
+            _server.RunCommand(message, task, callback);
+        }
     }
 }
