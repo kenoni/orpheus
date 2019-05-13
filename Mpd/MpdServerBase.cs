@@ -7,11 +7,8 @@ namespace Orpheus.Mpd
 {
     public abstract class MpdServerBase
     {
-        //public static MpdSession _session;
-        //public Action<string> _displayMessage;
-
         public virtual void RunCommand<T>(string message, IMpdCommand<T> task, Action<T> callback = null) { }
-        public string ConnectionAsString { get; }
+        public virtual string ConnectionAsString { get; }
         public virtual void AddId(string uri) { }
         public virtual void AddId(string uri, string position) { }
         public virtual void DeleteId(string songId) { }

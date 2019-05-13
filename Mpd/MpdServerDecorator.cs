@@ -14,5 +14,6 @@ namespace Orpheus.Mpd
         {
             _server = server;
         }
+        public override string ConnectionAsString => _server.ConnectionAsString;
     }
 }

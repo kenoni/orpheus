@@ -70,7 +70,7 @@ namespace Orpheus.Mpd
         public static MpdServerBase Instance { get; private set; }
 
         //public DisableOutput
-        public string ConnectionAsString
+        public override string ConnectionAsString
         {
             get => $"{_address}:{_port}";
         }
