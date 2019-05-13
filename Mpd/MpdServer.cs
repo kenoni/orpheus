@@ -20,25 +20,25 @@ using Orpheus.Mpd.Commands;
 using Orpheus.Properties;
 namespace Orpheus.Mpd
 {
-    public class MpdServer
+    public class MpdServer : MpdServerBase
     {
         private readonly string _address;
         private readonly int _port;
-        private static MpdSession _session;
+        private  static  MpdSession _session;
+        private Action<string> _displayMessage;
         private Action _connected;
         private Action _authenticate;
-        private Action<string> _displayMessage;
 
         private MpdServer(Action<string> displayStatus, Action connectedCallback)
         {
             var mpdAddress = Settings.Default.Mpd_Address.ToMpdAddress();
 
             _address = mpdAddress[0];
-            _port = (mpdAddress.Length > 1) ? Convert.ToInt32(mpdAddress[1]) : 6600 ;
+            _port = (mpdAddress.Length > 1) ? Convert.ToInt32(mpdAddress[1]) : 6600;
 
             _displayMessage = displayStatus;
             _connected = connectedCallback;
-            if (mpdAddress.Length > 2) _authenticate = delegate { RunCommand("Deleting id...", new OneArgCommand("password", new[] { mpdAddress[2] })); };
+            if (mpdAddress.Length > 2) _authenticate = delegate { RunCommand("Authenticating...", new OneArgCommand("password", new[] { mpdAddress[2] })); };
 
             CreateSession();
         }
@@ -58,119 +58,31 @@ namespace Orpheus.Mpd
             _session.Authenticate += _authenticate;
 
             Task initSession = Task.Run(() => { _session.Connect(); });
-            
+
             await initSession;
         }
 
         public static void CreateInstance(Action<string> displayStatus, Action connectedCallback)
         {
-            Instance = new MpdServer(displayStatus, connectedCallback);
+            Instance = new CommandDecorator(new MpdServer(displayStatus, connectedCallback));
         }
 
-        public static MpdServer Instance { get; private set; }
+        public static MpdServerBase Instance { get; private set; }
 
-        private  void RunCommand<T>(string message, IMpdCommand<T> task, Action<T> callback = null) {
-            if (_session?._tcpConnection != null &&  _session?._tcpConnection?.Connected != false)
+        //public DisableOutput
+        public string ConnectionAsString
+        {
+            get => $"{_address}:{_port}";
+        }
+
+        public override void RunCommand<T>(string message, IMpdCommand<T> task, Action<T> callback = null)
+        {
+            if (_session?._tcpConnection != null && _session?._tcpConnection?.Connected != false)
             {
                 _displayMessage?.Invoke(message);
                 Task.Factory.StartNew(() => _session.SendCommand(task, callback));
             }
         }
 
-        public void PlaylistInfo(Action<MpdPlaylist> callback)
-        {
-            RunCommand("Updating current playlist...", new PlaylistInfoCommand("playlistinfo"), callback);
-        }
-
-        public void FilelistInfo(Action<MpdFileSystem> callback)
-        {
-            RunCommand("Fetching file system ...", new ListallCommand("listall"), callback);
-        }
-
-        public void PlayId(string songId)
-        {
-            RunCommand("Playing id...", new OneArgCommand("playid", new[] { songId }));
-        }
-
-        public void DeleteId(string songId)
-        {
-            RunCommand("Deleting id...", new OneArgCommand("deleteid", new[] { songId }));
-        }
-
-        public void AddId(string uri)
-        {
-            RunCommand("Adding id...", new AddIdCommand("addid", new[] { uri }));
-        }
-
-        public void AddId(string uri, string position)
-        {
-            RunCommand("Adding id...", new AddIdCommand("addid", new[] { uri, position }));
-        }
-
-        public void Status(Action<MpdStatus> callback)
-        {
-            RunCommand("Fetching status...", new StatusCommand("status"), callback);
-        }
-
-        public void Update()
-        {
-            RunCommand("Updating music database...", new NoArgCommand("rescan"));
-        }
-
-        public void SeekCur(string time)
-        {
-            RunCommand("Seek current ...", new OneArgCommand("seekcur", new[] { time }));
-        }
-
-        public void Stats(Action<MpdStats> callback)
-        {
-            RunCommand("Fetching stats...", new StatsCommand("stats"), callback);
-        }
-
-        public void Outputs(Action<List<MpdOutput>> callback)
-        {
-            RunCommand("Fetching outputs...", new OutputCommand("outputs"), callback);
-        }
-
-        public void EnableOutput(string outputId)
-        {
-            RunCommand("Enabling output...", new OneArgCommand("enableoutput", new[] { outputId }), null);
-        }
-        public void DisableOutput(string outputId)
-        {
-            RunCommand("Disabling output...", new OneArgCommand("disableoutput", new[] { outputId }), null);
-        }
-
-        public void Next()
-        {
-            RunCommand("Next...", new NoArgCommand("next"));
-        }
-
-        public void Previous()
-        {
-            RunCommand("Previous...", new NoArgCommand("previous"));
-        }
-
-        public void Stop()
-        {
-            RunCommand("Stop...", new NoArgCommand("stop"));
-        }
-
-        public void Random(string state)
-        {
-            RunCommand("Toggling random...", new OneArgCommand("random", new[] { state }), null);
-        }
-
-        public void Repeat(string state)
-        {
-            RunCommand("Toggling repeat...", new OneArgCommand("repeat", new[] { state }), null);
-        }
-
-        //public DisableOutput
-        public string ConnectionAsString
-        {
-            get =>  $"{_address}:{_port}"; 
-        }
-        
     }
 }

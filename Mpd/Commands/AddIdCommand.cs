@@ -33,7 +33,7 @@ namespace Orpheus.Mpd.Commands
 
         public string Parse(MpdResponse response)
         {
-            response.ResponseLines.ToList().ForEach(line =>
+            response.Lines.ToList().ForEach(line =>
             {
                 var matchFileId = _idRegex.Match(line);
 

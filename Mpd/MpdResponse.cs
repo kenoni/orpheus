@@ -26,13 +26,9 @@ namespace Orpheus.Mpd
         private readonly Regex _okRegex = new Regex(@"^OK$", RegexOptions.Compiled);
         private readonly Regex _ackRegex = new Regex(@"^ACK \[(?<error>[^@]+)@(?<command_listNum>[^\]]+)] {(?<command>[^}]*)} (?<message>.*)", RegexOptions.Compiled);
 
-        //public AckCodes ErrorCode { get; private set; } = AckCodes.Unknown;
+        private string _errorMessage;
 
-        public string ErrorMessage { get; private set; }
-
-        public bool IsOk { get; private set; }
-
-        public IList<string> ResponseLines { get; } = new List<string>();
+        public IList<string> Lines { get; } = new List<string>();
 
         public bool AddLine(string line)
         {
@@ -40,17 +36,21 @@ namespace Orpheus.Mpd
 
             if (matchResponseEnd.Success)
             {
-                return true;
+                return false;
             }
-
-            var matchError = _ackRegex.Match(line);
-            if (matchError.Success)
+            else
             {
-                ErrorMessage = matchError.Groups["message"].Value;
+                var matchError = _ackRegex.Match(line);
+                if (matchError.Success)
+                {
+                    _errorMessage = matchError.Groups["message"].Value;
+                    return false;
+                }
+
+                Lines.Add(line);
+
                 return true;
             }
-            ResponseLines.Add(line);
-            return false;
         }
     }
 }

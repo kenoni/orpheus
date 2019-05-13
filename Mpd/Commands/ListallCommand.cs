@@ -25,7 +25,7 @@ namespace Orpheus.Mpd.Commands
         public MpdFileSystem Parse(MpdResponse response)
         {
             var id = 0;
-            foreach(var line in response.ResponseLines.ToList())
+            foreach(var line in response.Lines.ToList())
             {
                 id++;
                 var matchFolder = _folderRegex.Match(line);

@@ -25,7 +25,7 @@ namespace Orpheus.Mpd.Commands
         public MpdStatus Parse(MpdResponse response)
         {
             Response = new MpdStatus();
-            response.ResponseLines.ToList().ForEach(line =>
+            response.Lines.ToList().ForEach(line =>
                 {
                     var matchDuration = _durationRegex.Match(line);
                     var matchState = _stateRegex.Match(line);

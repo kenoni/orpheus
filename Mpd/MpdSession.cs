@@ -21,7 +21,7 @@ using Orpheus.Mpd.Commands;
 
 namespace Orpheus.Mpd
 {
-    class MpdSession
+    public class MpdSession
     {
         private NetworkStream _mpdStream = null;
         public TcpClient _tcpConnection;
@@ -98,13 +98,13 @@ namespace Orpheus.Mpd
 
         public  void SendCommand<T>(IMpdCommand<T> command, Action<T> callback)
         {
-            lock (obj)
+            while (true)
             {
-                while (true)
+                try
                 {
-                    try
+                    var buffer = Encoding.UTF8.GetBytes($"{command.Command}\n");
+                    lock (obj)
                     {
-                        var buffer = Encoding.UTF8.GetBytes($"{command.Command}\n");
                         _mpdStream.Write(buffer, 0, buffer.Length);
 
                         var rawResponse = ReadResponse();
@@ -112,17 +112,15 @@ namespace Orpheus.Mpd
 
                         callback?.Invoke(mpdResponse);
                         DisplayMessage?.Invoke("Idle");
-
-                        break;
                     }
-                    catch (Exception ex)
-                    {
-                        Reconnect();
-                    }
-
+                    break;
+                }
+                catch (Exception ex)
+                {
+                    Reconnect();
                 }
             }
-            
+
         }
 
         public bool Reconnect()
@@ -181,7 +179,7 @@ namespace Orpheus.Mpd
                 do
                 {
                     line =  reader.ReadLine();
-                } while (!response.AddLine(line));
+                } while (response.AddLine(line));
             }
 
             return response;

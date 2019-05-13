@@ -23,7 +23,7 @@ namespace Orpheus.Mpd.Commands
         public MpdPlaylist Parse(MpdResponse response)
         {
             MpdPlaylistEntry item = null;
-            response.ResponseLines.ToList().ForEach(line =>
+            response.Lines.ToList().ForEach(line =>
                 {
                     var matchFile = _fileRegex.Match(line);
                     var matchFileId = _idRegex.Match(line);

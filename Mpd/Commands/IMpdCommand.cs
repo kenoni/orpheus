@@ -1,6 +1,6 @@
 ﻿namespace Orpheus.Mpd.Commands
 {
-    interface IMpdCommand <TResponse>
+    public interface IMpdCommand <TResponse>
     {
         string Command { get; set; }
         TResponse Response { get; set; }

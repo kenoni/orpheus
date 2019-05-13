@@ -75,6 +75,8 @@
     <Compile Include="AppData\AppDataContent.cs" />
     <Compile Include="AppData\AppDataManager.cs" />
     <Compile Include="Converters\BooleanToVisibility.cs" />
+    <Compile Include="Mpd\MpdServerDecorator.cs" />
+    <Compile Include="Mpd\CommandDecorator.cs" />
     <Compile Include="Mpd\Commands\DisableOutputCommand.cs" />
     <Compile Include="Mpd\Commands\OneArgCommand.cs" />
     <Compile Include="Mpd\Commands\ListallCommand.cs" />
@@ -101,6 +103,7 @@
     <Compile Include="Models\MpdStats.cs" />
     <Compile Include="Models\MpdStatus.cs" />
     <Compile Include="Models\PlayerStream.cs" />
+    <Compile Include="Mpd\MpdServerBase.cs" />
     <Compile Include="Mpd\MpdHelper.cs" />
     <Compile Include="Mpd\MpdResponse.cs" />
     <Compile Include="Mpd\MpdServer.cs" />

@@ -29,7 +29,7 @@ namespace Orpheus.Mpd.Commands
         public List<MpdOutput> Parse(MpdResponse response)
         {
             MpdOutput item = null;
-            foreach (var line in response.ResponseLines.ToList())
+            foreach (var line in response.Lines.ToList())
             {
                 var matchOutputId = _outputIdRegex.Match(line);
                 if (matchOutputId.Success)

@@ -24,8 +24,6 @@ namespace Orpheus.Mpd
 {
     public static class MpdHelper
     {
-       
-
         public static string[] ToMpdAddress(this string address)
         {
             var mpdAddressRegEx = new Regex(@"([\S]+)[:]{1}([\d]+)[:]([\S]+)");
