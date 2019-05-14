@@ -22,7 +22,7 @@ using System.Threading.Tasks;
 
 namespace Orpheus.Mpd
 {
-    public static class MpdHelper
+    internal static class MpdHelper
     {
         public static string[] ToMpdAddress(this string address)
         {

@@ -36,7 +36,7 @@ namespace Orpheus.Mpd
 
             _displayMessage = displayStatus;
             _connected = connectedCallback;
-            if (mpdAddress.Length > 2) _authenticate = delegate { RunCommand("Authenticating...", new OneArgCommand("password", new[] { mpdAddress[2] })); };
+            if (mpdAddress.Length > 2) _authenticate = () => { RunCommand("Authenticating...", new OneArgCommand("password", new[] { mpdAddress[2] })); };
 
             CreateSession();
         }

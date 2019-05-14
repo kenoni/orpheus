@@ -13,6 +13,7 @@ namespace Orpheus.Mpd.Commands
         
         private readonly Regex _fileRegex = new Regex(@"^file: ([\s\S]*\/(.*))", RegexOptions.IgnoreCase);
         private readonly Regex _idRegex = new Regex(@"^id: ([\d]+)", RegexOptions.IgnoreCase);
+        private readonly Regex _rootFileRegex = new Regex(@"^file: ([\s\S]*)", RegexOptions.IgnoreCase);
 
         public PlaylistInfoCommand(string command)
         {
@@ -26,14 +27,26 @@ namespace Orpheus.Mpd.Commands
             response.Lines.ToList().ForEach(line =>
                 {
                     var matchFile = _fileRegex.Match(line);
+                    var matchRootFile = _rootFileRegex.Match(line);
                     var matchFileId = _idRegex.Match(line);
+                    
 
                     if (matchFile.Success)
                     {
                         item = new MpdPlaylistEntry { Name = matchFile.Groups[2].Value
                                                     , Path = matchFile.Groups[1].Value
                                                     , Type = MpdPlaylistEntryType.File
-                                                    , IsCurrentlyPlaying = false }; 
+                                                    , IsCurrentlyPlaying = false };
+                    }
+                    else
+                    {
+                        if (matchRootFile.Success)
+                        {
+                             item = new MpdPlaylistEntry { Name = matchRootFile.Groups[1].Value
+                                                    , Path = matchRootFile.Groups[1].Value
+                                                    , Type = MpdPlaylistEntryType.File
+                                                    , IsCurrentlyPlaying = false };
+                        }
                     }
 
                     if (matchFileId.Success && item != null)

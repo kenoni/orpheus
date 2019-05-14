@@ -14,6 +14,7 @@ namespace Orpheus.Mpd.Commands
         public MpdFileSystem Response { get; set; }
 
         private readonly Regex _fileRegex = new Regex(@"^file: (([\s\S]*)\/(.*))", RegexOptions.IgnoreCase);
+        private readonly Regex _rootFileRegex = new Regex(@"^file: ([\s\S]*)", RegexOptions.IgnoreCase);
         private readonly Regex _folderRegex = new Regex(@"^directory: ([\s\S]*)", RegexOptions.IgnoreCase);
 
         public ListallCommand(string command)
@@ -31,27 +32,37 @@ namespace Orpheus.Mpd.Commands
                 var matchFolder = _folderRegex.Match(line);
                 if (matchFolder.Success)
                 {
-                    var item = new MpdFile
+                    Response.Items.Add(id, new MpdFile
                     {
                         Type = MpdFileType.Folder,
                         Uri = matchFolder.Groups[1].Value,
                         Name = matchFolder.Groups[1].Value
-                    };
-                    Response.Items.Add(id,item);
+                    });
                     continue;
                 }
 
                 var matchFile = _fileRegex.Match(line);
                 if (matchFile.Success)
                 {
-                    var item = new MpdFile
+                    Response.Items.Add(id, new MpdFile
                     {
                         Type = MpdFileType.File,
                         Uri = matchFile.Groups[1].Value,
                         Name = matchFile.Groups[3].Value
-                    };
-
-                    Response.Items.Add(id,item);
+                    });
+                }
+                else
+                {
+                    var matchRootFile = _rootFileRegex.Match(line);
+                    if (matchRootFile.Success)
+                    {
+                        Response.Items.Add(id, new MpdFile
+                        {
+                            Type = MpdFileType.File,
+                            Uri = matchRootFile.Groups[1].Value,
+                            Name = matchRootFile.Groups[1].Value
+                        });
+                    }
                 }
             }
             var treeBuilder = new TreeBuilder<MpdFile>(Response.Items, '/');
