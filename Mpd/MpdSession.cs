@@ -34,6 +34,7 @@ namespace Orpheus.Mpd
         public Action Authenticate;
         private object obj = new object();
 
+
         public MpdSession(string address, int port)
         {
             _address = address;
@@ -118,7 +119,8 @@ namespace Orpheus.Mpd
                 }
                 catch (Exception ex)
                 {
-                    Reconnect();
+                    var reconnected = Reconnect();
+                    if(!reconnected) DisplayMessage?.Invoke("Could not reconnect");
                 }
             }
 
@@ -126,7 +128,8 @@ namespace Orpheus.Mpd
 
         public bool Reconnect()
         {
-            while (true)
+            var reconnectAttempts = 0;
+            while (true && reconnectAttempts < 10)
             {
                 if(_tcpConnection?.Client != null)
                 {
@@ -137,13 +140,14 @@ namespace Orpheus.Mpd
                     }
                 }
 
+                reconnectAttempts++;
                 Close();
                 Connect();
 
                 Thread.Sleep(1000);
             }
 
-            return true;
+            return (reconnectAttempts < 10);
         }
 
         private bool IsConnected(Socket client)

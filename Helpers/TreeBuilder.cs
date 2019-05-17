@@ -17,14 +17,12 @@ namespace Orpheus.Helpers
 
         public Dictionary<int,ITreeItem<T>> BuildTree()
         {
-            var roots = _items.Where(x => !x.Value.Uri.Contains(_delimiter)).ToDictionary(x => x.Key, x => x.Value);
+            var roots = _items.Where(x => !x.Value.Uri.Contains(_delimiter)).OrderBy(x => x.Value.Type).ThenBy(y => y.Value.Name).ToDictionary(x => x.Key, x => x.Value);
 
             if (roots.Count <= 0) return roots;
 
             foreach (var child in roots)
                 AddChildren(child.Value);
-
-
 
             return roots;
         }
@@ -35,7 +33,7 @@ namespace Orpheus.Helpers
             {
                 var slashCount = treeItem.Uri.Count(x => x == _delimiter);
                 treeItem.Children = _items.Where(x => x.Value.Uri.StartsWith(treeItem.Uri + _delimiter) 
-                                                        && slashCount + 1 == x.Value.Uri.Count(x1 => x1 == _delimiter)).ToDictionary(x => x.Key,x => x.Value);
+                                                        && slashCount + 1 == x.Value.Uri.Count(x1 => x1 == _delimiter)).OrderBy(x => x.Value.Type).ThenBy(y => y.Value.Name).ToDictionary(x => x.Key,x => x.Value);
 
                 foreach (var child in treeItem.Children)
                 {
