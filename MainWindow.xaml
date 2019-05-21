@@ -6,6 +6,7 @@
         xmlns:converters="clr-namespace:Orpheus.Converters"
         xmlns:models="clr-namespace:Orpheus.Models"
         xmlns:fa="http://schemas.fontawesome.io/icons/"
+        xmlns:customControls="clr-namespace:Orpheus.Controls"
         x:Class="Orpheus.MainWindow"
         mc:Ignorable="d"
         Closing="OnClose"
@@ -36,41 +37,7 @@
 
         <GridSplitter MouseDoubleClick="GridSplitter_MouseLeftButtonDown"  Name="GridSplitter1" Visibility="Visible" Grid.Row="2" Grid.Column="1" HorizontalAlignment="Right" Width="2" VerticalAlignment="Stretch"  ResizeBehavior="PreviousAndNext" Height="Auto" Background="White" IsEnabled="True" ResizeDirection="Columns" Cursor="SizeWE"/>
 
-        <Popup  x:Name="AddStreamPopup"  AllowsTransparency="True" IsOpen="False" Width="290"  PlacementTarget="{Binding ElementName=MainWindow.PlayerStreamsListView}" Placement="Top" Margin="0">
-            <Grid Background="AliceBlue" Width="290">
-                <Grid.Resources >
-                    <Style TargetType="Border" >
-                        <Setter Property="Padding" Value="5,0,5,1" />
-                    </Style>
-                </Grid.Resources>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="20"/>
-                    <RowDefinition Height="20"/>
-                </Grid.RowDefinitions>
-                <Grid.ColumnDefinitions>
-
-                    <ColumnDefinition Width="45" />
-                    <ColumnDefinition Width="210" />
-                    <ColumnDefinition Width="35" />
-                </Grid.ColumnDefinitions>
-                <Border Grid.Row="0" Grid.Column="0">
-                    <TextBlock Text="Name"></TextBlock>
-                </Border>
-                <Border Grid.Row="0" Grid.Column="1">
-                    <TextBox Name="AddStreamName" Width="199"></TextBox>
-                </Border>
-                <Border Grid.Row="1" Grid.Column="0">
-                    <TextBlock Text="Url"></TextBlock>
-                </Border>
-                <Border Grid.Row="1" Grid.Column="1">
-                    <TextBox Name="AddStreamUrl" Width="199"></TextBox>
-                </Border>
-                <Border Grid.Row="1" Grid.Column="2">
-                    <Button Content="Add" Click="AddStreamBtn_Click" />
-                </Border>
-
-            </Grid>
-        </Popup>
+        
         
             <Grid Margin="5" Grid.Row="2" Grid.Column="0">
                 <Grid.RowDefinitions>
@@ -195,112 +162,11 @@
             </StatusBarItem>
         </StatusBar>
         <TabControl Background="#FFC3C3C3" SelectionChanged="TabControl_SelectionChanged"  Grid.Column="2" Grid.Row="2" TabStripPlacement="Left" >
-
-            <TabItem Header="Mpd"  Style="{StaticResource TabControl}">
-                <DockPanel  Name="MpdDockPanel">
-                    <DockPanel Height="34" DockPanel.Dock="Top" Name="MpdActionsDockPanel">
-                        <Button   Click="RescanFileSystem_Click" Width="30" Height="24" VerticalAlignment="Bottom" Margin="5,5,5,5" HorizontalContentAlignment="Center" HorizontalAlignment="Left" >
-                            <fa:ImageAwesome  Icon="Refresh"></fa:ImageAwesome>
-                        </Button>
-                        <Button  Height="23"  HorizontalAlignment="Right"   Name="button1" VerticalAlignment="Center" Width="70" Click="button1_Click" >
-                            <Button.Content>
-                                <TextBlock Text="Outputs" />
-                            </Button.Content>
-                            <Button.ContextMenu>
-                                <ContextMenu ItemsSource="{Binding Path=MainWindow.MpdOutputs}" >
-                                    <ContextMenu.ItemTemplate>
-                                        <DataTemplate>
-                                            <CheckBox Margin="-26,0,0,0" Content="{Binding Name}" IsChecked="{Binding IsSelected}" Click="CheckBox_Click"/>
-                                        </DataTemplate>
-                                    </ContextMenu.ItemTemplate>
-                                </ContextMenu>
-                            </Button.ContextMenu>
-                        </Button>
-                    </DockPanel>
-                    
-                    <DockPanel>
-                        <Grid Margin="5">
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="*" />
-                            </Grid.RowDefinitions>
-                            <fa:ImageAwesome Grid.Row="0"  Visibility="{Binding Path=MainWindow.MpdFileSystem, TargetNullValue=Visible, FallbackValue=Hidden }" Grid.ZIndex="1" Icon="Refresh" Spin="True" Height="24" Width="24" />
-                            <controls:MultiSelectTreeView   Grid.Row="0"  Style="{StaticResource MultiSelectTreeView}" ItemContainerStyle="{StaticResource MultiSelectListViewBoxItem}" PreviewMouseDown="FileTreeview_PreviewMouseDown"  
-                                                            HorizontalContentAlignment="Stretch" 
-                                                            ItemsSource="{Binding Path=MainWindow.MpdFileSystem}"  
-                                                            VerticalContentAlignment="Stretch" 
-                                                            Name="FileTreeview" 
-                                                            Margin="5" >
-
-                                <controls:MultiSelectTreeView.Resources>
-                                    <HierarchicalDataTemplate DataType="{x:Type models:MpdFile}" ItemsSource="{Binding Path=Children.Values}">
-                                        <TextBlock Text="{Binding Name}" PreviewMouseLeftButtonDown="TextBlock_PreviewMouseLeftButtonDown" PreviewMouseMove="TextBlock_PreviewMouseMove">
-
-                                        </TextBlock>
-                                    </HierarchicalDataTemplate>
-                                </controls:MultiSelectTreeView.Resources>
-                            </controls:MultiSelectTreeView>
-                        </Grid>
-                        
-                    </DockPanel>
-                    
-                </DockPanel>
-            </TabItem>
             <TabItem Header="Player"  Style="{StaticResource TabControl}">
-                <DockPanel Background="#FFC3C3C3"  Name="PlayerDockPanel">
-
-                    <DockPanel Height="34" HorizontalAlignment="Right" LastChildFill="False" Margin="5,0" DockPanel.Dock="Top" VerticalAlignment="Top" >
-                        <ToggleButton Height="24" Width="30" HorizontalAlignment="Left" Margin="1,0,0,0" VerticalAlignment="Center"   Click="OnPlayClicked">
-                            <fa:ImageAwesome Height="18" >
-                                <fa:ImageAwesome.Style>
-                                    <Style TargetType="{x:Type fa:ImageAwesome}">
-                                        <Style.Triggers>
-                                            <DataTrigger  Binding="{Binding MainWindow.IsPlayerPlaying}" Value="False">
-                                                <Setter Property="Icon" Value="Play"/>
-                                            </DataTrigger>
-                                            <DataTrigger  Binding="{Binding MainWindow.IsPlayerPlaying}" Value="True">
-                                                <Setter Property="Icon" Value="Stop"/>
-                                            </DataTrigger>
-                                        </Style.Triggers>
-                                    </Style>
-                                </fa:ImageAwesome.Style>
-                            </fa:ImageAwesome>
-                        </ToggleButton>
-                        <Slider x:Name="VolumeSlider" HorizontalAlignment="Right" IsMoveToPointEnabled="True"  Height="20" Maximum="100"   TickFrequency="15" VerticalAlignment="Center" Margin="5,0" Width="120"  HorizontalContentAlignment="Center" VerticalContentAlignment="Center" RenderTransformOrigin="2.919,0.567"  ValueChanged="OnSliderValueChanged"/>
-                    </DockPanel>
-
-                    <ListView Style="{StaticResource ListView}" ItemContainerStyle="{StaticResource ListViewBoxItem}" PreviewKeyDown="PlayerStreamsListView_PreviewKeyDown" AllowDrop="True" VerticalAlignment="Stretch"   Name="PlayerStreamsListView" ItemsSource="{Binding Path=MainWindow.PlayerStreams}"  MouseDoubleClick="PlayerStreamsListView_MouseDoubleClick"  Margin="5,5,0,5" VerticalContentAlignment="Stretch" >
-                        <ListView.ContextMenu>
-                            <ContextMenu>
-                                <MenuItem Header="Add" Name="AddStreamMenuItem" Click="MenuItem_Click" />
-                            </ContextMenu>
-                        </ListView.ContextMenu>
-                        <ListView.Resources>
-                            <Style TargetType="GridViewColumnHeader">
-                                <Setter Property="Visibility" Value="Collapsed" />
-                            </Style>
-                        </ListView.Resources>
-                        <ListView.View>
-                            <GridView >
-                                <GridViewColumn>
-                                    <GridViewColumn.CellTemplate>
-                                        <DataTemplate>
-                                            <DataTemplate.Resources>
-                                                <Style TargetType="{x:Type TextBlock}">
-                                                    <Style.Triggers>
-                                                        <DataTrigger Binding="{Binding Path=MainWindow.IsPlaying}" Value="true" >
-                                                            <Setter Property="FontWeight" Value="Bold" />
-                                                        </DataTrigger>
-                                                    </Style.Triggers>
-                                                </Style>
-                                            </DataTemplate.Resources>
-                                            <TextBlock Text="{Binding Name}" Name="PlayerStreamsEntryName"  TextAlignment="Right" />
-                                        </DataTemplate>
-                                    </GridViewColumn.CellTemplate>
-                                </GridViewColumn>
-                            </GridView>
-                        </ListView.View>
-                    </ListView>
-                </DockPanel>
+                <customControls:StreamPlayer />
+            </TabItem>
+            <TabItem Header="Mpd"  Style="{StaticResource TabControl}">
+                <customControls:MpdFileSystem />
             </TabItem>
             <TabItem  Style="{StaticResource TabControl}" Header="Settings" DataContext="{Binding Settings}">
                 <DockPanel>

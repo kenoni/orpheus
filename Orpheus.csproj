@@ -54,6 +54,8 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -74,7 +76,14 @@
     </ApplicationDefinition>
     <Compile Include="AppData\AppDataContent.cs" />
     <Compile Include="AppData\AppDataManager.cs" />
+    <Compile Include="Controls\MpdFileSystem.xaml.cs">
+      <DependentUpon>MpdFileSystem.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\StreamPlayer.xaml.cs">
+      <DependentUpon>StreamPlayer.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Converters\BooleanToVisibility.cs" />
+    <Compile Include="Helpers\IceCastParser.cs" />
     <Compile Include="Mpd\MpdServerDecorator.cs" />
     <Compile Include="Mpd\CommandDecorator.cs" />
     <Compile Include="Mpd\Commands\DisableOutputCommand.cs" />
@@ -109,6 +118,14 @@
     <Compile Include="Mpd\MpdServer.cs" />
     <Compile Include="Mpd\MpdSession.cs" />
     <Compile Include="Mpd\Commands\PlaylistInfoCommand.cs" />
+    <Page Include="Controls\MpdFileSystem.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\StreamPlayer.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
