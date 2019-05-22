@@ -1,9 +1,9 @@
 Orpheus
 ====
 Mpd (Music Player Daemon) client.
-An attempt to make a simple and fast mpd client.
 
-Work in progress.
+A music player is also present in the app.
+You can listen to local playlists or browse the icecast Radio directory.
 
 Screenshots
 ===
