@@ -39,6 +39,8 @@ namespace Orpheus.Controls
                 _appDataManager.GetData();
             }
             catch { }
+
+            var directoryList = new IceCastDirectoryList();
         }
 
         private void MenuItem_Click(object sender, RoutedEventArgs e)
@@ -87,14 +89,16 @@ namespace Orpheus.Controls
         private async void PlayerStreamsListView_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
 
-            ListViewItem item = ListViewRowBeingClicked(PlayerStreamsListView, e);
+            ListViewItem item = ListViewRowBeingClicked(((ListView)sender), e);
             if (item != null)
             {
-                var stream = item.DataContext as PlayerStream;
+                var itemContext = item.DataContext;
+                var stream = (itemContext.GetType() == typeof(KeyValuePair<int, IceCastStream>)) ? ((KeyValuePair<int, IceCastStream>)itemContext).Value
+                                    : item.DataContext as BaseStream;
 
                 if (stream != null)
                 {
-                    MainContext.Instance.MainWindow.PlayerStreams.ToList().ForEach(x => x.IsPlaying = false);
+                    //MainContext.Instance.MainWindow.PlayerStreams.ToList().ForEach(x => x.IsPlaying = false);
 
                     if (!MainContext.Instance.MainWindow.IsPlayerPlaying)
                     {
@@ -145,7 +149,7 @@ namespace Orpheus.Controls
 
             if (hit != null)
             {
-                DependencyObject component = (DependencyObject)hit.VisualHit;
+                DependencyObject component = hit.VisualHit;
 
                 while (component != null)
                 {
@@ -161,6 +165,22 @@ namespace Orpheus.Controls
             }
 
             return null;
+        }
+
+        private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            var text = (sender as TextBox).Text;
+
+            MainContext.Instance.MainWindow.IceCastStreams = IceCastDirectoryList.Stations
+                .Where(x =>( x.Value.ServerName != null  && x.Value.ServerName.IndexOf(text, 0, StringComparison.CurrentCultureIgnoreCase) != -1 )
+                        || (x.Value.Genre != null && x.Value.Genre.IndexOf(text, 0, StringComparison.CurrentCultureIgnoreCase) != -1))
+                .ToDictionary(x => x.Key, x => x.Value);
+        }
+
+        private void CopyIceCastStreamMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            var item = (KeyValuePair<int, IceCastStream>)IceCastListView.SelectedItem;
+            Clipboard.SetText(item.Value.Url);
         }
     }
 }

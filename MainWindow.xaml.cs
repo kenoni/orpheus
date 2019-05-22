@@ -35,7 +35,7 @@ namespace Orpheus
             
             InitializeDataContext();
             InitializeAppDataManager();
-            LoadSettings();
+            
             StartTimers();
         }
 
@@ -254,27 +254,7 @@ namespace Orpheus
            
         }
 
-        public void LoadSettings()
-        {
-            TbMpdAddress.Text = Settings.Default.Mpd_Address;
-            TbMpdRefreshInterval.Text = Settings.Default.Mpd_RefreshInterval.ToString();
-            CbOutputDevices.SelectedValue = Settings.Default.OutputDeviceId;
-        }
-
-        public void SaveSettings()
-        {
-            Settings.Default.Mpd_Address = TbMpdAddress.Text;
-            Settings.Default.Mpd_RefreshInterval = TbMpdRefreshInterval.Text.ToInt();
-            var outputDevice = CbOutputDevices.SelectedValue;
-            Settings.Default.OutputDeviceId = outputDevice.ToString();
-            Settings.Default.Save();
-        }
-
-        private void OnSaveSettingsClicked(object sender, RoutedEventArgs e)
-        {
-            SaveSettings();
-            MpdServer.CreateInstance(MainContext.Instance.MainWindow.DisplayMessage, MainContext.Instance.MainWindow.UpdateUI);
-        }
+        
 
         private void GridSplitter_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {

@@ -79,11 +79,17 @@
     <Compile Include="Controls\MpdFileSystem.xaml.cs">
       <DependentUpon>MpdFileSystem.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\SettingsControl.xaml.cs">
+      <DependentUpon>SettingsControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\StreamPlayer.xaml.cs">
       <DependentUpon>StreamPlayer.xaml</DependentUpon>
     </Compile>
     <Compile Include="Converters\BooleanToVisibility.cs" />
+    <Compile Include="Helpers\IceCastDirectoryList.cs" />
     <Compile Include="Helpers\IceCastParser.cs" />
+    <Compile Include="Models\IceCastStream.cs" />
+    <Compile Include="Models\BaseStream.cs" />
     <Compile Include="Mpd\MpdServerDecorator.cs" />
     <Compile Include="Mpd\CommandDecorator.cs" />
     <Compile Include="Mpd\Commands\DisableOutputCommand.cs" />
@@ -119,6 +125,10 @@
     <Compile Include="Mpd\MpdSession.cs" />
     <Compile Include="Mpd\Commands\PlaylistInfoCommand.cs" />
     <Page Include="Controls\MpdFileSystem.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\SettingsControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -182,6 +192,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="orpheus32x32.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="yp.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

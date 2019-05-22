@@ -9,41 +9,8 @@ using Newtonsoft.Json;
 namespace Orpheus.Models
 {
     [JsonObject(MemberSerialization.OptIn)]
-    public class PlayerStream: INotifyPropertyChanged
+    public class PlayerStream: BaseStream,INotifyPropertyChanged
     {
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        private void NotifyPropertyChanged(string info)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(info));
-        }
-
-        private bool _isPlaying;
-
-        public bool IsPlaying
-        {
-            get => _isPlaying;
-            set
-            {
-                _isPlaying = value;
-                NotifyPropertyChanged("IsPlaying");
-            }
-        }
-
-        private string _name;
-
-        [JsonProperty]
-        public string Name
-        {
-            get => _name;
-            set
-            {
-                _name = value;
-                NotifyPropertyChanged("Name");
-            }
-        }
-
-        [JsonProperty]
-        public string Url { get; set; }
+             
     }
 }

@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Orpheus.Helpers;
 using Orpheus.Models;
 using Orpheus.Mpd;
 
@@ -65,6 +66,16 @@ namespace Orpheus.DataContext
                 {
                     item.PropertyChanged += PropertyChanged;
                 }
+            }
+        }
+        public Dictionary<int, IceCastStream> _iceCastStreams;
+        public Dictionary<int, IceCastStream> IceCastStreams
+        {
+            get => _iceCastStreams;
+            set
+            {
+                _iceCastStreams = value;
+                NotifyPropertyChanged("IceCastStreams");
             }
         }
 

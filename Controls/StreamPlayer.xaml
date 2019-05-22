@@ -7,7 +7,15 @@
              xmlns:fa="http://schemas.fontawesome.io/icons/"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
+
     <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="28" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
         <Popup  x:Name="AddStreamPopup"  AllowsTransparency="True" IsOpen="False" Width="290"  PlacementTarget="{Binding ElementName=MainWindow.PlayerStreamsListView}" Placement="Top" Margin="0">
             <Grid Background="AliceBlue" Width="290">
                 <Grid.Resources >
@@ -44,12 +52,30 @@
             </Grid>
         </Popup>
 
-        <DockPanel Background="#FFC3C3C3"  Name="PlayerDockPanel">
+        <DockPanel Grid.Column="0" Grid.Row="0" 
+                   HorizontalAlignment="Stretch"
+                   Background="#FFC3C3C3" 
+                   Name="PlayerDockPanel">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="100" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+            
+                <Label Grid.Column="0" Grid.Row="0" DockPanel.Dock="Left" 
+                       Name="CurrentlyPlayingTitle" 
+                       VerticalAlignment="Center" 
+                       HorizontalAlignment="Stretch"  />
 
-            <DockPanel Height="34" HorizontalAlignment="Right" LastChildFill="False" Margin="5,0" DockPanel.Dock="Top" VerticalAlignment="Top" >
-                <Label DockPanel.Dock="Left" Name="CurrentlyPlayingTitle" Width="300" />
-                <ToggleButton Height="24" Width="30" HorizontalAlignment="Left" Margin="1,0,0,0" VerticalAlignment="Center"   Click="OnPlayClicked">
-                    <fa:ImageAwesome Height="18" >
+                <ToggleButton Grid.Column="1" Grid.Row="0" Height="20" 
+                              Width="20" 
+                              HorizontalAlignment="Left"
+                              VerticalAlignment="Center"   
+                              Click="OnPlayClicked">
+                    <fa:ImageAwesome Height="16" >
                         <fa:ImageAwesome.Style>
                             <Style TargetType="{x:Type fa:ImageAwesome}">
                                 <Style.Triggers>
@@ -64,10 +90,17 @@
                         </fa:ImageAwesome.Style>
                     </fa:ImageAwesome>
                 </ToggleButton>
-                <Slider x:Name="VolumeSlider" HorizontalAlignment="Right" IsMoveToPointEnabled="True"  Height="20" Maximum="100"   TickFrequency="15" VerticalAlignment="Center" Margin="5,0" Width="120"  HorizontalContentAlignment="Center" VerticalContentAlignment="Center" RenderTransformOrigin="2.919,0.567"  ValueChanged="OnSliderValueChanged"/>
-            </DockPanel>
+                <Slider Grid.Column="1" Grid.Row="0" x:Name="VolumeSlider" HorizontalAlignment="Right" IsMoveToPointEnabled="True" 
+                        Height="20" Maximum="100"  
+                        TickFrequency="15" 
+                        VerticalAlignment="Center"
+                        Margin="5,0" Width="70"  HorizontalContentAlignment="Center" VerticalContentAlignment="Center" RenderTransformOrigin="2.919,0.567"  ValueChanged="OnSliderValueChanged"/>
+            </Grid>
+        </DockPanel>
 
-            <ListView Style="{StaticResource ListView}" 
+        <TabControl Grid.Column="0" Grid.Row="1" >
+            <TabItem Header="Streams">
+                <ListView Style="{StaticResource ListView}" 
                       ItemContainerStyle="{StaticResource ListViewBoxItem}" 
                       PreviewKeyDown="PlayerStreamsListView_PreviewKeyDown" 
                       AllowDrop="True" 
@@ -77,38 +110,86 @@
                       MouseDoubleClick="PlayerStreamsListView_MouseDoubleClick" 
                       Margin="5,5,0,5" 
                       VerticalContentAlignment="Stretch" >
-                <ListView.ContextMenu>
-                    <ContextMenu>
-                        <MenuItem Header="Add" Name="AddStreamMenuItem" Click="MenuItem_Click" />
-                    </ContextMenu>
-                </ListView.ContextMenu>
-                <ListView.Resources>
-                    <Style TargetType="GridViewColumnHeader">
-                        <Setter Property="Visibility" Value="Collapsed" />
-                    </Style>
-                </ListView.Resources>
-                <ListView.View>
-                    <GridView >
-                        <GridViewColumn>
-                            <GridViewColumn.CellTemplate>
-                                <DataTemplate>
-                                    <DataTemplate.Resources>
-                                        <Style TargetType="{x:Type TextBlock}">
-                                            <Style.Triggers>
-                                                <DataTrigger Binding="{Binding Path=MainWindow.IsPlaying}" Value="true" >
-                                                    <Setter Property="FontWeight" Value="Bold" />
-                                                </DataTrigger>
-                                            </Style.Triggers>
-                                        </Style>
-                                    </DataTemplate.Resources>
-                                    <TextBlock Text="{Binding Name}" Name="PlayerStreamsEntryName"  TextAlignment="Right" />
-                                </DataTemplate>
-                            </GridViewColumn.CellTemplate>
-                        </GridViewColumn>
-                    </GridView>
-                </ListView.View>
-            </ListView>
-        </DockPanel>
+                    <ListView.ContextMenu>
+                        <ContextMenu>
+                            <MenuItem Header="Add" Name="AddStreamMenuItem" Click="MenuItem_Click" />
+                        </ContextMenu>
+                    </ListView.ContextMenu>
+                    <ListView.Resources>
+                        <Style TargetType="GridViewColumnHeader">
+                            <Setter Property="Visibility" Value="Collapsed" />
+                        </Style>
+                    </ListView.Resources>
+                    <ListView.View>
+                        <GridView >
+                            <GridViewColumn>
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <DataTemplate.Resources>
+                                            <Style TargetType="{x:Type TextBlock}">
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding Path=MainWindow.IsPlaying}" Value="true" >
+                                                        <Setter Property="FontWeight" Value="Bold" />
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </DataTemplate.Resources>
+                                        <TextBlock Text="{Binding Name}" Name="PlayerStreamsEntryName"  TextAlignment="Right" />
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                        </GridView>
+                    </ListView.View>
+                </ListView>
+            </TabItem>
+            <TabItem Header="IceCast Streams">
+                
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="26" />
+                            <RowDefinition  Height="*"/>
+                        </Grid.RowDefinitions>
+                        <TextBox HorizontalAlignment="Stretch" 
+                                 TextChanged="TextBox_TextChanged" 
+                                 Height="22"
+                                 Grid.Column="0"
+                                 Grid.Row="0">
+                        </TextBox>
+                    <fa:ImageAwesome Grid.Column="0" Grid.Row="1"   Visibility="{Binding Path=MainWindow.IceCastStreams, TargetNullValue=Visible, FallbackValue=Hidden }" 
+                                 Grid.ZIndex="1" 
+                                 Icon="Refresh" 
+                                 Spin="True" 
+                                 Height="24" 
+                                 Width="24" />
+                    <ListView Grid.Column="0" Grid.Row="1" 
+                              Background="#D8D8D8"
+                              Name="IceCastListView"
+                              VerticalAlignment="Stretch" 
+                              HorizontalAlignment="Stretch"
+                              ItemsSource="{Binding Path=MainWindow.IceCastStreams}" 
+                              MouseDoubleClick="PlayerStreamsListView_MouseDoubleClick">
+                        <ListView.Resources>
+                            <Style TargetType="GridViewColumnHeader">
+                                <Setter Property="Visibility" Value="Collapsed" />
+                            </Style>
+                        </ListView.Resources>
+                        <ListView.ContextMenu>
+                            <ContextMenu>
+                                <MenuItem Header="Copy" Name="CopyIceCastStreamItem" Click="CopyIceCastStreamMenuItem_Click" />
+                            </ContextMenu>
+                        </ListView.ContextMenu>
+                        <ListView.View>
+                            <GridView>
+                                <GridViewColumn Header="Name" Width="Auto" DisplayMemberBinding="{Binding Value.Name}" />
+                                
+                            </GridView>
+                        </ListView.View>
+                    </ListView>
+                    </Grid>
+            </TabItem>
+        </TabControl>
     </Grid>
-    
 </UserControl>
