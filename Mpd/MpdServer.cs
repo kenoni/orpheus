@@ -14,6 +14,7 @@
     along with Orpheus.  If not, see<http://www.gnu.org/licenses/>.*/
 using System;
 using System.Threading.Tasks;
+using log4net.Repository.Hierarchy;
 using Orpheus.Mpd.Commands;
 using Orpheus.Properties;
 namespace Orpheus.Mpd
@@ -55,9 +56,7 @@ namespace Orpheus.Mpd
             _session.Connected += _connected;
             _session.Authenticate += _authenticate;
 
-            Task initSession = Task.Run(() => { _session.Connect(); });
-
-            await initSession;
+            await Task.Run(() => { _session.Connect(); });
         }
 
         public static void CreateInstance(Action<string> displayStatus, Action connectedCallback)
@@ -77,6 +76,7 @@ namespace Orpheus.Mpd
         {
             if (_session?._tcpConnection != null && _session?._tcpConnection?.Connected != false)
             {
+                Logger.Info(message);
                 _displayMessage?.Invoke(message);
                 Task.Factory.StartNew(() => _session.SendCommand(task, callback));
             }

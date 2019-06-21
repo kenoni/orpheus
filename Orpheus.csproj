@@ -88,6 +88,7 @@
     <Compile Include="Converters\BooleanToVisibility.cs" />
     <Compile Include="Helpers\IceCastDirectoryList.cs" />
     <Compile Include="Helpers\IceCastParser.cs" />
+    <Compile Include="Logger.cs" />
     <Compile Include="Models\IceCastStream.cs" />
     <Compile Include="Models\BaseStream.cs" />
     <Compile Include="Mpd\MpdServerDecorator.cs" />

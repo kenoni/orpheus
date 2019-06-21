@@ -271,18 +271,9 @@ namespace Orpheus
 
         private double PreviousGridSplitterWIdth = 0;
 
-       
-
-       
-
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
-            var firstSongInCurrentPlaylist = MainContext.Instance.MainWindow.CurrentPlaylist.FirstOrDefault();
+            var firstSongInCurrentPlaylist = MainContext.Instance.MainWindow.CurrentPlaylist?.FirstOrDefault();
             if(firstSongInCurrentPlaylist != null)
             {
                 MpdServer.Instance.PlayId(firstSongInCurrentPlaylist.Id);

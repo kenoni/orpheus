@@ -19,7 +19,6 @@ namespace Orpheus
     public partial class App : Application
 
     {
-        private static  ILog _log4NetLogger;
         private const string eventName = "84bb9974-fb13-4927-bf47-91f9fca1601c";
         private EventWaitHandle singleInstanceEvent;
 
@@ -61,10 +60,9 @@ namespace Orpheus
 
         private void Application_Startup(object sender, StartupEventArgs e)
         {
-            _log4NetLogger = LogManager.GetLogger(typeof(App));
             log4net.Config.XmlConfigurator.Configure();
 
-            LogMessage("Application started.");
+            Logger.Info("Application started.");
             Dispatcher.UnhandledException += LogUnhandledExceptions;
         }
 
@@ -95,13 +93,8 @@ namespace Orpheus
             string message = $"{exceptionMessage} {Environment.NewLine}  {e.StackTrace}";
             message = (message.Length > 2000) ? message.Substring(0, 2000) : message;
 
-            _log4NetLogger?.Error(message);
+            Logger.Info(message);
         }
-        public static void LogMessage(string message)
-        {
-            _log4NetLogger?.Info(message);
-        }
-
     }
 
 }
