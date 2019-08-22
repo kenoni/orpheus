@@ -22,115 +22,13 @@
     </Window.Resources>
     <Grid Background="#FFC3C3C3" Name="MainGrid" Style="{StaticResource GridStyle}" >
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="50*" />
-            <ColumnDefinition Width="5" />
-            <ColumnDefinition Name="TabControlHolder" Width="400" MinWidth="30" />
+            <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="24"/>
         </Grid.RowDefinitions>
-
-        <GridSplitter MouseDoubleClick="GridSplitter_MouseLeftButtonDown"  Name="GridSplitter1" Visibility="Visible" Grid.Row="2" Grid.Column="1" HorizontalAlignment="Right" Width="2" VerticalAlignment="Stretch"  ResizeBehavior="PreviousAndNext" Height="Auto" Background="White" IsEnabled="True" ResizeDirection="Columns" Cursor="SizeWE"/>
-
-        
-        
-            <Grid Margin="5" Grid.Row="2" Grid.Column="0">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="*" />
-                </Grid.RowDefinitions>
-                <fa:ImageAwesome Grid.Row="0"  Visibility="{Binding Path=MainWindow.CurrentPlaylist, TargetNullValue=Visible, FallbackValue=Hidden }" Grid.ZIndex="1" Icon="Refresh" Spin="True" Height="24" Width="24" />
-                <ListView ItemContainerStyle="{StaticResource ListViewBoxItem}"  Style="{StaticResource ListView}"  AllowDrop="True"  PreviewDrop="PlayListView_PreviewDrop" VerticalAlignment="Stretch" PreviewKeyDown="PlayListView_PreviewKeyDown"  Name="PlayListView" ItemsSource="{Binding Path=MainWindow.CurrentPlaylist}"  MouseDoubleClick="OnPlaylistViewDoubleClicked"  Margin="5,5,0,5" VerticalContentAlignment="Stretch" >
-                    <ListView.Resources>
-                        <Style TargetType="GridViewColumnHeader">
-                            <Setter Property="Visibility" Value="Collapsed" />
-                        </Style>
-                    </ListView.Resources>
-                    <ListView.View>
-                        <GridView>
-                            <GridViewColumn>
-
-                                <GridViewColumn.CellTemplate>
-
-                                    <DataTemplate>
-                                        <DataTemplate.Resources>
-
-                                            <Style TargetType="{x:Type TextBlock}">
-                                                <Style.Triggers>
-                                                    <DataTrigger Binding="{Binding Path=IsCurrentlyPlaying}" Value="true" >
-                                                        <Setter Property="FontWeight" Value="Bold" />
-                                                    </DataTrigger>
-                                                </Style.Triggers>
-                                            </Style>
-                                            <Style TargetType="{x:Type ListViewItem}">
-                                                <Style.Triggers>
-                                                    <Trigger Property="IsMouseOver" Value="true">
-                                                        <Setter Property="Foreground" Value="Black" />
-                                                    </Trigger>
-                                                </Style.Triggers>
-                                            </Style>
-                                        </DataTemplate.Resources>
-                                        <TextBlock Text="{Binding Name}" Name="PlaylistEntryName"  TextAlignment="Right" />
-                                    </DataTemplate>
-                                </GridViewColumn.CellTemplate>
-                            </GridViewColumn>
-                        </GridView>
-                    </ListView.View>
-                </ListView>
-            </Grid>
-
-        
-        
-
-        <Border   Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="3" BorderBrush="Black" BorderThickness="0 .4 0 0">
-            <DockPanel  VerticalAlignment="Stretch" Height="30" LastChildFill="False" Visibility="{Binding Path=MainWindow.MpdConnected, Converter={StaticResource BooleanToVisibilityConverter}}" >
-                <Label  Style="{StaticResource Label}" DockPanel.Dock="Left" Margin="0,3,0,0" Content="{Binding Path=MainWindow.PlayingSong}"  />
-                <Button Width="30" Height="24"  Margin="0,0,5,0" DockPanel.Dock="Right" Click="Button_Click_2" >
-                    <fa:ImageAwesome  Icon="StepForward"></fa:ImageAwesome>
-                </Button>
-                <Button Width="30" Height="24"  Margin="0,0,5,0" DockPanel.Dock="Right"  Click="Button_Click_1" >
-                    <fa:ImageAwesome Height="18" Icon="Play"></fa:ImageAwesome>
-                </Button>
-                <Button Width="30" Height="24"  Margin="0,0,5,0" DockPanel.Dock="Right" Click="Button_Click_3">
-                    <fa:ImageAwesome Height="18" Icon="Stop"></fa:ImageAwesome>
-                </Button>
-                <Button Width="30" Height="24"  Margin="0,0,5,0" DockPanel.Dock="Right" Click="Button_Click_4">
-                    <fa:ImageAwesome Icon="StepBackward"></fa:ImageAwesome>
-                </Button>
-                <Button Width="30" Height="24"  Margin="0,0,5,0" DockPanel.Dock="Right" Click="Button_Click_5">
-                    <fa:ImageAwesome Icon="Random"></fa:ImageAwesome>
-                </Button>
-                <Button Width="30" Height="24"  Margin="0,0,5,0" DockPanel.Dock="Right" Click="Button_Click_6">
-                    <fa:ImageAwesome Icon="Repeat"></fa:ImageAwesome>
-                </Button>
-            </DockPanel>
-        </Border>
-
-        <DockPanel Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="3" VerticalAlignment="Stretch" Height="30" Dock="Bottom" Name="PlaylisItemSliderPanel" Margin="10,0,10,10" Visibility="{Binding Path=MainWindow.MpdConnected, Converter={StaticResource BooleanToVisibilityConverter}}">
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="Auto" />
-                </Grid.ColumnDefinitions>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition  Height="30"/>
-                </Grid.RowDefinitions>
-                <Label Grid.Column="0" Style="{StaticResource Label}" DockPanel.Dock="Left"  Content="{Binding Path=MainWindow.ElapsedTime, Converter={StaticResource TimeConverter}}"  />
-                <Slider Grid.Column="1" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" IsMoveToPointEnabled="True" Margin="0,3,0,0" Maximum="{Binding Path=MainWindow.Duration}" Value="{Binding Path=MainWindow.ElapsedTime}" Name="PlaylisItemSlider" VerticalContentAlignment="Bottom" PreviewMouseUp="PlaylisItemSlider_OnValueChanged"  Height="20" />
-                <Label Grid.Column="2" Style="{StaticResource Label}" DockPanel.Dock="Left" Content="{Binding Path=MainWindow.Duration, Converter={StaticResource TimeConverter}}"  />
-            </Grid>
-            
-            <!--<Slider DockPanel.Dock="Left"  Width="{Binding Path=ActualWidth, ElementName=PlaylisItemSliderPanel}" IsMoveToPointEnabled="True" Margin="0,0,0,0" Maximum="{Binding Path=MainWindow.Duration}" Value="{Binding Path=MainWindow.ElapsedTime}" Name="PlaylisItemSlider" VerticalContentAlignment="Bottom" PreviewMouseUp="PlaylisItemSlider_OnValueChanged"  Height="20"  />-->
-            
-        </DockPanel>
-
-        <StatusBar Grid.Row="5" Grid.ColumnSpan="3" Grid.Column="0" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" >
+        <StatusBar Grid.Row="1" Grid.ColumnSpan="1" Grid.Column="0" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" >
             <StatusBarItem Visibility="{Binding Path=MainWindow.MpdConnected, Converter={StaticResource BooleanToVisibilityConverter}}">
                 <TextBlock  Name="StatusBarLabel" Text="{Binding Path=MainWindow.State}" />
             </StatusBarItem>
@@ -161,7 +59,7 @@
                
             </StatusBarItem>
         </StatusBar>
-        <TabControl Background="#FFC3C3C3" SelectionChanged="TabControl_SelectionChanged"  Grid.Column="2" Grid.Row="2" TabStripPlacement="Left" >
+        <TabControl  Grid.Row="0" Grid.Column="1" Background="#FFC3C3C3" SelectionChanged="TabControl_SelectionChanged"   TabStripPlacement="Left" >
             <TabItem Header="Player"  Style="{StaticResource TabControl}">
                 <customControls:StreamPlayer />
             </TabItem>
