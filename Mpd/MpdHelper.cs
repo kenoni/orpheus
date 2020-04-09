@@ -12,13 +12,7 @@
 
     You should have received a copy of the GNU General Public License
     along with Orpheus.  If not, see<http://www.gnu.org/licenses/>.*/
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Sockets;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 namespace Orpheus.Mpd
 {

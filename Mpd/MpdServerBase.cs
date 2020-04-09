@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using Orpheus.Models;
 using Orpheus.Mpd.Commands;
 
 namespace Orpheus.Mpd

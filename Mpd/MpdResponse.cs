@@ -12,12 +12,8 @@
 
     You should have received a copy of the GNU General Public License
     along with Orpheus.  If not, see<http://www.gnu.org/licenses/>.*/
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 namespace Orpheus.Mpd
 {
@@ -38,19 +34,17 @@ namespace Orpheus.Mpd
             {
                 return false;
             }
-            else
+            
+            var matchError = _ackRegex.Match(line);
+            if (matchError.Success)
             {
-                var matchError = _ackRegex.Match(line);
-                if (matchError.Success)
-                {
-                    _errorMessage = matchError.Groups["message"].Value;
-                    return false;
-                }
-
-                Lines.Add(line);
-
-                return true;
+                _errorMessage = matchError.Groups["message"].Value;
+                return false;
             }
+
+            Lines.Add(line);
+
+            return true;
         }
     }
 }

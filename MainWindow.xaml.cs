@@ -29,10 +29,7 @@ namespace Orpheus
 
         public MainWindow()
         {
-            
-            InitializeComponent();
-            
-            
+            //InitializeComponent();
             InitializeDataContext();
             InitializeAppDataManager();
             
@@ -82,48 +79,12 @@ namespace Orpheus
         private void OnClose(object sender, System.ComponentModel.CancelEventArgs e)
         {
             Player.Instance.Stop();
+            Settings.Default.MainWindowHeight = int.Parse(Height.ToString());
+            Settings.Default.MainWindowWidth = int.Parse(Width.ToString());
+            Settings.Default.Save();
         }
 
-        
-
        
-
-        
-
-        
-        
-       
-
-        
-
-       
-
-       
-
-       
-
-
-        
-
-        
-
-
-        
-
-       
-
-        
-
-        
-
-       
-
-        
-
-       
-
-        
-
         private void TabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (e.OriginalSource is TabControl)
@@ -132,7 +93,6 @@ namespace Orpheus
 
                 switch (tabName)
                 {
-                    //case "Player": if (MainContext.Instance.MainWindow.PlayerStreams == null) _appDataManager.GetData(); break;
                     default: break;
                 }
                 e.Handled = true;
@@ -140,14 +100,10 @@ namespace Orpheus
            
         }
 
-        
-
-       
-
-        
-
-        
-
-       
+        private void MainWindow_OnLoaded(object sender, RoutedEventArgs e)
+        {
+            Height = Settings.Default.MainWindowHeight;
+            Width = Settings.Default.MainWindowWidth;
+        }
     }
 }

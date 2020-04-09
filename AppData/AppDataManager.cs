@@ -10,8 +10,9 @@ namespace Orpheus.AppData
 {
     class AppDataManager
     {
-        private AppDataContent _appDataContent;
-        private string _dataFileName = "appData.json";
+        private readonly AppDataContent _appDataContent;
+        private const string DataFileName = "appData.json";
+
         public AppDataManager(AppDataContent appDataContent)
         {
             _appDataContent = appDataContent;
@@ -19,16 +20,15 @@ namespace Orpheus.AppData
 
         public void GetData()
         {
-            var json = FileManager.ReadFrom(_dataFileName);
+            var json = FileManager.ReadFrom(DataFileName);
             if(json != string.Empty)
             {
                 ParseJsonData(json);
-                return;
             }
             else
             {
                 SaveData();
-                json = FileManager.ReadFrom(_dataFileName);
+                json = FileManager.ReadFrom(DataFileName);
                 ParseJsonData(json);
             }
         }
@@ -43,8 +43,8 @@ namespace Orpheus.AppData
         public void SaveData()
         {
             _appDataContent.Streams = _appDataContent.StreamsFromContext;
-            var contentStr = Serializer.ToString<AppDataContent>(_appDataContent);
-            FileManager.SaveTo(_dataFileName, contentStr);
+            var contentStr = Serializer.ToString(_appDataContent);
+            FileManager.SaveTo(DataFileName, contentStr);
         }
     }
 
@@ -71,7 +71,7 @@ namespace Orpheus.AppData
             return (File.Exists(path)) ? File.ReadAllText(path) : string.Empty;
         }
 
-        private static string AssemblyPath => System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location);
+        private static string AssemblyPath => Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location);
     }
 
     public static class Serializer

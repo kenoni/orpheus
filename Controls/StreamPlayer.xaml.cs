@@ -26,19 +26,23 @@ namespace Orpheus.Controls
     /// </summary>
     public partial class StreamPlayer : UserControl
     {
-        private AppDataManager _appDataManager;
+        private readonly AppDataManager _appDataManager;
 
         public StreamPlayer()
         {
             InitializeComponent();
             VolumeSlider.Value = Settings.Default.Player_Volume;
-            var _appData = new AppData.AppDataContent(MainContext.Instance.MainWindow);
-            _appDataManager = new AppDataManager(_appData);
+            var appData = new AppData.AppDataContent(MainContext.Instance.MainWindow);
+            _appDataManager = new AppDataManager(appData);
+           
             try
             {
                 _appDataManager.GetData();
             }
-            catch { }
+            catch
+            {
+                // ignored
+            }
 
             var directoryList = new IceCastDirectoryList();
         }

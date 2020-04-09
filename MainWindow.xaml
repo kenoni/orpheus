@@ -13,6 +13,7 @@
         Title="Orpheus" Width="800" MinHeight="450" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" Icon="Icons/Orpheus32x32.png"
         TextOptions.TextFormattingMode="Display"
         TextOptions.TextRenderingMode="ClearType"
+        Loaded="MainWindow_OnLoaded"
         UseLayoutRounding="true">
     <Window.Resources>
         <converters:SecondsToTimeConverter x:Key="TimeConverter" />

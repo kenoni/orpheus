@@ -5,18 +5,18 @@ namespace Orpheus.Mpd
 {
     public class MpdServerDecorator : MpdServerBase
     {
-        protected readonly MpdServerBase _server;
+        protected readonly MpdServerBase Server;
 
-        public MpdServerDecorator(MpdServerBase server)
+        protected MpdServerDecorator(MpdServerBase server)
         {
-            _server = server;
+            Server = server;
         }
 
-        public override string ConnectionAsString => _server.ConnectionAsString;
+        public override string ConnectionAsString => Server.ConnectionAsString;
 
         public override void RunCommand<T>(string message, IMpdCommand<T> task, Action<T> callback = null)
         {
-            _server.RunCommand(message, task, callback);
+            Server.RunCommand(message, task, callback);
         }
     }
 }

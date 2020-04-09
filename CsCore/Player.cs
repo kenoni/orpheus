@@ -1,13 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using CSCore.Codecs;
 using CSCore.CoreAudioAPI;
-using CSCore.DMO;
 using static Orpheus.CsCore.Helper;
 using Orpheus.Properties;
 
@@ -43,10 +36,6 @@ namespace Orpheus.CsCore
             {
                 _musicPlayer.Open(url, _usedOutputDevice);
                 _musicPlayer.Play();
-                //var wavesource = CodecFactory.Instance.GetCodec(url);
-               //((DmoStream) wavesource).pa
-                //_usedOutputDevice.
-                //CSCore.Tags.ID3.ID3v2.FromStream(_musicPlayer.)
             }
         }
 

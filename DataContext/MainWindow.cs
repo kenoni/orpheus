@@ -150,7 +150,7 @@ namespace Orpheus.DataContext
 
         public void GetMpdFiles()
         {
-            MpdServer.Instance.FilelistInfo(FillFileSystem);
+            MpdServer.Instance.FileListInfo(FillFileSystem);
         }
 
         private IList<MpdPlaylistEntry> _currentPlaylist;

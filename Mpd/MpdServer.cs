@@ -14,7 +14,6 @@
     along with Orpheus.  If not, see<http://www.gnu.org/licenses/>.*/
 using System;
 using System.Threading.Tasks;
-using log4net.Repository.Hierarchy;
 using Orpheus.Mpd.Commands;
 using Orpheus.Properties;
 namespace Orpheus.Mpd
@@ -24,9 +23,9 @@ namespace Orpheus.Mpd
         private readonly string _address;
         private readonly int _port;
         private  static  MpdSession _session;
-        private Action<string> _displayMessage;
-        private Action _connected;
-        private Action _authenticate;
+        private readonly Action<string> _displayMessage;
+        private readonly Action _connected;
+        private readonly Action _authenticate;
 
         private MpdServer(Action<string> displayStatus, Action connectedCallback)
         {
@@ -66,20 +65,16 @@ namespace Orpheus.Mpd
 
         public static MpdServerWithCommands Instance { get; private set; }
 
-        //public DisableOutput
-        public override string ConnectionAsString
-        {
-            get => $"{_address}:{_port}";
-        }
+        public override string ConnectionAsString => $"{_address}:{_port}";
 
         public override void RunCommand<T>(string message, IMpdCommand<T> task, Action<T> callback = null)
         {
-            if (_session?._tcpConnection != null && _session?._tcpConnection?.Connected != false)
-            {
-                Logger.Info(message);
-                _displayMessage?.Invoke(message);
-                Task.Factory.StartNew(() => _session.SendCommand(task, callback));
-            }
+            if (!(_session?.IsActive() ?? false)) 
+                return;
+            
+            Logger.Info(message);
+            _displayMessage?.Invoke(message);
+            Task.Factory.StartNew(() => _session.SendCommand(task, callback));
         }
 
     }

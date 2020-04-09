@@ -23,7 +23,7 @@ namespace Orpheus.AppData
         {
             if(streams != null)
             {
-                _dataContext.PlayerStreams = streams.Select(x => new PlayerStream { Name = x.Name, Url = x.Url }).ToList();
+                _dataContext.PlayerStreams = streams.Select(x => new PlayerStream { Name = $"{x.Name} [{x.Url}]", Url = x.Url }).ToList();
             }
         }
 

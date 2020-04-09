@@ -23,16 +23,16 @@ namespace Orpheus.Mpd
 {
     public class MpdSession
     {
-        private NetworkStream _mpdStream = null;
-        public TcpClient _tcpConnection;
-        private int _tcpTimeout = 5000;
+        private NetworkStream _mpdStream;
+        private TcpClient _tcpConnection;
+        private const int TcpTimeout = 5000;
         public bool Terminating = false;
-        private string _address;
-        private int _port;
+        private readonly string _address;
+        private readonly int _port;
         public event Action<string> DisplayMessage;
         public Action Connected;
         public Action Authenticate;
-        private readonly object obj = new object();
+        private readonly object _obj = new object();
 
 
         public MpdSession(string address, int port)
@@ -41,17 +41,22 @@ namespace Orpheus.Mpd
             _port = port;
         }
 
+        public bool IsActive()
+        {
+            return _tcpConnection?.Connected ?? false ;
+        }
+
         public void Connect()
         {
             while (_tcpConnection == null && !Terminating)
             {
                 _tcpConnection = new TcpClient
                 {
-                    SendTimeout = _tcpTimeout,
-                    ReceiveTimeout = _tcpTimeout
+                    SendTimeout = TcpTimeout,
+                    ReceiveTimeout = TcpTimeout
                 };
 
-                IAsyncResult connectResult = _tcpConnection.BeginConnect(_address, _port, null, null);
+                var connectResult = _tcpConnection.BeginConnect(_address, _port, null, null);
 
                 while (!connectResult.IsCompleted && !Terminating)
                 {
@@ -68,7 +73,7 @@ namespace Orpheus.Mpd
                     {
                         _tcpConnection.EndConnect(connectResult);
 
-                        lock (obj)
+                        lock (_obj)
                         {
                             _mpdStream = _tcpConnection.GetStream();
                         }
@@ -87,7 +92,7 @@ namespace Orpheus.Mpd
             }
         }
 
-        public void Close()
+        private void Close()
         {
             if (_tcpConnection == null) return;
 
@@ -96,7 +101,7 @@ namespace Orpheus.Mpd
                 // SendCommand("close").Wait();
             }
 
-            lock (obj)
+            lock (_obj)
             {
                 _mpdStream?.Close();
                 _mpdStream = null;
@@ -113,7 +118,7 @@ namespace Orpheus.Mpd
                 try
                 {
                     var buffer = Encoding.UTF8.GetBytes($"{command.Command}\n");
-                    lock (obj)
+                    lock (_obj)
                     {
                         Logger.Info("Executing - " + command.Command);
                         _mpdStream.Write(buffer, 0, buffer.Length);
@@ -136,7 +141,7 @@ namespace Orpheus.Mpd
             }
         }
 
-        public bool Reconnect()
+        private bool Reconnect()
         {
             var reconnectAttempts = 0;
             while (reconnectAttempts < 10)
@@ -160,7 +165,7 @@ namespace Orpheus.Mpd
             return (reconnectAttempts < 10);
         }
 
-        private bool IsConnected(Socket client)
+        private static bool IsConnected(Socket client)
         {
             bool blockingState = client.Blocking;
             try
