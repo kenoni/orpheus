@@ -74,16 +74,16 @@ namespace Orpheus.CsCore
                 _soundOut.Initialize(_waveSource);
                 if (PlaybackStopped != null) _soundOut.Stopped += PlaybackStopped;
             }
-            catch 
+            catch (Exception ex)
             {
-                
+                Logger.Info(ex.Message);
             }
         }
 
         public void Play()
         {
-            if(_soundOut.WaveSource != null)
-            _soundOut?.Play();
+            if(_soundOut?.WaveSource != null)
+                _soundOut?.Play();
         }
 
         public void Pause()
